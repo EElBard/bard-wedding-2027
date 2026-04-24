@@ -150,6 +150,16 @@
     animation: fadeUp 1s 0.2s ease both;
     text-shadow: 0 2px 40px rgba(200,151,58,0.15);
   }
+  
+    .hero h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(3rem, 3vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+    animation: fadeUp 1s 0.2s ease both;
+    text-shadow: 0 2px 40px rgba(200,151,58,0.15);
+    }
 
   .hero h1 .ampersand {
     color: var(--gold);
@@ -158,6 +168,11 @@
   
   .hero-img {
       animation: fadeUp 1s 0.2s ease both;
+      width: 40%;
+      border-radius: 5%;
+      -webkit-mask-image: radial-gradient(circle, black 80%, transparent 100%);
+      mask-image: radial-gradient(circle, black 80%, transparent 100%);
+
   }
 
   .hero-divider {
@@ -336,6 +351,10 @@
     .events-grid { grid-template-columns: 1fr; }
     nav { gap: 1rem; flex-wrap: wrap; }
     nav a { font-size: 0.62rem; }
+    
+    .hero-img {
+        width: 50%;
+    }
   }
 
   .event-card {
@@ -565,7 +584,7 @@
     Holly
   </h1>
   
-  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiVdegdi-DnsGZORtwQo9Ri5pDuXxbWrLRHg&s" alt="Engagement Photo" class="hero-img"/>
+  <img src="../Engagement Picture" alt="Engagement Photo" class="hero-img"/>
 
   <div class="hero-divider">
     <div class="line"></div>
@@ -575,7 +594,7 @@
     <div class="line"></div>
   </div>
 
-  <p class="hero-date">Spring 2027</p>
+  <h2 class="hero-date">March 25, 2027</h2>
   <p class="hero-tagline">A celebration of love, laughter, and a little bit of merriment</p>
 
   <div class="hero-scroll">
@@ -612,17 +631,17 @@
       <span class="icon">💍</span>
       <h3>The Ceremony</h3>
       <p>
-        <strong>March 2027</strong><br>
-        <span class="placeholder-text">Time to be announced</span><br><br>
-        <span class="placeholder-text">Venue name & location<br>coming soon</span>
+        <strong>March 25, 2027</strong><br>
+        <span class="placeholder-text">4:30 PM</span><br><br>
+        <span class="placeholder-text">Stallion Mountain<br>5500 E Flamingo Rd, Las Vegas, NV 89122</span>
       </p>
     </div>
     <div class="event-card">
       <span class="icon">🍾</span>
       <h3>The Feasting & Revelry</h3>
       <p>
-        <strong>March 2027</strong><br>
-        <span class="placeholder-text">Reception time TBD</span><br><br>
+        <strong>Same time and place!</strong><br>
+        <span class="placeholder-text">5:00 PM</span><br><br>
         <span class="placeholder-text">Food, music, dancing,<br>& merriment await</span>
       </p>
     </div>
@@ -634,7 +653,7 @@
   <p class="section-eyebrow">Gifts for the realm</p>
   <h2 class="section-title">Registry</h2>
   <div class="section-ornament">🎁 ✦ 🎁</div>
-
+  <p class="dress-note reveal">Your presence at our faire is truly the greatest gift. Should you wish to bestow something more, please see the below.</p>
   <div class="registry-grid reveal">
     <div class="registry-card">
       <span class="icon">🏖️</span>
@@ -650,7 +669,7 @@
     </div>
   </div>
 
-  <p class="dress-note reveal">Your presence at our faire is truly the greatest gift. Should you wish to bestow something more, registry links shall be added here anon.</p>
+
 </section>
 
 <!-- TRAVEL -->
@@ -660,7 +679,7 @@
   <div class="section-ornament">🗺 ✦ 🗺</div>
 
   <div class="travel-placeholder reveal">
-    <p>🧭 <em>Details on nearby lodgings, travel tips, and recommended inns shall be posted here once the venue is confirmed. Check back soon, fair traveler!</em></p>
+    <p><em>If you need to travel in, we recommend booking at <a href="https://greenvalleyranch.com/">Green Valley Ranch Resort Spa & Casino.</a></em></p>
   </div>
 </section>
 
