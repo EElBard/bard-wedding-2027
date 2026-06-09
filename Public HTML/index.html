@@ -35,7 +35,12 @@
     html {
       scroll-behavior: smooth;
       font-size: clamp(16px, 1.2vw + 10px, 20px);
-      scroll-snap-type: y mandatory;
+    }
+
+    @media (min-width: 768px) {
+      html {
+        scroll-snap-type: y mandatory;
+      }
     }
 
     body {
