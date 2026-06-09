@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Ethan & Holly — A Spring Faire Wedding</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,8 +86,8 @@
       align-content: center;
       flex-wrap: wrap;
       gap: 2.5rem;
-      padding: 0 2rem;
-      height: var(--nav-height);
+      padding: env(safe-area-inset-top) 2rem 0;
+      height: calc(var(--nav-height) + env(safe-area-inset-top));
     }
 
     nav a {
@@ -348,7 +348,7 @@
       flex-direction: column;
       justify-content: center;
       scroll-snap-align: start;
-      scroll-margin-top: var(--nav-height);
+      scroll-margin-top: calc(var(--nav-height) + env(safe-area-inset-top));
     }
 
     section+section {
@@ -416,9 +416,7 @@
     }
 
     @media (max-width: 600px) {
-      :root {
-        --nav-height: 3.8rem;
-      }
+
 
       section {
         padding: 4.5rem 1.5rem 2.5rem;
@@ -489,6 +487,7 @@
       nav {
         gap: 0.4rem 1rem;
         flex-wrap: wrap;
+        padding: env(safe-area-inset-top) 1rem 0;
       }
 
       nav a {
