@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Deployment configuration for Vercel",
   "scripts": {
-    "build": "mkdir -p public && cp -a \"public/.\" public/"
+    "build": "mkdir -p public && cp -a \"Public HTML/.\" public/"
   }
 }
