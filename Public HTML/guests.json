@@ -1,6 +1,0 @@
-{
-  "jane-smith":     { "name": "Jane Smith",         "plusOne": true  },
-  "john-doe":       { "name": "John Doe",            "plusOne": false },
-  "sarah-johnson":  { "name": "Sarah Johnson",       "plusOne": true  },
-  "the-williams":   { "name": "The Williams Family", "plusOne": false }
-}
