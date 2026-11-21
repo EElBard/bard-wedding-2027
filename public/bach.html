@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bach Weekend RSVP — Ethan & Holly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #f2c4ce;
+    --blush-deep: #e8a0b0;
+    --sage: #a8c5a0;
+    --sage-deep: #7ea87a;
+    --lavender: #c9b8e8;
+    --lavender-deep: #a090cc;
+    --cream: #fdf6ec;
+    --parchment: #f5e9d0;
+    --ink: #3a2a1a;
+    --gold: #c8973a;
+    --gold-light: #e8c47a;
+    --border-gold: #d4a855;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(200,183,232,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(168,197,160,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 20%, rgba(242,196,206,0.15) 0%, transparent 40%);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .back-link {
+    position: fixed;
+    top: 1.25rem;
+    left: 1.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.2s;
+    z-index: 10;
+  }
+  .back-link:hover { opacity: 0.65; }
+
+  /* ---- CARD CONTAINER ---- */
+  .card {
+    background: linear-gradient(145deg, var(--parchment), rgba(253,246,236,0.95));
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 3.5rem);
+    max-width: 620px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 8px 60px rgba(58,42,26,0.08);
+    animation: fadeUp 0.8s ease both;
+    margin-bottom: 2rem;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--blush), var(--lavender), var(--sage), var(--lavender), var(--blush));
+  }
+
+  .card-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    font-weight: 400;
+    text-align: center;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-ornament {
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+    color: var(--sage-deep);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+  }
+
+  #greeting {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    text-align: center;
+    color: var(--ink);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    min-height: 1.7em;
+    transition: opacity 0.4s;
+  }
+
+  #unknown-guest {
+    display: none;
+    background: rgba(242,196,206,0.3);
+    border: 1px solid var(--blush-deep);
+    border-radius: 2px;
+    padding: 1.5rem;
+    text-align: center;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ---- ITINERARY ---- */
+  .itinerary { margin-bottom: 0.5rem; }
+
+  .day-header {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 2px;
+  }
+  .day-fri { background: linear-gradient(135deg, var(--lavender-deep), var(--lavender)); }
+  .day-sat { background: linear-gradient(135deg, var(--sage-deep), var(--sage)); }
+  .day-sun { background: linear-gradient(135deg, var(--blush-deep), var(--blush)); }
+
+  .event-item {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(212,168,85,0.2);
+  }
+  .event-item:last-child { border-bottom: none; }
+
+  .event-item .time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .event-item .activity {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .event-item .detail {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    opacity: 0.75;
+    margin-top: 0.15rem;
+    line-height: 1.5;
+  }
+
+  .event-item .detail a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .cost-badge {
+    display: inline-block;
+    background: rgba(200,151,58,0.12);
+    border: 1px solid rgba(200,151,58,0.3);
+    border-radius: 2px;
+    padding: 0.15rem 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 0.3rem;
+  }
+
+  .dietary-box {
+    background: rgba(242,196,206,0.15);
+    border: 1px solid rgba(232,160,176,0.3);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--ink);
+    opacity: 0.8;
+  }
+
+  .dietary-box strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--blush-deep);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+
+  .dietary-box a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .meal-box {
+    background: rgba(168,197,160,0.15);
+    border: 1px solid rgba(126,168,122,0.3);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--ink);
+    opacity: 0.85;
+  }
+
+  .meal-box strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+
+  .day-block { margin-bottom: 1.5rem; }
+  .day-block:last-child { margin-bottom: 0; }
+
+  /* ---- DIVIDER ---- */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0 1.5rem;
+  }
+  .section-divider .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-gold), transparent);
+  }
+  .section-divider .diamond {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  /* ---- RSVP FORM ---- */
+  .rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-field label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: rgba(253,246,236,0.9);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: var(--lavender-deep);
+    box-shadow: 0 0 0 3px rgba(201,184,232,0.2);
+  }
+
+  .form-field textarea { min-height: 90px; resize: vertical; }
+
+  #plus-one-field { display: none; }
+  #plus-one-field.visible { display: flex; }
+
+  #solo-invite-field { display: none; }
+  #solo-invite-field.visible { display: flex; }
+
+  .checkbox-row {
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: auto;
+    margin-top: 0.35rem;
+    accent-color: var(--gold);
+    transform: scale(1.2);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .checkbox-row .checkbox-label {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--ink);
+    opacity: 0.85;
+    cursor: pointer;
+    line-height: 1.6;
+    user-select: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: white;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 1rem 3rem;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(200,151,58,0.3);
+    align-self: center;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(200,151,58,0.4);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.65;
+    cursor: default;
+    transform: none;
+  }
+
+  #success-message {
+    display: none;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  #success-message .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  #success-message h3 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+
+  #success-message p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+    opacity: 0.75;
+  }
+
+  #no-code {
+    display: none;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  #no-code p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+    opacity: 0.7;
+    line-height: 1.8;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">← Back to our site</a>
+
+<!-- ITINERARY CARD -->
+<div class="card">
+  <p class="card-eyebrow">A most noble gathering</p>
+  <h1 class="card-title">The Bach Weekend</h1>
+  <div class="card-ornament">⚔ ✦ ⚔</div>
+
+  <div id="greeting">Fetching your invitation...</div>
+
+  <div id="unknown-guest">
+    🪶 We don't recognize this invitation link. Please check the link in your invitation or contact Ethan &amp; Holly directly.
+  </div>
+
+  <div id="itinerary-section" style="display:none;">
+    <div class="itinerary">
+
+      <!-- FRIDAY -->
+      <div class="day-block">
+        <div class="day-header day-fri">🏰 Friday, February 19th</div>
+
+        <div class="event-item">
+          <span class="time">2:00 PM</span>
+          <span class="activity">Arrive at the Bard Household</span>
+          <div class="detail">All guests arrive by 2:00 PM</div>
+        </div>
+
+        <div class="event-item">
+          <span class="time">2:00 – 4:00 PM</span>
+          <span class="activity">👑 Make Your Own Crown</span>
+          <div class="detail">Craft a flower crown, princess hat, or royal crown</div>
+          <div class="cost-badge">~$10 – $40 per person</div>
+        </div>
+
+        <div class="event-item">
+          <span class="time">4:00 PM</span>
+          <span class="activity">🥂 Happy Hour</span>
+          <div class="detail">Prosecco to prepare the court for the evening</div>
+        </div>
+
+        <div class="event-item">
+          <span class="time">6:00 PM</span>
+          <span class="activity">⚔️ Tournament of Kings</span>
+          <div class="cost-badge">~$85 per person (Ticket + Meal)</div>
+          <div class="meal-box">
+            <strong>Feast included</strong>
+            Roasted Seasoned Chicken · Lemon Pepper Roasted Red Bliss Potatoes · Corn on the Cob · Apple Square · Dinner Roll
+          </div>
+          <div class="dietary-box">
+            <strong>Dietary accommodations</strong>
+            Accommodations may be available upon request. Dietary and children's meal requests can only be made up to 90 days in advance, and must be requested at least 4 hours prior to showtime.<br><br>
+            Call the Excalibur Box Office at <strong style="display:inline; font-family:inherit; font-size:inherit; text-transform:none; letter-spacing:normal; color:var(--ink);">702.597.7477</strong> or email <a href="mailto:ticketing_groups@excalibur.com">ticketing_groups@excalibur.com</a>.
+          </div>
+        </div>
+      </div>
+
+      <!-- SATURDAY -->
+      <div class="day-block">
+        <div class="day-header day-sat">⚔ Saturday, February 20th</div>
+
+        <div class="event-item">
+          <span class="time">Daytime</span>
+          <span class="activity">🎲 D&amp;D One-Shot</span>
+          <div class="detail">A quest for the ages — no experience required</div>
+        </div>
+
+        <div class="event-item">
+          <span class="time">Evening</span>
+          <span class="activity">🍽 Group Dinner</span>
+          <div class="detail">Dinner at the Bard Household</div>
+        </div>
+
+        <div class="event-item">
+          <span class="time">Night</span>
+          <span class="activity">🎉 Club Crawl</span>
+          <div class="detail"><a href="https://www.groupon.com/deals/nocturnal-tours-party-bus-1" target="_blank" rel="noopener">Nocturnal Tours Party Bus</a></div>
+          <div class="cost-badge">~$40 per person</div>
+          <div class="detail">Drinks at each bar ~$18 per drink · Women often get first drink free</div>
+        </div>
+      </div>
+
+      <!-- SUNDAY -->
+      <div class="day-block">
+        <div class="day-header day-sun">🌸 Sunday, February 21st</div>
+
+        <div class="event-item">
+          <span class="time">Morning</span>
+          <span class="activity">☕ Debrief Café</span>
+          <div class="detail"><a href="https://share.google/Y8TxOjoGY3Gu0056s" target="_blank" rel="noopener">The Coffee Class</a></div>
+          <div class="cost-badge">Drinks ~$10 · Pastries ~$10</div>
+        </div>
+
+        <div class="event-item">
+          <span class="time">Whenever you're ready</span>
+          <span class="activity">💐 Farewells</span>
+          <div class="detail">Until the wedding!</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider">
+      <div class="line"></div>
+      <div class="diamond"></div>
+      <div class="line"></div>
+    </div>
+
+    <!-- RSVP FORM -->
+    <p class="card-eyebrow" style="margin-bottom:1.2rem;">Will you join the quest?</p>
+
+    <form class="rsvp-form" id="rsvp-form" onsubmit="handleSubmit(event)">
+
+      <div class="form-field">
+        <label>Your Name</label>
+        <input type="text" id="field-name" placeholder="Your full name..." required>
+      </div>
+
+      <div class="form-field">
+        <label>Email</label>
+        <input type="email" id="field-email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-field">
+        <label>Will you attend?</label>
+        <select id="field-attending" required onchange="handleAttendingChange()">
+          <option value="">— Choose your fate —</option>
+          <option value="yes">Huzzah! I shall attend!</option>
+          <option value="no">Alas, I cannot make it</option>
+        </select>
+      </div>
+
+      <!-- +1 section -->
+      <div class="form-field" id="plus-one-field">
+        <label>Will you be bringing a guest? (+1)</label>
+        <select id="field-plusone">
+          <option value="no">Just me</option>
+          <option value="yes">Yes, I'll bring a guest</option>
+        </select>
+      </div>
+
+      <div class="form-field" id="plusone-name-field" style="display:none;">
+        <label>Guest's Name</label>
+        <input type="text" id="field-plusone-name" placeholder="Their name...">
+      </div>
+
+      <!-- Solo invite acknowledgment -->
+      <div class="form-field checkbox-row" id="solo-invite-field">
+        <input type="checkbox" id="field-solo-ack" required>
+        <label class="checkbox-label" for="field-solo-ack">I understand this invitation is for me only and does not include a plus-one.</label>
+      </div>
+
+      <div class="form-field">
+        <label>Dietary requirements or a note to Ethan &amp; Holly</label>
+        <textarea id="field-notes" placeholder="Any allergies, dietary restrictions, or a message for the couple..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary">Send My Reply ✦</button>
+    </form>
+  </div>
+
+  <div id="no-code">
+    <p>🪶 It seems you've arrived without an invitation link.<br><br>
+    Please use the personal link from your invitation, or reach out to Ethan &amp; Holly to receive yours.</p>
+  </div>
+
+  <div id="success-message">
+    <div class="success-icon">⚔️</div>
+    <h3>The quest awaits!</h3>
+    <p id="success-text">Your reply has been received. We cannot wait to celebrate with you!</p>
+  </div>
+</div>
+
+<script>
+  // --- DOM refs ---
+  const greetingEl       = document.getElementById('greeting');
+  const itineraryEl      = document.getElementById('itinerary-section');
+  const formEl           = document.getElementById('rsvp-form');
+  const unknownEl        = document.getElementById('unknown-guest');
+  const noCodeEl         = document.getElementById('no-code');
+  const plusOneField     = document.getElementById('plus-one-field');
+  const plusOneNameField = document.getElementById('plusone-name-field');
+  const soloInviteField  = document.getElementById('solo-invite-field');
+  const soloAckCheckbox  = document.getElementById('field-solo-ack');
+  const nameInput        = document.getElementById('field-name');
+
+  const params    = new URLSearchParams(window.location.search);
+  const guestSlug = params.get('guest');
+  let guest       = null;
+
+  // --- Load bach-guests.json and initialize ---
+  async function init() {
+    if (!guestSlug) {
+      greetingEl.style.display = 'none';
+      noCodeEl.style.display = 'block';
+      return;
+    }
+
+    try {
+      const res = await fetch('bach-guests.json');
+      const guests = await res.json();
+      guest = guests[guestSlug.toLowerCase()] || null;
+    } catch (err) {
+      greetingEl.textContent = 'Something went wrong loading your invitation. Please try again.';
+      return;
+    }
+
+    if (!guest) {
+      greetingEl.style.display = 'none';
+      unknownEl.style.display = 'block';
+      return;
+    }
+
+    greetingEl.textContent = `Welcome, ${guest.name}! You are summoned to the Bach Weekend.`;
+    nameInput.value = guest.name;
+    itineraryEl.style.display = 'block';
+  }
+
+  init();
+
+  // --- Show/hide +1 or solo-ack ---
+  function handleAttendingChange() {
+    const attending = document.getElementById('field-attending').value;
+    if (guest && guest.plusOne && attending === 'yes') {
+      plusOneField.classList.add('visible');
+      soloInviteField.classList.remove('visible');
+      soloAckCheckbox.required = false;
+      soloAckCheckbox.checked = false;
+    } else if (guest && !guest.plusOne && attending === 'yes') {
+      plusOneField.classList.remove('visible');
+      plusOneNameField.style.display = 'none';
+      document.getElementById('field-plusone').value = 'no';
+      soloInviteField.classList.add('visible');
+      soloAckCheckbox.required = true;
+    } else {
+      plusOneField.classList.remove('visible');
+      plusOneNameField.style.display = 'none';
+      document.getElementById('field-plusone').value = 'no';
+      soloInviteField.classList.remove('visible');
+      soloAckCheckbox.required = false;
+      soloAckCheckbox.checked = false;
+    }
+  }
+
+  document.getElementById('field-plusone').addEventListener('change', function () {
+    plusOneNameField.style.display = this.value === 'yes' ? 'flex' : 'none';
+    if (this.value !== 'yes') document.getElementById('field-plusone-name').value = '';
+  });
+
+  // --- Submit ---
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const attending   = document.getElementById('field-attending').value;
+    const name        = document.getElementById('field-name').value;
+    const email       = document.getElementById('field-email').value;
+    const notes       = document.getElementById('field-notes').value;
+    const plusOne     = document.getElementById('field-plusone').value || 'no';
+    const plusOneName = document.getElementById('field-plusone-name').value || '';
+    const soloAck    = soloAckCheckbox.checked;
+
+    const btn = formEl.querySelector('.btn-primary');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbyBfDQovMVZOntJmVXLHhVbhkrXn6-LRFVXJZirJp13RA3FnCCFhR7b_ZvZOBoC0RdP/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event: 'bach', guest: guestSlug, name, email, attending, plusOne, plusOneName, soloAck, notes })
+      });
+    } catch (err) {
+      btn.textContent = 'Send My Reply ✦';
+      btn.disabled = false;
+      alert("It seems you're offline or something went wrong. Please check your connection and try again, or contact Ethan & Holly directly.");
+      return;
+    }
+
+    formEl.style.display = 'none';
+    greetingEl.style.display = 'none';
+    document.querySelector('.card-eyebrow + .section-divider')?.remove();
+    document.querySelectorAll('.itinerary, .section-divider, [style*="margin-bottom:1.2rem"]').forEach(el => el.style.display = 'none');
+    document.getElementById('success-message').style.display = 'block';
+
+    const successText = document.getElementById('success-text');
+    if (attending === 'yes') {
+      successText.textContent = `Your RSVP is in, ${name.split(' ')[0]}! Prepare yourself for an epic weekend. ⚔️`;
+    } else {
+      successText.textContent = `We received your reply, ${name.split(' ')[0]}. You'll be missed — we'll raise a goblet in your honour! 🍷`;
+    }
+  }
+</script>
+</body>
+</html>
