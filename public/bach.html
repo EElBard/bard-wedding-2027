@@ -206,35 +206,6 @@
     margin-top: 0.3rem;
   }
 
-  .dietary-box {
-    background: rgba(242,196,206,0.15);
-    border: 1px solid rgba(232,160,176,0.3);
-    border-radius: 2px;
-    padding: 0.75rem 1rem;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    color: var(--ink);
-    opacity: 0.8;
-  }
-
-  .dietary-box strong {
-    display: block;
-    font-family: 'Cinzel', serif;
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--blush-deep);
-    margin-bottom: 0.3rem;
-    font-weight: 600;
-  }
-
-  .dietary-box a {
-    color: var(--gold);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
   .meal-box {
     background: rgba(168,197,160,0.15);
     border: 1px solid rgba(126,168,122,0.3);
@@ -326,37 +297,6 @@
 
   #plus-one-field { display: none; }
   #plus-one-field.visible { display: flex; }
-
-  #solo-invite-field { display: none; }
-  #solo-invite-field.visible { display: flex; }
-
-  .checkbox-row {
-    flex-direction: row !important;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  .checkbox-row input[type="checkbox"] {
-    width: auto;
-    margin-top: 0.35rem;
-    accent-color: var(--gold);
-    transform: scale(1.2);
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  .checkbox-row .checkbox-label {
-    font-family: 'IM Fell English', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    letter-spacing: normal;
-    text-transform: none;
-    color: var(--ink);
-    opacity: 0.85;
-    cursor: pointer;
-    line-height: 1.6;
-    user-select: none;
-  }
 
   .btn-primary {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
@@ -463,7 +403,6 @@
           <span class="time">2:00 – 4:00 PM</span>
           <span class="activity">👑 Make Your Own Crown</span>
           <div class="detail">Craft a flower crown, princess hat, or royal crown</div>
-          <div class="cost-badge">~$10 – $40 per person</div>
         </div>
 
         <div class="event-item">
@@ -479,11 +418,6 @@
           <div class="meal-box">
             <strong>Feast included</strong>
             Roasted Seasoned Chicken · Lemon Pepper Roasted Red Bliss Potatoes · Corn on the Cob · Apple Square · Dinner Roll
-          </div>
-          <div class="dietary-box">
-            <strong>Dietary accommodations</strong>
-            Accommodations may be available upon request. Dietary and children's meal requests can only be made up to 90 days in advance, and must be requested at least 4 hours prior to showtime.<br><br>
-            Call the Excalibur Box Office at <strong style="display:inline; font-family:inherit; font-size:inherit; text-transform:none; letter-spacing:normal; color:var(--ink);">702.597.7477</strong> or email <a href="mailto:ticketing_groups@excalibur.com">ticketing_groups@excalibur.com</a>.
           </div>
         </div>
       </div>
@@ -577,12 +511,6 @@
         <input type="text" id="field-plusone-name" placeholder="Their name...">
       </div>
 
-      <!-- Solo invite acknowledgment -->
-      <div class="form-field checkbox-row" id="solo-invite-field">
-        <input type="checkbox" id="field-solo-ack" required>
-        <label class="checkbox-label" for="field-solo-ack">I understand this invitation is for me only and does not include a plus-one.</label>
-      </div>
-
       <div class="form-field">
         <label>Dietary requirements or a note to Ethan &amp; Holly</label>
         <textarea id="field-notes" placeholder="Any allergies, dietary restrictions, or a message for the couple..."></textarea>
@@ -613,8 +541,6 @@
   const noCodeEl         = document.getElementById('no-code');
   const plusOneField     = document.getElementById('plus-one-field');
   const plusOneNameField = document.getElementById('plusone-name-field');
-  const soloInviteField  = document.getElementById('solo-invite-field');
-  const soloAckCheckbox  = document.getElementById('field-solo-ack');
   const nameInput        = document.getElementById('field-name');
 
   const params    = new URLSearchParams(window.location.search);
@@ -651,27 +577,16 @@
 
   init();
 
-  // --- Show/hide +1 or solo-ack ---
+  // --- Show/hide +1 based on attendance (all bach guests may bring a +1) ---
   function handleAttendingChange() {
     const attending = document.getElementById('field-attending').value;
-    if (guest && guest.plusOne && attending === 'yes') {
+    if (attending === 'yes') {
       plusOneField.classList.add('visible');
-      soloInviteField.classList.remove('visible');
-      soloAckCheckbox.required = false;
-      soloAckCheckbox.checked = false;
-    } else if (guest && !guest.plusOne && attending === 'yes') {
-      plusOneField.classList.remove('visible');
-      plusOneNameField.style.display = 'none';
-      document.getElementById('field-plusone').value = 'no';
-      soloInviteField.classList.add('visible');
-      soloAckCheckbox.required = true;
     } else {
       plusOneField.classList.remove('visible');
       plusOneNameField.style.display = 'none';
       document.getElementById('field-plusone').value = 'no';
-      soloInviteField.classList.remove('visible');
-      soloAckCheckbox.required = false;
-      soloAckCheckbox.checked = false;
+      document.getElementById('field-plusone-name').value = '';
     }
   }
 
@@ -690,7 +605,6 @@
     const notes       = document.getElementById('field-notes').value;
     const plusOne     = document.getElementById('field-plusone').value || 'no';
     const plusOneName = document.getElementById('field-plusone-name').value || '';
-    const soloAck    = soloAckCheckbox.checked;
 
     const btn = formEl.querySelector('.btn-primary');
     btn.textContent = 'Sending...';
@@ -701,7 +615,7 @@
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: 'bach', guest: guestSlug, name, email, attending, plusOne, plusOneName, soloAck, notes })
+        body: JSON.stringify({ event: 'bach', guest: guestSlug, name, email, attending, plusOne, plusOneName, notes })
       });
     } catch (err) {
       btn.textContent = 'Send My Reply ✦';
