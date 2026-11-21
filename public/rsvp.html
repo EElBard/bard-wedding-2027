@@ -181,6 +181,35 @@
   #plus-one-field { display: none; }
   #plus-one-field.visible { display: flex; }
 
+  #solo-invite-field { display: none; }
+  #solo-invite-field.visible { display: flex; }
+
+  .checkbox-row {
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: auto;
+    margin-top: 0.35rem;
+    accent-color: var(--gold);
+    transform: scale(1.2);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .checkbox-row .checkbox-label {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+    opacity: 0.85;
+    cursor: pointer;
+    line-height: 1.6;
+    user-select: none;
+  }
+
   .btn-primary {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     color: white;
@@ -303,6 +332,12 @@
       <input type="text" id="field-plusone-name" placeholder="Their name...">
     </div>
 
+    <!-- Solo invite acknowledgment — shown to guests WITHOUT a +1 who said yes -->
+    <div class="form-field checkbox-row" id="solo-invite-field">
+      <input type="checkbox" id="field-solo-ack" required>
+      <label class="checkbox-label" for="field-solo-ack">I understand this invitation is for me only and does not include a plus-one.</label>
+    </div>
+
     <div class="form-field">
       <label>Dietary requirements or a note to Ethan & Holly</label>
       <textarea id="field-notes" placeholder="Any allergies, dietary restrictions, or a message for the happy couple..."></textarea>
@@ -331,6 +366,8 @@
   const noCodeEl         = document.getElementById('no-code');
   const plusOneField     = document.getElementById('plus-one-field');
   const plusOneNameField = document.getElementById('plusone-name-field');
+  const soloInviteField  = document.getElementById('solo-invite-field');
+  const soloAckCheckbox  = document.getElementById('field-solo-ack');
   const nameInput        = document.getElementById('field-name');
 
   const params    = new URLSearchParams(window.location.search);
@@ -367,15 +404,27 @@
 
   init();
 
-  // --- Show/hide +1 based on attendance + eligibility ---
+  // --- Show/hide +1 or solo-ack based on attendance + eligibility ---
   function handleAttendingChange() {
     const attending = document.getElementById('field-attending').value;
     if (guest && guest.plusOne && attending === 'yes') {
       plusOneField.classList.add('visible');
+      soloInviteField.classList.remove('visible');
+      soloAckCheckbox.required = false;
+      soloAckCheckbox.checked = false;
+    } else if (guest && !guest.plusOne && attending === 'yes') {
+      plusOneField.classList.remove('visible');
+      plusOneNameField.style.display = 'none';
+      document.getElementById('field-plusone').value = 'no';
+      soloInviteField.classList.add('visible');
+      soloAckCheckbox.required = true;
     } else {
       plusOneField.classList.remove('visible');
       plusOneNameField.style.display = 'none';
       document.getElementById('field-plusone').value = 'no';
+      soloInviteField.classList.remove('visible');
+      soloAckCheckbox.required = false;
+      soloAckCheckbox.checked = false;
     }
   }
 
@@ -394,6 +443,7 @@
     const notes       = document.getElementById('field-notes').value;
     const plusOne     = document.getElementById('field-plusone').value || 'no';
     const plusOneName = document.getElementById('field-plusone-name').value || '';
+    const soloAck    = soloAckCheckbox.checked;
 
     const btn = formEl.querySelector('.btn-primary');
     btn.textContent = 'Sending...';
@@ -404,7 +454,7 @@
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guest: guestSlug, name, email, attending, plusOne, plusOneName, notes })
+        body: JSON.stringify({ guest: guestSlug, name, email, attending, plusOne, plusOneName, soloAck, notes })
       });
     } catch (err) {
       // Only fires on a true network failure (offline, DNS error, etc.)
