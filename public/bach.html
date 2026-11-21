@@ -43,9 +43,9 @@
   }
 
   .back-link {
-    position: fixed;
-    top: 1.25rem;
-    left: 1.5rem;
+    width: 100%;
+    max-width: 620px;
+    margin-bottom: 1rem;
     font-family: 'Cinzel', serif;
     font-size: 0.65rem;
     letter-spacing: 0.18em;
@@ -56,7 +56,6 @@
     align-items: center;
     gap: 0.4rem;
     transition: opacity 0.2s;
-    z-index: 10;
   }
   .back-link:hover { opacity: 0.65; }
 
@@ -298,6 +297,399 @@
   #plus-one-field { display: none; }
   #plus-one-field.visible { display: flex; }
 
+  /* ---- QUEST TIMELINE (TWO-POINT RANGE PICKER) ---- */
+  .visually-hidden:where(:not(:focus-within, :active)) {
+    position: absolute !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .quest-timeline-field {
+    display: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-inline-size: 0;
+  }
+  .quest-timeline-field.visible { display: block; }
+
+  .quest-timeline-field legend {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.45rem;
+    padding: 0;
+  }
+
+  .qt-card {
+    background: rgba(253,246,236,0.9);
+    border: 1px solid var(--border-gold);
+    border-radius: 2px;
+    padding: 1rem 1rem 1.05rem;
+  }
+
+  .qt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .qt-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #466a42;
+    background: rgba(168,197,160,0.28);
+    border: 1px solid rgba(126,168,122,0.55);
+    border-radius: 2px;
+    padding: 0.22rem 0.6rem;
+  }
+
+  .qt-status.is-partial {
+    color: #7c5412;
+    background: rgba(200,151,58,0.16);
+    border-color: rgba(200,151,58,0.5);
+  }
+
+  .qt-reset {
+    background: transparent;
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a621c;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 0.25rem 0.2rem;
+    min-block-size: 24px;
+    display: none;
+  }
+  .qt-reset.visible { display: inline-flex; align-items: center; }
+  .qt-reset:hover { color: var(--ink); }
+  .qt-reset:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .qt-readouts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .qt-readout {
+    background: rgba(245,233,208,0.55);
+    border: 1px solid rgba(212,168,85,0.45);
+    border-radius: 2px;
+    padding: 0.45rem 0.65rem;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  .qt-readout.is-adjusted {
+    background: rgba(200,151,58,0.12);
+    border-color: var(--gold);
+  }
+
+  .qt-readout-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.52rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7a5819;
+    margin-bottom: 0.1rem;
+  }
+
+  .qt-dot-key {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .qt-dot-key--arrive { background: #5a8456; }
+  .qt-dot-key--depart { background: #9a6e1f; }
+
+  .qt-readout-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .qt-slider-area {
+    --slider-track-size: 0.375rem;
+    --slider-thumb-size: 1.5rem;
+    position: relative;
+    padding-block: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .qt-slider-wrap {
+    position: relative;
+    block-size: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .qt-rail {
+    position: absolute;
+    left: calc(var(--slider-thumb-size) / 2);
+    right: calc(var(--slider-thumb-size) / 2);
+    height: var(--slider-track-size);
+    background: #d8c8ae;
+    box-shadow: inset 0 0 0 1px rgba(90,70,40,0.32);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .qt-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--qt-start, 0%);
+    right: calc(100% - var(--qt-end, 100%));
+    background: linear-gradient(to right, #5a8456, #9a6e1f);
+    border-radius: 999px;
+  }
+
+  .qt-ticks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .qt-tick {
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 2px solid #8a7554;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.15s, border-color 0.15s, transform 0.15s;
+  }
+
+  .qt-tick.in-range {
+    background: var(--gold-light);
+    border-color: #7c5412;
+  }
+
+  .qt-range {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 2.75rem;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .qt-range:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* WebKit/Blink range styling (separate from Firefox rules) */
+  .qt-range::-webkit-slider-runnable-track {
+    block-size: var(--slider-track-size);
+    border: 0;
+    background: transparent;
+  }
+
+  .qt-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: auto;
+    inline-size: var(--slider-thumb-size);
+    block-size: var(--slider-thumb-size);
+    margin-block-start: calc((var(--slider-track-size) - var(--slider-thumb-size)) / 2);
+    border-radius: 50%;
+    border: 2.5px solid var(--cream);
+    box-shadow: 0 2px 6px rgba(58,42,26,0.32), 0 0 0 1px rgba(58,42,26,0.22);
+    cursor: grab;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .qt-range--arrive::-webkit-slider-thumb {
+    background: #5a8456;
+  }
+
+  .qt-range--depart::-webkit-slider-thumb {
+    background: #9a6e1f;
+  }
+
+  .qt-range::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.12);
+  }
+
+  .qt-range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px var(--cream), 0 0 0 5px var(--ink);
+  }
+
+  /* Firefox range styling */
+  .qt-range::-moz-range-track {
+    block-size: var(--slider-track-size);
+    border: 0;
+    background: transparent;
+  }
+
+  .qt-range::-moz-range-thumb {
+    pointer-events: auto;
+    inline-size: var(--slider-thumb-size);
+    block-size: var(--slider-thumb-size);
+    border-radius: 50%;
+    border: 2.5px solid var(--cream);
+    box-shadow: 0 2px 6px rgba(58,42,26,0.32), 0 0 0 1px rgba(58,42,26,0.22);
+    cursor: grab;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .qt-range--arrive::-moz-range-thumb {
+    background: #5a8456;
+  }
+
+  .qt-range--depart::-moz-range-thumb {
+    background: #9a6e1f;
+  }
+
+  .qt-range::-moz-range-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.12);
+  }
+
+  .qt-range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 3px var(--cream), 0 0 0 5px var(--ink);
+  }
+
+  .qt-day-axis {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 calc(var(--slider-thumb-size) / 2);
+    font-family: 'Cinzel', serif;
+    font-size: 0.54rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .qt-stops {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .qt-stop {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-block-size: 2.15rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    border: 1px solid rgba(212,168,85,0.65);
+    background: rgba(245,233,208,0.65);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  }
+
+  .qt-stop:hover {
+    border-color: var(--gold);
+    background: rgba(232,196,122,0.28);
+  }
+
+  .qt-stop:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .qt-stop.is-skipped {
+    opacity: 0.42;
+    background: transparent;
+    border-style: dashed;
+    border-color: rgba(154,132,99,0.55);
+  }
+
+  .qt-stop.is-skipped .qt-stop-name {
+    text-decoration: line-through;
+  }
+
+  .qt-stop.is-arrive {
+    border-color: #5a8456;
+    background: rgba(168,197,160,0.28);
+  }
+
+  .qt-stop.is-depart {
+    border-color: #9a6e1f;
+    background: rgba(232,196,122,0.34);
+  }
+
+  .qt-stop-time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c5412;
+  }
+
+  .qt-hint {
+    margin-top: 0.6rem;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.84rem;
+    color: var(--ink);
+    opacity: 0.7;
+  }
+
+  @media (pointer: coarse) {
+    .qt-slider-area {
+      --slider-thumb-size: 1.75rem;
+    }
+    .qt-stop {
+      min-block-size: 2.5rem;
+      padding: 0.35rem 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .qt-readouts {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .btn-primary {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     color: white;
@@ -489,13 +881,74 @@
       </div>
 
       <div class="form-field">
-        <label>Will you attend?</label>
+        <label for="field-attending">Will you attend?</label>
         <select id="field-attending" required onchange="handleAttendingChange()">
           <option value="">— Choose your fate —</option>
           <option value="yes">Huzzah! I shall attend!</option>
           <option value="no">Alas, I cannot make it</option>
         </select>
       </div>
+
+      <!-- Quest Timeline — two-point range picker for late arrival / early departure -->
+      <fieldset class="quest-timeline-field" id="quest-timeline-field">
+        <legend>Your Quest Timeline</legend>
+        <div class="qt-card">
+          <div class="qt-header">
+            <span class="qt-status" id="qt-status" aria-live="polite">⚔️ Full Weekend</span>
+            <button type="button" class="qt-reset" id="qt-reset">Reset to full weekend</button>
+          </div>
+
+          <div class="qt-readouts">
+            <div class="qt-readout" id="qt-arrive-box">
+              <div class="qt-readout-label"><span class="qt-dot-key qt-dot-key--arrive" aria-hidden="true"></span>Arriving for</div>
+              <div class="qt-readout-val" id="qt-arrive-text">👑 Fri 2 PM · Arrival &amp; Crowns</div>
+            </div>
+            <div class="qt-readout" id="qt-depart-box">
+              <div class="qt-readout-label"><span class="qt-dot-key qt-dot-key--depart" aria-hidden="true"></span>Staying through</div>
+              <div class="qt-readout-val" id="qt-depart-text">☕ Sun AM · Café &amp; Farewells</div>
+            </div>
+          </div>
+
+          <div class="qt-slider-area" id="qt-slider-area">
+            <label for="field-arrive" class="visually-hidden">Arriving for milestone</label>
+            <label for="field-depart" class="visually-hidden">Staying through milestone</label>
+            <div class="qt-slider-wrap">
+              <div class="qt-rail" id="qt-rail">
+                <div class="qt-fill" id="qt-fill"></div>
+                <div class="qt-ticks" id="qt-ticks" aria-hidden="true"></div>
+              </div>
+              <input
+                type="range"
+                id="field-arrive"
+                class="qt-range qt-range--arrive"
+                min="0"
+                max="6"
+                step="1"
+                value="0"
+                aria-describedby="qt-hint"
+              >
+              <input
+                type="range"
+                id="field-depart"
+                class="qt-range qt-range--depart"
+                min="0"
+                max="6"
+                step="1"
+                value="6"
+                aria-describedby="qt-hint"
+              >
+            </div>
+            <div class="qt-day-axis" aria-hidden="true">
+              <span>Fri Feb 19</span>
+              <span>Sat Feb 20</span>
+              <span>Sun Feb 21</span>
+            </div>
+          </div>
+
+          <div class="qt-stops" id="qt-stops" role="group" aria-label="Quick-select weekend milestones"></div>
+          <p class="qt-hint" id="qt-hint">Slide either handle or tap a stop if you're arriving late or leaving early.</p>
+        </div>
+      </fieldset>
 
       <!-- +1 section -->
       <div class="form-field" id="plus-one-field">
@@ -541,7 +994,196 @@
   const noCodeEl         = document.getElementById('no-code');
   const plusOneField     = document.getElementById('plus-one-field');
   const plusOneNameField = document.getElementById('plusone-name-field');
+  const questField       = document.getElementById('quest-timeline-field');
   const nameInput        = document.getElementById('field-name');
+
+  // --- Quest Timeline state & refs ---
+  const QUEST_STOPS = [
+    { day: 'Fri', time: '2 PM',  short: 'Crowns',     name: 'Arrival & Crowns',    icon: '👑' },
+    { day: 'Fri', time: '4 PM',  short: 'Happy Hr',   name: 'Happy Hour',          icon: '🥂' },
+    { day: 'Fri', time: '6 PM',  short: 'Tournament', name: 'Tournament of Kings', icon: '⚔️' },
+    { day: 'Sat', time: 'Day',   short: 'D&D',        name: 'D&D One-Shot',        icon: '🎲' },
+    { day: 'Sat', time: 'Eve',   short: 'Dinner',     name: 'Group Dinner',        icon: '🍽️' },
+    { day: 'Sat', time: 'Night', short: 'Club Crawl', name: 'Club Crawl',          icon: '🎉' },
+    { day: 'Sun', time: 'AM',    short: 'Café',       name: 'Café & Farewells',    icon: '☕' }
+  ];
+  const LAST_STOP = QUEST_STOPS.length - 1;
+
+  const arriveInput  = document.getElementById('field-arrive');
+  const departInput  = document.getElementById('field-depart');
+  const qtFill       = document.getElementById('qt-fill');
+  const qtRail       = document.getElementById('qt-rail');
+  const qtTicksEl    = document.getElementById('qt-ticks');
+  const qtStopsEl    = document.getElementById('qt-stops');
+  const qtStatusEl   = document.getElementById('qt-status');
+  const qtResetBtn   = document.getElementById('qt-reset');
+  const qtArriveBox  = document.getElementById('qt-arrive-box');
+  const qtDepartBox  = document.getElementById('qt-depart-box');
+  const qtArriveText = document.getElementById('qt-arrive-text');
+  const qtDepartText = document.getElementById('qt-depart-text');
+
+  function formatStop(stop) {
+    return `${stop.day} ${stop.time} · ${stop.name}`;
+  }
+
+  function buildQuestTimeline() {
+    qtTicksEl.innerHTML = '';
+    qtStopsEl.innerHTML = '';
+
+    QUEST_STOPS.forEach((stop, idx) => {
+      const pct = (idx / LAST_STOP) * 100;
+
+      const tick = document.createElement('span');
+      tick.className = 'qt-tick';
+      tick.style.left = `${pct}%`;
+      tick.dataset.index = idx;
+      qtTicksEl.appendChild(tick);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'qt-stop';
+      btn.dataset.index = idx;
+      btn.innerHTML = `<span aria-hidden="true">${stop.icon}</span><span class="qt-stop-time">${stop.day} ${stop.time}</span><span class="qt-stop-name">${stop.short}</span>`;
+      btn.addEventListener('click', () => handleStopSelect(idx));
+      qtStopsEl.appendChild(btn);
+    });
+
+    syncQuestTimeline();
+  }
+
+  function handleStopSelect(idx) {
+    let a = Number(arriveInput.value);
+    let d = Number(departInput.value);
+
+    if (idx < a) {
+      a = idx;
+      arriveInput.style.zIndex = '4';
+      departInput.style.zIndex = '3';
+    } else if (idx > d) {
+      d = idx;
+      departInput.style.zIndex = '4';
+      arriveInput.style.zIndex = '3';
+    } else if (idx === a || idx === d) {
+      return;
+    } else {
+      const distA = idx - a;
+      const distD = d - idx;
+      if (distA < distD || (distA === distD && idx <= Math.floor(LAST_STOP / 2))) {
+        a = idx;
+        arriveInput.style.zIndex = '4';
+        departInput.style.zIndex = '3';
+      } else {
+        d = idx;
+        departInput.style.zIndex = '4';
+        arriveInput.style.zIndex = '3';
+      }
+    }
+
+    arriveInput.value = String(a);
+    departInput.value = String(d);
+    syncQuestTimeline();
+  }
+
+  function syncQuestTimeline(changedHandle) {
+    let a = Number(arriveInput.value);
+    let d = Number(departInput.value);
+
+    if (changedHandle === 'arrive' && a > d) {
+      a = d;
+      arriveInput.value = String(a);
+    } else if (changedHandle === 'depart' && d < a) {
+      d = a;
+      departInput.value = String(d);
+    }
+
+    if (a === d) {
+      if (a === 0) {
+        departInput.style.zIndex = '4';
+        arriveInput.style.zIndex = '3';
+      } else if (a === LAST_STOP) {
+        arriveInput.style.zIndex = '4';
+        departInput.style.zIndex = '3';
+      } else if (changedHandle === 'arrive') {
+        arriveInput.style.zIndex = '4';
+        departInput.style.zIndex = '3';
+      } else if (changedHandle === 'depart') {
+        departInput.style.zIndex = '4';
+        arriveInput.style.zIndex = '3';
+      }
+    } else if (changedHandle === 'arrive') {
+      arriveInput.style.zIndex = '4';
+      departInput.style.zIndex = '3';
+    } else if (changedHandle === 'depart') {
+      departInput.style.zIndex = '4';
+      arriveInput.style.zIndex = '3';
+    }
+
+    const startPct = (a / LAST_STOP) * 100;
+    const endPct   = (d / LAST_STOP) * 100;
+    qtFill.style.setProperty('--qt-start', `${startPct}%`);
+    qtFill.style.setProperty('--qt-end', `${endPct}%`);
+
+    const arriveStop = QUEST_STOPS[a];
+    const departStop = QUEST_STOPS[d];
+
+    arriveInput.setAttribute('aria-valuetext', formatStop(arriveStop));
+    departInput.setAttribute('aria-valuetext', formatStop(departStop));
+
+    qtArriveText.textContent = `${arriveStop.icon} ${formatStop(arriveStop)}`;
+    qtDepartText.textContent = `${departStop.icon} ${formatStop(departStop)}`;
+
+    const late  = a > 0;
+    const early = d < LAST_STOP;
+    qtArriveBox.classList.toggle('is-adjusted', late);
+    qtDepartBox.classList.toggle('is-adjusted', early);
+    qtResetBtn.classList.toggle('visible', late || early);
+
+    if (!late && !early) {
+      qtStatusEl.textContent = '⚔️ Full Weekend';
+      qtStatusEl.classList.remove('is-partial');
+    } else if (late && early) {
+      qtStatusEl.textContent = '⏳ Arriving Late · Leaving Early';
+      qtStatusEl.classList.add('is-partial');
+    } else if (late) {
+      qtStatusEl.textContent = '⏳ Arriving Late';
+      qtStatusEl.classList.add('is-partial');
+    } else {
+      qtStatusEl.textContent = '⏳ Leaving Early';
+      qtStatusEl.classList.add('is-partial');
+    }
+
+    qtTicksEl.querySelectorAll('.qt-tick').forEach((el) => {
+      const i = Number(el.dataset.index);
+      el.classList.toggle('in-range', i >= a && i <= d);
+    });
+
+    qtStopsEl.querySelectorAll('.qt-stop').forEach((btn) => {
+      const i = Number(btn.dataset.index);
+      const inRange = i >= a && i <= d;
+      btn.classList.toggle('is-skipped', !inRange);
+      btn.classList.toggle('is-arrive', i === a && late);
+      btn.classList.toggle('is-depart', i === d && early);
+      btn.setAttribute('aria-pressed', String(inRange));
+    });
+  }
+
+  arriveInput.addEventListener('input', () => syncQuestTimeline('arrive'));
+  departInput.addEventListener('input', () => syncQuestTimeline('depart'));
+
+  qtRail.addEventListener('click', (e) => {
+    const rect = qtRail.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const idx = Math.round(ratio * LAST_STOP);
+    handleStopSelect(idx);
+  });
+
+  qtResetBtn.addEventListener('click', () => {
+    arriveInput.value = '0';
+    departInput.value = String(LAST_STOP);
+    syncQuestTimeline();
+  });
+
+  buildQuestTimeline();
 
   const params    = new URLSearchParams(window.location.search);
   const guestSlug = params.get('guest');
@@ -577,12 +1219,14 @@
 
   init();
 
-  // --- Show/hide +1 based on attendance (all bach guests may bring a +1) ---
+  // --- Show/hide Quest Timeline & +1 based on attendance ---
   function handleAttendingChange() {
     const attending = document.getElementById('field-attending').value;
     if (attending === 'yes') {
+      questField.classList.add('visible');
       plusOneField.classList.add('visible');
     } else {
+      questField.classList.remove('visible');
       plusOneField.classList.remove('visible');
       plusOneNameField.style.display = 'none';
       document.getElementById('field-plusone').value = 'no';
@@ -602,9 +1246,23 @@
     const attending   = document.getElementById('field-attending').value;
     const name        = document.getElementById('field-name').value;
     const email       = document.getElementById('field-email').value;
-    const notes       = document.getElementById('field-notes').value;
+    const rawNotes    = document.getElementById('field-notes').value.trim();
     const plusOne     = document.getElementById('field-plusone').value || 'no';
     const plusOneName = document.getElementById('field-plusone-name').value || '';
+
+    const aIdx = Number(arriveInput.value);
+    const dIdx = Number(departInput.value);
+    const isFullWeekend = aIdx === 0 && dIdx === LAST_STOP;
+    const arriveAt    = attending === 'yes' ? formatStop(QUEST_STOPS[aIdx]) : '';
+    const departAfter = attending === 'yes' ? formatStop(QUEST_STOPS[dIdx]) : '';
+    const schedule    = attending === 'yes'
+      ? (isFullWeekend ? 'Full Weekend' : `${arriveAt} to ${departAfter}`)
+      : '';
+
+    const scheduleNote = (attending === 'yes' && !isFullWeekend)
+      ? `[Schedule: Arriving ${arriveAt} | Staying through ${departAfter}]`
+      : '';
+    const notes = [scheduleNote, rawNotes].filter(Boolean).join('\n');
 
     const btn = formEl.querySelector('.btn-primary');
     btn.textContent = 'Sending...';
@@ -615,7 +1273,7 @@
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: 'bach', guest: guestSlug, name, email, attending, plusOne, plusOneName, notes })
+        body: JSON.stringify({ event: 'bach', guest: guestSlug, name, email, attending, plusOne, plusOneName, schedule, arriveAt, departAfter, notes })
       });
     } catch (err) {
       btn.textContent = 'Send My Reply ✦';
