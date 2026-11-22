@@ -452,21 +452,33 @@
     btn.disabled = true;
 
     try {
-      await fetch('https://script.google.com/macros/s/AKfycbyBfDQovMVZOntJmVXLHhVbhkrXn6-LRFVXJZirJp13RA3FnCCFhR7b_ZvZOBoC0RdP/exec', {
+      const res = await fetch('/api/rsvps', {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guest: guestSlug, name, email, attending, plusOne, plusOneName, soloAck, notes })
+        body: JSON.stringify({
+          event: 'wedding',
+          guest: guestSlug ? guestSlug.toLowerCase() : '',
+          name,
+          email,
+          attending,
+          plusOne,
+          plusOneName,
+          soloAck,
+          notes,
+          source: 'form'
+        })
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Unable to save your RSVP right now.');
+      }
     } catch (err) {
-      // Only fires on a true network failure (offline, DNS error, etc.)
       btn.textContent = 'Send My Reply ✦';
       btn.disabled = false;
-      alert("It seems you're offline or something went wrong. Please check your connection and try again, or contact Ethan & Holly directly.");
+      alert(err.message || "It seems you're offline or something went wrong. Please check your connection and try again, or contact Ethan & Holly directly.");
       return;
     }
 
-    // No throw = request reached Google. Show success.
     formEl.style.display = 'none';
     greetingEl.style.display = 'none';
     document.getElementById('success-message').style.display = 'block';

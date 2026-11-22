@@ -1,0 +1,3649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>The Royal Ledger — Ethan &amp; Holly Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #f2c4ce;
+    --blush-deep: #e8a0b0;
+    --rose-ink: #843647;
+    --sage: #a8c5a0;
+    --sage-deep: #7ea87a;
+    --sage-ink: #2f512c;
+    --lavender: #c9b8e8;
+    --lavender-deep: #a090cc;
+    --lavender-ink: #4a3a75;
+    --cream: #fdf6ec;
+    --parchment: #f5e9d0;
+    --parchment-soft: #faf1df;
+    --ink: #3a2a1a;
+    --ink-muted: #6c5844;
+    --gold: #c8973a;
+    --gold-light: #e8c47a;
+    --gold-ink: #7d5610;
+    --border-gold: #d4a855;
+    --border-soft: rgba(212, 168, 85, 0.42);
+    --surface: rgba(255, 252, 246, 0.92);
+    --shadow-sm: 0 2px 12px rgba(58, 42, 26, 0.06);
+    --shadow-md: 0 10px 36px rgba(58, 42, 26, 0.1);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--cream);
+    background-image:
+      radial-gradient(ellipse at 15% 10%, rgba(200, 183, 232, 0.18) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 85%, rgba(168, 197, 160, 0.18) 0%, transparent 45%),
+      radial-gradient(ellipse at 70% 15%, rgba(242, 196, 206, 0.14) 0%, transparent 40%);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .visually-hidden {
+    position: absolute !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  [hidden]:not([hidden="until-found"]) {
+    display: none !important;
+  }
+
+  /* ---- HEADER BAR ---- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(253, 246, 236, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-gold);
+    box-shadow: 0 2px 18px rgba(58, 42, 26, 0.05);
+  }
+
+  .topbar::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(to right, var(--blush), var(--lavender), var(--sage), var(--lavender), var(--blush));
+  }
+
+  .topbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.9rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .brand-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  .brand-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.55rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: var(--parchment-soft);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .status-badge[data-state="live"] {
+    background: rgba(168, 197, 160, 0.25);
+    border-color: rgba(126, 168, 122, 0.6);
+    color: var(--sage-ink);
+  }
+  .status-badge[data-state="live"] .status-dot { background: #4c8c46; }
+
+  .status-badge[data-state="preview"] {
+    background: rgba(201, 184, 232, 0.25);
+    border-color: rgba(160, 144, 204, 0.65);
+    color: var(--lavender-ink);
+  }
+  .status-badge[data-state="preview"] .status-dot { background: #7b66b6; }
+
+  .status-badge[data-state="offline"] {
+    background: rgba(242, 196, 206, 0.3);
+    border-color: var(--blush-deep);
+    color: var(--rose-ink);
+  }
+  .status-badge[data-state="offline"] .status-dot { background: #be5469; }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  /* ---- BUTTONS ---- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 36px;
+    padding: 0.45rem 0.95rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-gold);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn:hover:not(:disabled) {
+    background: var(--parchment);
+    border-color: var(--gold);
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #b98528);
+    border-color: #a4731e;
+    color: #fffdf9;
+    box-shadow: 0 3px 12px rgba(200, 151, 58, 0.28);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #b88528, #9f701d);
+    border-color: #8b6016;
+  }
+
+  .btn-danger {
+    background: #fff5f7;
+    border-color: var(--blush-deep);
+    color: var(--rose-ink);
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    background: rgba(242, 196, 206, 0.45);
+    border-color: #c77286;
+  }
+
+  .btn-sm {
+    min-height: 28px;
+    padding: 0.22rem 0.55rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.09em;
+  }
+
+  /* ---- MAIN SHELL ---- */
+  .main-shell {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 1.75rem 3.5rem;
+  }
+
+  /* ---- SETUP / PREVIEW BANNER ---- */
+  .setup-banner {
+    background: linear-gradient(145deg, var(--parchment), rgba(253, 246, 236, 0.96));
+    border: 1px solid var(--border-gold);
+    border-left: 4px solid var(--gold);
+    border-radius: 3px;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .setup-banner[hidden] { display: none; }
+
+  .setup-banner h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .setup-banner p,
+  .setup-banner ol {
+    font-size: 0.88rem;
+    color: var(--ink);
+    max-width: 78ch;
+  }
+
+  .setup-banner ol {
+    margin: 0.45rem 0 0 1.2rem;
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .setup-banner code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.82em;
+    background: rgba(253, 246, 236, 0.95);
+    border: 1px solid var(--border-soft);
+    padding: 0.08rem 0.35rem;
+    border-radius: 2px;
+  }
+
+  .setup-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-self: center;
+  }
+
+  /* ---- TABS ---- */
+  .tabs-wrap {
+    margin-top: 0.25rem;
+  }
+
+  .tablist {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border-gold);
+    margin-bottom: 1.25rem;
+    scrollbar-width: none;
+  }
+  .tablist::-webkit-scrollbar { display: none; }
+
+  [role="tab"] {
+    position: relative;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1.2rem;
+    background: transparent;
+    border: 0;
+    color: var(--ink-muted);
+    font-family: 'Cinzel', serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+
+  [role="tab"]:hover {
+    color: var(--ink);
+  }
+
+  [role="tab"]:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: -3px;
+    border-radius: 2px;
+  }
+
+  [role="tab"][aria-selected="true"] {
+    color: var(--ink);
+  }
+
+  [role="tab"][aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    border-block-end: 3px solid var(--gold);
+  }
+
+  .tab-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: var(--parchment);
+    border: 1px solid var(--border-soft);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  [role="tab"][aria-selected="true"] .tab-count {
+    background: rgba(200, 151, 58, 0.16);
+    border-color: var(--gold);
+    color: var(--gold-ink);
+  }
+
+  /* Tab panels sit in a single grid cell; ZERO padding/border/margin/bg on [role="tabpanel"] itself */
+  .tabpanel-stack {
+    display: grid;
+  }
+
+  [role="tabpanel"] {
+    grid-area: 1 / 1;
+    min-width: 0;
+    z-index: 1;
+  }
+
+  [role="tabpanel"][hidden] {
+    align-self: start;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .panel-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* ---- KPI CARDS ---- */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .kpi-card {
+    background: linear-gradient(155deg, var(--surface), rgba(245, 233, 208, 0.55));
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 1rem 1.15rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    text-align: left;
+  }
+
+  button.kpi-card {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+  }
+
+  button.kpi-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(58, 42, 26, 0.08);
+  }
+
+  button.kpi-card:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .kpi-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  .kpi-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.1rem;
+    font-weight: 600;
+    line-height: 1.05;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kpi-sub {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kpi-bar {
+    height: 6px;
+    background: rgba(212, 168, 85, 0.22);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 0.2rem;
+  }
+
+  .kpi-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--sage-deep), var(--gold));
+    border-radius: 999px;
+    transition: width 0.25s ease;
+  }
+
+  /* ---- SECTION CARD ---- */
+  .section-card {
+    background: var(--surface);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 1.15rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.9rem;
+  }
+
+  .section-head h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .section-head p {
+    font-size: 0.84rem;
+    color: var(--ink-muted);
+  }
+
+  /* ---- TOOLBAR & FILTERS ---- */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.9rem;
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    min-width: 240px;
+    flex: 0 1 300px;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    background: #fffdf9;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--lavender-deep);
+    box-shadow: 0 0 0 3px rgba(201, 184, 232, 0.25);
+  }
+
+  .chip-group {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    min-height: 30px;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: var(--parchment-soft);
+    color: var(--ink-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+
+  .filter-chip:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  .filter-chip[aria-pressed="true"] {
+    background: rgba(200, 151, 58, 0.18);
+    border-color: var(--gold);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .filter-chip:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /* ---- SORTABLE DATA TABLE ---- */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    background: #fffdf9;
+  }
+
+  .table-scroll:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .ledger-table {
+    width: 100%;
+    min-inline-size: 860px;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.86rem;
+  }
+
+  .ledger-table thead {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--border-gold);
+  }
+
+  .ledger-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+    white-space: nowrap;
+    padding: 0.7rem 0.85rem;
+    vertical-align: middle;
+  }
+
+  .ledger-table th:has(> button) {
+    padding: 0;
+  }
+
+  .ledger-table th > button {
+    width: 100%;
+    min-height: 38px;
+    padding: 0.7rem 0.85rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-align: left;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.45rem;
+    cursor: pointer;
+  }
+
+  .ledger-table th > button:hover {
+    background: rgba(200, 151, 58, 0.1);
+    color: var(--ink);
+  }
+
+  .ledger-table th > button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: -2px;
+  }
+
+  .sort-icon {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    opacity: 0.4;
+    color: currentColor;
+  }
+
+  .sort-icon::before {
+    content: '⇅';
+  }
+
+  th[aria-sort="ascending"] .sort-icon,
+  th[aria-sort="descending"] .sort-icon {
+    opacity: 1;
+    color: var(--ink);
+  }
+
+  th[aria-sort="ascending"] .sort-icon::before {
+    content: '▲';
+  }
+
+  th[aria-sort="descending"] .sort-icon::before {
+    content: '▼';
+  }
+
+  .ledger-table tbody tr {
+    border-bottom: 1px solid rgba(212, 168, 85, 0.22);
+    view-transition-name: match-element;
+  }
+
+  .ledger-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .ledger-table tbody tr:hover {
+    background: rgba(245, 233, 208, 0.35);
+  }
+
+  .ledger-table tbody tr[hidden] {
+    display: none;
+  }
+
+  .ledger-table td {
+    padding: 0.65rem 0.85rem;
+    vertical-align: top;
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
+    }
+  }
+
+  .guest-name {
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .guest-meta {
+    font-size: 0.76rem;
+    color: var(--ink-muted);
+    margin-top: 0.1rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.16rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  .pill-yes {
+    background: rgba(168, 197, 160, 0.3);
+    border-color: rgba(126, 168, 122, 0.6);
+    color: var(--sage-ink);
+  }
+
+  .pill-no {
+    background: rgba(242, 196, 206, 0.36);
+    border-color: var(--blush-deep);
+    color: var(--rose-ink);
+  }
+
+  .pill-pending {
+    background: rgba(232, 196, 122, 0.25);
+    border-color: rgba(200, 151, 58, 0.5);
+    color: var(--gold-ink);
+  }
+
+  .pill-lavender {
+    background: rgba(201, 184, 232, 0.28);
+    border-color: rgba(160, 144, 204, 0.55);
+    color: var(--lavender-ink);
+  }
+
+  .pill-neutral {
+    background: var(--parchment-soft);
+    border-color: var(--border-soft);
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+
+  .party-cell {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .notes-cell {
+    max-width: 300px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.83rem;
+  }
+
+  .muted-dash {
+    color: #a69582;
+  }
+
+  .row-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: nowrap;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+  }
+
+  /* ---- BACH QUEST TIMELINE BREAKDOWN ---- */
+  .bach-breakdown-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 1.15rem;
+    align-items: start;
+  }
+
+  .stop-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stop-bar-btn {
+    width: 100%;
+    text-align: left;
+    background: var(--parchment-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    padding: 0.65rem 0.85rem;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: minmax(195px, 1.2fr) minmax(120px, 1.4fr) auto;
+    align-items: center;
+    gap: 0.9rem;
+    transition: border-color 0.15s, background-color 0.15s;
+  }
+
+  .stop-bar-btn:hover {
+    border-color: var(--gold);
+    background: var(--parchment);
+  }
+
+  .stop-bar-btn[aria-pressed="true"] {
+    border-color: var(--gold);
+    background: rgba(232, 196, 122, 0.22);
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+
+  .stop-bar-btn:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .stop-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .stop-time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  .stop-title {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 0.88rem;
+  }
+
+  .stop-cost {
+    font-size: 0.74rem;
+    color: var(--ink-muted);
+  }
+
+  .stop-track {
+    height: 10px;
+    background: rgba(212, 168, 85, 0.18);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .stop-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--sage-deep), var(--gold));
+    border-radius: 999px;
+  }
+
+  .stop-count {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    min-width: 92px;
+  }
+
+  .stop-count strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+
+  .stop-count span {
+    font-size: 0.73rem;
+    color: var(--ink-muted);
+  }
+
+  .stop-detail-box {
+    background: var(--parchment-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    padding: 0.95rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .stop-detail-head h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .stop-detail-head p {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin-top: 0.15rem;
+  }
+
+  .chip-list-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+    margin-bottom: 0.35rem;
+  }
+
+  .guest-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  /* ---- GUEST SCHEDULE MATRIX ---- */
+  .matrix-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    background: #fffdf9;
+  }
+
+  .matrix-table {
+    width: 100%;
+    min-inline-size: 760px;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  .matrix-table th,
+  .matrix-table td {
+    padding: 0.5rem 0.55rem;
+    border-bottom: 1px solid rgba(212, 168, 85, 0.2);
+    text-align: center;
+  }
+
+  .matrix-table th:first-child,
+  .matrix-table td:first-child {
+    text-align: left;
+    padding-left: 0.85rem;
+    min-width: 175px;
+  }
+
+  .matrix-table thead th {
+    background: var(--parchment);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  .matrix-block {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 22px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .matrix-block.in {
+    background: rgba(168, 197, 160, 0.45);
+    border: 1px solid var(--sage-deep);
+    color: var(--sage-ink);
+  }
+
+  .matrix-block.arrive {
+    background: rgba(126, 168, 122, 0.7);
+    color: #fff;
+  }
+
+  .matrix-block.depart {
+    background: rgba(200, 151, 58, 0.35);
+    border: 1px solid var(--gold);
+    color: var(--ink);
+  }
+
+  .matrix-block.out {
+    background: transparent;
+    border: 1px dashed rgba(154, 132, 99, 0.45);
+    color: #b4a38d;
+  }
+
+  /* ---- DIETARY & NOTES CARDS ---- */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .note-card {
+    background: #fffdf9;
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 0.95rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .note-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .note-card-body {
+    background: var(--parchment-soft);
+    border-left: 3px solid var(--gold);
+    padding: 0.6rem 0.75rem;
+    border-radius: 2px;
+    font-size: 0.88rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .note-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.76rem;
+    color: var(--ink-muted);
+  }
+
+  /* ---- DIALOGS ---- */
+  dialog:modal {
+    overscroll-behavior: contain;
+    margin: auto;
+    border: 1px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 0;
+    background: linear-gradient(155deg, #fffdf9, var(--parchment-soft));
+    color: var(--ink);
+    width: min(580px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    box-shadow: 0 20px 70px rgba(38, 25, 12, 0.3);
+  }
+
+  dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background: rgba(58, 42, 26, 0.48);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.35rem;
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--parchment);
+  }
+
+  .modal-header h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .modal-close-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    background: #fffdf9;
+    color: var(--ink);
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-close-btn:hover {
+    background: var(--parchment-soft);
+    border-color: var(--gold);
+  }
+
+  .modal-close-btn:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .modal-body {
+    padding: 1.2rem 1.35rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .field[hidden] { display: none; }
+
+  .field label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  .field input[type="text"],
+  .field input[type="email"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    background: #fffdf9;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--lavender-deep);
+    box-shadow: 0 0 0 3px rgba(201, 184, 232, 0.25);
+  }
+
+  .field textarea {
+    min-height: 82px;
+    resize: vertical;
+  }
+
+  .field-hint {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+  }
+
+  .checkbox-field {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .checkbox-field input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  .checkbox-field label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.84rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .modal-error {
+    background: rgba(242, 196, 206, 0.38);
+    border: 1px solid var(--blush-deep);
+    color: var(--rose-ink);
+    padding: 0.55rem 0.75rem;
+    border-radius: 3px;
+    font-size: 0.84rem;
+  }
+
+  .modal-error[hidden] { display: none; }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    padding: 0.9rem 1.35rem;
+    border-top: 1px solid var(--border-soft);
+    background: var(--parchment-soft);
+  }
+
+  /* ---- TOAST NOTIFICATIONS (POPOVER="MANUAL") ---- */
+  .toast-region {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 200;
+    pointer-events: none;
+  }
+
+  [popover].toast {
+    pointer-events: auto;
+    position: fixed;
+    inset: auto 1.25rem 1.25rem auto;
+    margin: 0;
+    width: min(370px, calc(100vw - 2.5rem));
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border-gold);
+    border-left: 4px solid var(--gold);
+    border-radius: 3px;
+    background: #fffdf9;
+    color: var(--ink);
+    box-shadow: var(--shadow-md);
+    font-size: 0.86rem;
+    line-height: 1.45;
+    transform: translateY(var(--toast-offset, 0px));
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.2s ease, display 0.18s ease, overlay 0.18s ease;
+    transition-behavior: allow-discrete;
+  }
+
+  [popover].toast:is(:popover-open, .\:popover-open) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    opacity: 1;
+  }
+
+  @starting-style {
+    [popover].toast:is(:popover-open, .\:popover-open) {
+      opacity: 0;
+    }
+  }
+
+  [popover].toast[data-tone="success"] { border-left-color: var(--sage-deep); }
+  [popover].toast[data-tone="error"] { border-left-color: #be5469; }
+
+  .toast-close {
+    min-width: 26px;
+    min-height: 26px;
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    background: var(--parchment-soft);
+    color: var(--ink);
+    cursor: pointer;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  .toast-close:hover { background: var(--parchment); }
+  .toast-close:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    [popover].toast {
+      transition: none;
+    }
+  }
+
+  /* ---- RESPONSIVE ADJUSTMENTS ---- */
+  @media (max-width: 1120px) {
+    .kpi-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .bach-breakdown-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .main-shell { padding: 1rem; }
+    .topbar-inner { padding: 0.8rem 1rem; }
+    .kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .form-grid-2 {
+      grid-template-columns: 1fr;
+    }
+    .stop-bar-btn {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+    .stop-count { text-align: left; }
+  }
+
+  /* ---- PRINT CATERING SHEET ---- */
+  @media print {
+    body {
+      background: #fff;
+      color: #000;
+      font-size: 11pt;
+    }
+    .topbar,
+    .setup-banner,
+    .tablist,
+    .toolbar,
+    .btn,
+    .row-actions,
+    .toast-region {
+      display: none !important;
+    }
+    .main-shell {
+      max-width: none;
+      padding: 0;
+    }
+    .section-card,
+    .note-card {
+      border-color: #bbb;
+      box-shadow: none;
+      break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-group">
+      <div>
+        <div class="brand-eyebrow">Ethan &amp; Holly · Spring 2027</div>
+        <h1 class="brand-title">The Royal Ledger</h1>
+      </div>
+      <span id="connection-badge" class="status-badge" data-state="offline">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="connection-text">Connecting...</span>
+      </span>
+    </div>
+
+    <div class="topbar-actions">
+      <button type="button" id="btn-exit-preview" class="btn" hidden>Exit Preview</button>
+      <button type="button" id="btn-refresh" class="btn">↻ Refresh</button>
+      <button type="button" id="btn-add-rsvp" class="btn btn-primary">+ Add RSVP</button>
+      <button type="button" id="btn-export-csv" class="btn">⬇ Export CSV</button>
+      <a href="index.html" class="btn">← Wedding Site</a>
+    </div>
+  </div>
+</header>
+
+<main class="main-shell">
+  <section id="setup-banner" class="setup-banner" aria-labelledby="setup-banner-title" hidden>
+    <div>
+      <h2 id="setup-banner-title">Connect Free Neon Postgres to Go Live</h2>
+      <p>Your dashboard and RSVP forms are wired to <code>/api/rsvps</code>, and no database connection string is configured yet. To enable persistent storage on Vercel for free (no credit card required):</p>
+      <ol>
+        <li>Open your project in <strong>Vercel Dashboard → Storage → Create Database → Neon (Serverless Postgres)</strong>.</li>
+        <li>Link the database to this project (Vercel automatically populates <code>DATABASE_URL</code>).</li>
+        <li>Redeploy once — the <code>rsvps</code> table initializes automatically on the first request.</li>
+      </ol>
+    </div>
+    <div class="setup-banner-actions">
+      <button type="button" id="btn-preview-sample" class="btn btn-primary">Preview with Sample Data</button>
+      <button type="button" id="btn-retry-db" class="btn">Retry Connection</button>
+    </div>
+  </section>
+
+  <div class="tabs-wrap">
+    <div class="tablist" role="tablist" focusgroup="tablist nomemory" aria-label="Dashboard sections">
+      <button type="button" role="tab" id="tab-wedding" aria-selected="true" tabindex="0" focusgroupstart>
+        <span>Wedding RSVPs</span>
+        <span class="tab-count" id="count-wedding">0 / 42</span>
+      </button>
+      <button type="button" role="tab" id="tab-bach" aria-selected="false" tabindex="-1">
+        <span>Bach Weekend</span>
+        <span class="tab-count" id="count-bach">0 / 17</span>
+      </button>
+      <button type="button" role="tab" id="tab-notes" aria-selected="false" tabindex="-1">
+        <span>Dietary &amp; Notes</span>
+        <span class="tab-count" id="count-notes">0</span>
+      </button>
+      <button type="button" role="tab" id="tab-activity" aria-selected="false" tabindex="-1">
+        <span>All Activity</span>
+        <span class="tab-count" id="count-activity">0</span>
+      </button>
+    </div>
+
+    <div id="table-sort-status" role="status" class="visually-hidden"></div>
+
+    <div class="tabpanel-stack">
+      <!-- PANEL 1: WEDDING RSVPs -->
+      <section id="panel-wedding" role="tabpanel" aria-labelledby="tab-wedding">
+        <div class="panel-inner">
+          <div class="kpi-grid" id="wedding-kpis"></div>
+
+          <div class="section-card">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input type="search" id="wedding-search" class="search-input" placeholder="Search name, email, +1, or notes..." aria-label="Search wedding guests">
+                <div class="chip-group" id="wedding-filters" role="group" aria-label="Filter wedding guests">
+                  <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
+                  <button type="button" class="filter-chip" data-filter="attending" aria-pressed="false">Attending</button>
+                  <button type="button" class="filter-chip" data-filter="declined" aria-pressed="false">Declined</button>
+                  <button type="button" class="filter-chip" data-filter="pending" aria-pressed="false">Pending</button>
+                  <button type="button" class="filter-chip" data-filter="plusone" aria-pressed="false">Bringing +1</button>
+                  <button type="button" class="filter-chip" data-filter="notes" aria-pressed="false">Has Notes</button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button type="button" id="btn-copy-wedding-pending" class="btn btn-sm">Copy Pending Links</button>
+              </div>
+            </div>
+
+            <div class="table-scroll" role="region" aria-labelledby="wedding-caption" tabindex="0">
+              <table id="wedding-table" class="ledger-table">
+                <caption id="wedding-caption" class="visually-hidden">Wedding guest list and RSVP responses</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-type="text" aria-sort="ascending">
+                      <button type="button" commandfor="wedding-table" command="--sort">
+                        <span>Guest</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="wedding-table" command="--sort">
+                        <span>Status</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="wedding-table" command="--sort">
+                        <span>Party</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="wedding-table" command="--sort">
+                        <span>Email</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="wedding-table" command="--sort">
+                        <span>Dietary &amp; Notes</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="wedding-table" command="--sort">
+                        <span>Updated</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="wedding-tbody"></tbody>
+              </table>
+              <div id="wedding-empty" class="empty-state" hidden>No wedding guests match your current search or filter.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 2: BACH WEEKEND -->
+      <section id="panel-bach" role="tabpanel" aria-labelledby="tab-bach" hidden="until-found">
+        <div class="panel-inner">
+          <div class="kpi-grid" id="bach-kpis"></div>
+
+          <div class="section-card">
+            <div class="section-head">
+              <div>
+                <h2>Quest Timeline Headcount Breakdown</h2>
+                <p>Click any stop to see exact arrivals, departures, and who is attending or skipping.</p>
+              </div>
+              <div id="bach-cost-summary" class="pill pill-lavender"></div>
+            </div>
+            <div class="bach-breakdown-grid">
+              <div class="stop-bars" id="bach-stop-bars"></div>
+              <div class="stop-detail-box" id="bach-stop-detail"></div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-head">
+              <div>
+                <h2>Guest Schedule Matrix</h2>
+                <p>Visual Fri–Sun attendance across all 7 Quest Timeline stops for attending guests.</p>
+              </div>
+            </div>
+            <div class="matrix-wrap" id="bach-matrix-wrap"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input type="search" id="bach-search" class="search-input" placeholder="Search guest, schedule, +1, or notes..." aria-label="Search bach weekend guests">
+                <div class="chip-group" id="bach-filters" role="group" aria-label="Filter bach guests">
+                  <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
+                  <button type="button" class="filter-chip" data-filter="attending" aria-pressed="false">Attending</button>
+                  <button type="button" class="filter-chip" data-filter="declined" aria-pressed="false">Declined</button>
+                  <button type="button" class="filter-chip" data-filter="pending" aria-pressed="false">Pending</button>
+                  <button type="button" class="filter-chip" data-filter="partial" aria-pressed="false">Partial Weekend</button>
+                  <button type="button" class="filter-chip" data-filter="plusone" aria-pressed="false">Bringing +1</button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button type="button" id="btn-copy-bach-pending" class="btn btn-sm">Copy Pending Links</button>
+              </div>
+            </div>
+
+            <div class="table-scroll" role="region" aria-labelledby="bach-caption" tabindex="0">
+              <table id="bach-table" class="ledger-table">
+                <caption id="bach-caption" class="visually-hidden">Bach weekend guest list and RSVP responses</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-type="text" aria-sort="ascending">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Guest</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Status</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Party</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Quest Timeline</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Email</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Dietary &amp; Notes</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="bach-table" command="--sort">
+                        <span>Updated</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bach-tbody"></tbody>
+              </table>
+              <div id="bach-empty" class="empty-state" hidden>No Bach weekend guests match your current search or filter.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 3: DIETARY & NOTES -->
+      <section id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden="until-found">
+        <div class="panel-inner">
+          <div class="section-card">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input type="search" id="notes-search" class="search-input" placeholder="Search allergies, dietary needs, or notes..." aria-label="Search dietary requirements and notes">
+                <div class="chip-group" id="notes-filters" role="group" aria-label="Filter notes by event">
+                  <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All Events</button>
+                  <button type="button" class="filter-chip" data-filter="wedding" aria-pressed="false">Wedding Only</button>
+                  <button type="button" class="filter-chip" data-filter="bach" aria-pressed="false">Bach Only</button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button type="button" id="btn-export-notes-csv" class="btn btn-sm">⬇ Export Notes CSV</button>
+                <button type="button" id="btn-print-notes" class="btn btn-sm">🖨 Print Catering Sheet</button>
+              </div>
+            </div>
+
+            <div class="notes-grid" id="notes-grid"></div>
+            <div id="notes-empty" class="empty-state" hidden>No dietary requirements or notes have been submitted yet.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 4: ALL ACTIVITY -->
+      <section id="panel-activity" role="tabpanel" aria-labelledby="tab-activity" hidden="until-found">
+        <div class="panel-inner">
+          <div class="section-card">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input type="search" id="activity-search" class="search-input" placeholder="Search all submitted responses..." aria-label="Search all RSVP activity">
+                <div class="chip-group" id="activity-filters" role="group" aria-label="Filter activity by event">
+                  <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All Events</button>
+                  <button type="button" class="filter-chip" data-filter="wedding" aria-pressed="false">Wedding</button>
+                  <button type="button" class="filter-chip" data-filter="bach" aria-pressed="false">Bach Weekend</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-scroll" role="region" aria-labelledby="activity-caption" tabindex="0">
+              <table id="activity-table" class="ledger-table">
+                <caption id="activity-caption" class="visually-hidden">All submitted RSVP records across Wedding and Bach Weekend</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Event</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Guest</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Status</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Party</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">Details</th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Dietary &amp; Notes</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Source</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number" aria-sort="descending">
+                      <button type="button" commandfor="activity-table" command="--sort">
+                        <span>Updated</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="activity-tbody"></tbody>
+              </table>
+              <div id="activity-empty" class="empty-state" hidden>No RSVP submissions have been recorded yet.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- ADD / EDIT RSVP MODAL -->
+<dialog id="rsvp-modal" closedby="any" aria-labelledby="rsvp-modal-title">
+  <div class="modal-header">
+    <h2 id="rsvp-modal-title">Log RSVP</h2>
+    <button type="button" class="modal-close-btn" id="rsvp-modal-close" aria-label="Close dialog">&times;</button>
+  </div>
+  <form id="rsvp-modal-form">
+    <div class="modal-body">
+      <div id="rsvp-modal-error" class="modal-error" hidden></div>
+      <input type="hidden" id="modal-id">
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label for="modal-event">Event</label>
+          <select id="modal-event" required>
+            <option value="wedding">Wedding</option>
+            <option value="bach">Bach Weekend</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="modal-preset">Invited Guest Preset</label>
+          <select id="modal-preset">
+            <option value="">— Custom / unlisted guest —</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label for="modal-name">Full Name</label>
+          <input type="text" id="modal-name" required maxlength="120" autofocus placeholder="Guest's full name">
+        </div>
+        <div class="field">
+          <label for="modal-slug">Guest Link Slug</label>
+          <input type="text" id="modal-slug" required maxlength="100" placeholder="e.g. tori-watson">
+          <span class="field-hint" id="modal-slug-hint">Used to match invite links (?guest=slug)</span>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label for="modal-email">Email (optional for admin)</label>
+          <input type="email" id="modal-email" maxlength="200" placeholder="guest@email.com">
+        </div>
+        <div class="field">
+          <label for="modal-attending">Attendance</label>
+          <select id="modal-attending" required>
+            <option value="yes">Attending (Yes)</option>
+            <option value="no">Declined (No)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid-2" id="modal-plusone-row">
+        <div class="field">
+          <label for="modal-plusone">Bringing a +1?</label>
+          <select id="modal-plusone">
+            <option value="no">No (Just guest)</option>
+            <option value="yes">Yes (+1 guest)</option>
+          </select>
+          <span class="field-hint" id="modal-plusone-hint"></span>
+        </div>
+        <div class="field" id="modal-plusone-name-wrap" hidden>
+          <label for="modal-plusone-name">Plus-One Name</label>
+          <input type="text" id="modal-plusone-name" maxlength="120" placeholder="Guest's +1 name">
+        </div>
+      </div>
+
+      <div class="field checkbox-field" id="modal-solo-row" hidden>
+        <input type="checkbox" id="modal-solo-ack">
+        <label for="modal-solo-ack">Solo invite acknowledged (no +1)</label>
+      </div>
+
+      <div class="form-grid-2" id="modal-bach-schedule" hidden>
+        <div class="field">
+          <label for="modal-arrive">Arriving For</label>
+          <select id="modal-arrive"></select>
+        </div>
+        <div class="field">
+          <label for="modal-depart">Staying Through</label>
+          <select id="modal-depart"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="modal-notes">Dietary Requirements or Notes</label>
+        <textarea id="modal-notes" maxlength="2000" placeholder="Allergies, dietary restrictions, arrival notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn" id="rsvp-modal-cancel">Cancel</button>
+      <button type="submit" class="btn btn-primary" id="rsvp-modal-submit">Save RSVP</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<dialog id="delete-modal" closedby="any" aria-labelledby="delete-modal-title">
+  <div class="modal-header">
+    <h2 id="delete-modal-title">Delete RSVP?</h2>
+    <button type="button" class="modal-close-btn" id="delete-modal-close" aria-label="Close dialog">&times;</button>
+  </div>
+  <form method="dialog">
+    <div class="modal-body">
+      <p id="delete-modal-message">Remove this RSVP response? The guest will return to Pending status if they are on the invite list.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" value="cancel" class="btn" autofocus>Cancel</button>
+      <button type="submit" value="delete" class="btn btn-danger">Delete RSVP</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast-region" class="toast-region" role="region" aria-label="Notifications"></div>
+<div id="sr-announcer" aria-live="polite" class="visually-hidden"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const QUEST_STOPS = [
+    { index: 0, day: 'Fri', date: 'Fri Feb 19', time: '2 PM',  short: 'Crowns',     name: 'Arrival & Crowns',    icon: '👑', cost: 0 },
+    { index: 1, day: 'Fri', date: 'Fri Feb 19', time: '4 PM',  short: 'Happy Hr',   name: 'Happy Hour',          icon: '🥂', cost: 0 },
+    { index: 2, day: 'Fri', date: 'Fri Feb 19', time: '6 PM',  short: 'Tournament', name: 'Tournament of Kings', icon: '⚔️', cost: 85 },
+    { index: 3, day: 'Sat', date: 'Sat Feb 20', time: 'Day',   short: 'D&D',        name: 'D&D One-Shot',        icon: '🎲', cost: 0 },
+    { index: 4, day: 'Sat', date: 'Sat Feb 20', time: 'Eve',   short: 'Dinner',     name: 'Group Dinner',        icon: '🍽️', cost: 0 },
+    { index: 5, day: 'Sat', date: 'Sat Feb 20', time: 'Night', short: 'Club Crawl', name: 'Club Crawl',          icon: '🎉', cost: 40 },
+    { index: 6, day: 'Sun', date: 'Sun Feb 21', time: 'AM',    short: 'Café',       name: 'Café & Farewells',    icon: '☕', cost: 0 }
+  ];
+  const LAST_STOP = QUEST_STOPS.length - 1;
+
+  const state = {
+    guests: { wedding: {}, bach: {} },
+    rsvps: [],
+    previewMode: false,
+    dbConfigured: false,
+    lastSyncedAt: null,
+    activeTab: 'wedding',
+    selectedStopIndex: 2,
+    filters: {
+      wedding: { query: '', pill: 'all' },
+      bach: { query: '', pill: 'all' },
+      notes: { query: '', pill: 'all' },
+      activity: { query: '', pill: 'all' }
+    },
+    modalMode: 'add',
+    modalTargetId: null,
+    modalSlugEdited: false,
+    pendingDeleteRsvp: null,
+    nextSampleId: 100
+  };
+
+  // ---- FEATURE DETECTION POLYFILLS ----
+  if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+    import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js').catch(() => {});
+  }
+
+  // ---- DOM REFS ----
+  const connectionBadge = document.getElementById('connection-badge');
+  const connectionText  = document.getElementById('connection-text');
+  const setupBanner     = document.getElementById('setup-banner');
+  const btnExitPreview  = document.getElementById('btn-exit-preview');
+  const btnRefresh      = document.getElementById('btn-refresh');
+  const btnAddRsvp      = document.getElementById('btn-add-rsvp');
+  const btnExportCsv    = document.getElementById('btn-export-csv');
+  const btnPreviewSample = document.getElementById('btn-preview-sample');
+  const btnRetryDb      = document.getElementById('btn-retry-db');
+
+  const tablist = document.querySelector('[role="tablist"]');
+  const tabs    = [...tablist.querySelectorAll('[role="tab"]')];
+  const panels  = [...document.querySelectorAll('[role="tabpanel"]')];
+  const sortStatusEl = document.getElementById('table-sort-status');
+
+  const rsvpModal       = document.getElementById('rsvp-modal');
+  const rsvpModalTitle  = document.getElementById('rsvp-modal-title');
+  const rsvpModalForm   = document.getElementById('rsvp-modal-form');
+  const rsvpModalError  = document.getElementById('rsvp-modal-error');
+  const modalId         = document.getElementById('modal-id');
+  const modalEvent      = document.getElementById('modal-event');
+  const modalPreset     = document.getElementById('modal-preset');
+  const modalName       = document.getElementById('modal-name');
+  const modalSlug       = document.getElementById('modal-slug');
+  const modalEmail      = document.getElementById('modal-email');
+  const modalAttending  = document.getElementById('modal-attending');
+  const modalPlusOneRow = document.getElementById('modal-plusone-row');
+  const modalPlusOne    = document.getElementById('modal-plusone');
+  const modalPlusOneHint = document.getElementById('modal-plusone-hint');
+  const modalPlusOneNameWrap = document.getElementById('modal-plusone-name-wrap');
+  const modalPlusOneName = document.getElementById('modal-plusone-name');
+  const modalSoloRow    = document.getElementById('modal-solo-row');
+  const modalSoloAck    = document.getElementById('modal-solo-ack');
+  const modalBachSchedule = document.getElementById('modal-bach-schedule');
+  const modalArrive     = document.getElementById('modal-arrive');
+  const modalDepart     = document.getElementById('modal-depart');
+  const modalNotes      = document.getElementById('modal-notes');
+  const modalSubmitBtn  = document.getElementById('rsvp-modal-submit');
+
+  const deleteModal        = document.getElementById('delete-modal');
+  const deleteModalMessage = document.getElementById('delete-modal-message');
+
+  const toastRegion = document.getElementById('toast-region');
+  const srAnnouncer = document.getElementById('sr-announcer');
+
+  // ---- HELPERS ----
+  const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function formatStop(stop) {
+    return `${stop.day} ${stop.time} · ${stop.name}`;
+  }
+
+  function formatShortStop(stop) {
+    return `${stop.day} ${stop.time}`;
+  }
+
+  function slugify(text) {
+    return String(text || '')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/['\u2018\u2019]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 100);
+  }
+
+  function formatTimestamp(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '—';
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
+      ' · ' +
+      d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined && text !== null) node.textContent = String(text);
+    return node;
+  }
+
+  function makeDash() {
+    return el('span', 'muted-dash', '—');
+  }
+
+  function getInviteUrl(eventType, slug) {
+    const page = eventType === 'bach' ? 'bach.html' : 'rsvp.html';
+    return `${window.location.origin}/${page}?guest=${encodeURIComponent(slug)}`;
+  }
+
+  function getScheduleLabel(rsvp) {
+    if (!rsvp || rsvp.attending !== 'yes') return '—';
+    const a = rsvp.arrive_idx ?? 0;
+    const d = rsvp.depart_idx ?? LAST_STOP;
+    if (a === 0 && d === LAST_STOP) return 'Full Weekend';
+    const stopA = QUEST_STOPS[a];
+    const stopD = QUEST_STOPS[d];
+    if (stopA && stopD) return `${formatShortStop(stopA)} → ${formatShortStop(stopD)}`;
+    return rsvp.schedule || 'Partial Weekend';
+  }
+
+  // ---- TOASTS (POPOVER="MANUAL") ----
+  let toastSeq = 0;
+  let lastFocusedBeforeToast = null;
+
+  function layoutToasts() {
+    const active = [...toastRegion.querySelectorAll('[popover].toast')]
+      .filter((t) => t.matches(':popover-open') || t.classList.contains(':popover-open'));
+    let offset = 0;
+    for (let i = active.length - 1; i >= 0; i -= 1) {
+      active[i].style.setProperty('--toast-offset', `${-offset}px`);
+      offset += active[i].offsetHeight + 10;
+    }
+  }
+
+  function announceToast(message) {
+    if (typeof document.ariaNotify === 'function') {
+      document.ariaNotify(message);
+    } else {
+      srAnnouncer.textContent = '';
+      requestAnimationFrame(() => {
+        srAnnouncer.textContent = message;
+      });
+    }
+  }
+
+  function showToast(message, tone = 'info') {
+    if (document.querySelector('dialog[open]')) {
+      return;
+    }
+
+    toastSeq += 1;
+    const toast = document.createElement('div');
+    toast.id = `toast-${toastSeq}`;
+    toast.className = 'toast';
+    toast.dataset.tone = tone;
+    toast.setAttribute('popover', 'manual');
+
+    const msgSpan = el('span', 'toast-message', message);
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'toast-close';
+    closeBtn.setAttribute('popovertarget', toast.id);
+    closeBtn.setAttribute('popovertargetaction', 'hide');
+    closeBtn.setAttribute('aria-label', 'Dismiss notification');
+    closeBtn.textContent = '×';
+
+    toast.append(msgSpan, closeBtn);
+    toastRegion.appendChild(toast);
+
+    let dismissTimer = null;
+    const scheduleDismiss = () => {
+      clearTimeout(dismissTimer);
+      dismissTimer = setTimeout(() => {
+        if (!toast.contains(document.activeElement)) {
+          try {
+            toast.hidePopover();
+          } catch {
+            toast.remove();
+          }
+        }
+      }, 4500);
+    };
+
+    toast.addEventListener('focusin', () => {
+      clearTimeout(dismissTimer);
+    });
+    toast.addEventListener('focusout', () => {
+      scheduleDismiss();
+    });
+
+    closeBtn.addEventListener('click', () => {
+      lastFocusedBeforeToast = document.activeElement;
+    });
+
+    toast.addEventListener('toggle', (event) => {
+      if (event.newState === 'open') {
+        layoutToasts();
+        announceToast(message);
+        scheduleDismiss();
+      } else {
+        clearTimeout(dismissTimer);
+        const wasFocused = toast.contains(document.activeElement);
+        toast.remove();
+        layoutToasts();
+        if (wasFocused) {
+          const nextClose = toastRegion.querySelector('.toast-close');
+          if (nextClose) {
+            nextClose.focus();
+          } else if (lastFocusedBeforeToast && document.contains(lastFocusedBeforeToast)) {
+            lastFocusedBeforeToast.focus();
+          }
+        }
+      }
+    });
+
+    try {
+      toast.showPopover();
+    } catch {
+      toast.classList.add(':popover-open');
+      layoutToasts();
+      announceToast(message);
+      setTimeout(() => {
+        toast.remove();
+        layoutToasts();
+      }, 4500);
+    }
+  }
+
+  // ---- ACCESSIBLE TABS ----
+  function selectTab(targetTab, { moveFocus = false } = {}) {
+    const targetId = targetTab.id;
+    state.activeTab = targetId.replace('tab-', '');
+
+    for (const tab of tabs) {
+      const selected = tab === targetTab;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      tab.toggleAttribute('focusgroupstart', selected);
+    }
+
+    for (const panel of panels) {
+      const match = panel.getAttribute('aria-labelledby') === targetId;
+      if (match) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', 'until-found');
+      }
+    }
+
+    targetTab.scrollIntoView({ block: 'nearest', inline: 'nearest', container: 'nearest' });
+    if (moveFocus) {
+      targetTab.focus();
+    }
+  }
+
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => selectTab(tab));
+  }
+
+  for (const panel of panels) {
+    panel.addEventListener('beforematch', () => {
+      const tabId = panel.getAttribute('aria-labelledby');
+      const tab = tabs.find((t) => t.id === tabId);
+      if (tab) selectTab(tab);
+    });
+  }
+
+  if (!Object.hasOwn(HTMLElement.prototype, 'focusGroup')) {
+    tablist.addEventListener('keydown', (event) => {
+      const currentIdx = tabs.indexOf(document.activeElement);
+      if (currentIdx === -1) return;
+
+      let nextIdx = currentIdx;
+      if (event.key === 'ArrowRight') nextIdx = (currentIdx + 1) % tabs.length;
+      else if (event.key === 'ArrowLeft') nextIdx = (currentIdx - 1 + tabs.length) % tabs.length;
+      else if (event.key === 'Home') nextIdx = 0;
+      else if (event.key === 'End') nextIdx = tabs.length - 1;
+      else return;
+
+      event.preventDefault();
+      selectTab(tabs[nextIdx], { moveFocus: true });
+    });
+  } else {
+    tablist.addEventListener('focusin', (event) => {
+      const tab = event.target.closest('[role="tab"]');
+      if (tab && tab.getAttribute('aria-selected') !== 'true') {
+        selectTab(tab);
+      }
+    });
+  }
+
+  // ---- SORTABLE TABLES ----
+  function reorderRows(container, orderedRows) {
+    for (const row of orderedRows) {
+      if (typeof container.moveBefore === 'function') {
+        container.moveBefore(row, null);
+      } else {
+        container.appendChild(row);
+      }
+    }
+  }
+
+  function applySortToTable(table, th, direction, announce = true) {
+    const tbody = table.tBodies[0];
+    if (!tbody) return;
+
+    const index = th.cellIndex;
+    const type = th.dataset.type || 'text';
+    const factor = direction === 'ascending' ? 1 : -1;
+
+    for (const header of table.tHead.rows[0].cells) {
+      header.removeAttribute('aria-sort');
+    }
+    th.setAttribute('aria-sort', direction);
+
+    const rows = [...tbody.rows];
+    const keyed = rows.map((row) => {
+      const cell = row.cells[index];
+      const raw = cell ? (cell.dataset.value ?? cell.textContent.trim()) : '';
+      return { row, value: type === 'number' ? Number(raw) : raw };
+    });
+
+    keyed.sort((a, b) => {
+      if (type === 'number') {
+        const diff = a.value - b.value;
+        return factor * (Number.isNaN(diff) ? 0 : diff);
+      }
+      return factor * collator.compare(a.value, b.value);
+    });
+
+    const ordered = keyed.map((k) => k.row);
+    if (announce && typeof table.startViewTransition === 'function' && !prefersReducedMotion) {
+      table.startViewTransition(() => reorderRows(tbody, ordered));
+    } else {
+      reorderRows(tbody, ordered);
+    }
+
+    if (announce) {
+      const label = th.querySelector('button')?.textContent.trim() || 'column';
+      const visibleCount = ordered.filter((r) => !r.hidden).length;
+      sortStatusEl.textContent = `Sorted by ${label}, ${direction}, ${visibleCount} rows`;
+    }
+  }
+
+  function setupSortableTable(table) {
+    const handleSortButton = (btn) => {
+      const th = btn.closest('th');
+      if (!th) return;
+      const direction = th.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+      applySortToTable(table, th, direction, true);
+    };
+
+    table.addEventListener('command', (event) => {
+      if (event.command !== '--sort') return;
+      handleSortButton(event.source);
+    });
+
+    if (!('commandForElement' in HTMLButtonElement.prototype)) {
+      table.tHead.addEventListener('click', (event) => {
+        const btn = event.target.closest('button[command="--sort"]');
+        if (!btn) return;
+        handleSortButton(btn);
+      });
+    }
+  }
+
+  function reapplyCurrentSort(table) {
+    const currentTh = table.tHead.querySelector('th[aria-sort]');
+    if (!currentTh) return;
+    applySortToTable(table, currentTh, currentTh.getAttribute('aria-sort'), false);
+  }
+
+  for (const table of document.querySelectorAll('.ledger-table')) {
+    setupSortableTable(table);
+  }
+
+  // ---- SAMPLE DATA FOR PREVIEW MODE ----
+  function buildSampleRsvps() {
+    const now = Date.now();
+    const mins = (m) => new Date(now - m * 60000).toISOString();
+    return [
+      { id: 1, event: 'wedding', guest_slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Marcus Reed', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Vegetarian for Marcus please!', source: 'form', submitted_at: mins(420), updated_at: mins(420) },
+      { id: 2, event: 'wedding', guest_slug: 'olivia-el-bard', name: 'Olivia El Bard', email: 'olivia@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: true, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Cannot wait! Arriving Thursday night.', source: 'form', submitted_at: mins(380), updated_at: mins(380) },
+      { id: 3, event: 'wedding', guest_slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Sam Chen', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Gluten-free option if available.', source: 'form', submitted_at: mins(320), updated_at: mins(320) },
+      { id: 4, event: 'wedding', guest_slug: 'joel-ruud', name: 'Joel Ruud', email: 'joel@example.com', attending: 'no', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Work conference in Chicago — cheering from afar!', source: 'form', submitted_at: mins(280), updated_at: mins(280) },
+      { id: 5, event: 'wedding', guest_slug: 'grandma-randel', name: 'Grandma Randel', email: '', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: true, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Confirmed by phone with Holly; prefers aisle seat.', source: 'admin', submitted_at: mins(200), updated_at: mins(200) },
+      { id: 6, event: 'wedding', guest_slug: 'baron-leon', name: 'Baron Leon', email: 'baron@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'No allergies. Ready to dress up!', source: 'form', submitted_at: mins(140), updated_at: mins(140) },
+      { id: 7, event: 'bach', guest_slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Marcus Reed', solo_ack: false, arrive_idx: 0, depart_idx: 6, arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: 'Full Weekend', notes: 'Bringing extra fairy lights for crown crafting!', source: 'form', submitted_at: mins(115), updated_at: mins(115) },
+      { id: 8, event: 'bach', guest_slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: 2, depart_idx: 5, arrive_at: formatStop(QUEST_STOPS[2]), depart_after: formatStop(QUEST_STOPS[5]), schedule: `${formatStop(QUEST_STOPS[2])} to ${formatStop(QUEST_STOPS[5])}`, notes: 'Flight lands Friday at 4:45 PM — meeting right at Tournament of Kings!', source: 'form', submitted_at: mins(90), updated_at: mins(90) },
+      { id: 9, event: 'bach', guest_slug: 'tug', name: 'Tug', email: 'tug@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Alex', solo_ack: false, arrive_idx: 0, depart_idx: 6, arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: 'Full Weekend', notes: 'Dairy-free for Alex.', source: 'form', submitted_at: mins(65), updated_at: mins(65) },
+      { id: 10, event: 'bach', guest_slug: 'patrick-egbert', name: 'Patrick Egbert', email: 'patrick@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: 3, depart_idx: 6, arrive_at: formatStop(QUEST_STOPS[3]), depart_after: formatStop(QUEST_STOPS[6]), schedule: `${formatStop(QUEST_STOPS[3])} to ${formatStop(QUEST_STOPS[6])}`, notes: 'In for Saturday D&D through Sunday café!', source: 'form', submitted_at: mins(45), updated_at: mins(45) },
+      { id: 11, event: 'bach', guest_slug: 'jeremy', name: 'Jeremy', email: 'jeremy@example.com', attending: 'no', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Out of town Feb 19–21, sorry!', source: 'form', submitted_at: mins(25), updated_at: mins(25) }
+    ];
+  }
+
+  // ---- DATA LOADING ----
+  async function loadGuestLists() {
+    const [wRes, bRes] = await Promise.all([
+      fetch('guests.json', { cache: 'no-store' }),
+      fetch('bach-guests.json', { cache: 'no-store' })
+    ]);
+    if (!wRes.ok || !bRes.ok) {
+      throw new Error('Could not load guest list JSON files.');
+    }
+    state.guests.wedding = await wRes.json();
+    state.guests.bach = await bRes.json();
+  }
+
+  async function fetchRsvpsFromServer() {
+    const res = await fetch('/api/rsvps', { cache: 'no-store' });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.status === 503 && data.code === 'DB_NOT_CONFIGURED') {
+      state.dbConfigured = false;
+      if (!state.previewMode) {
+        state.rsvps = [];
+      }
+      return;
+    }
+
+    if (!res.ok || !data.ok) {
+      throw new Error(data.error || 'Failed to load RSVP responses.');
+    }
+
+    state.dbConfigured = true;
+    state.previewMode = false;
+    state.rsvps = data.rsvps || [];
+    state.lastSyncedAt = data.serverTime || new Date().toISOString();
+  }
+
+  function updateConnectionUi() {
+    btnExitPreview.hidden = !state.previewMode;
+
+    if (state.previewMode) {
+      connectionBadge.dataset.state = 'preview';
+      connectionText.textContent = 'Preview Mode · Sample Data';
+      setupBanner.hidden = false;
+    } else if (state.dbConfigured) {
+      connectionBadge.dataset.state = 'live';
+      const time = state.lastSyncedAt
+        ? new Date(state.lastSyncedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+        : '';
+      connectionText.textContent = `Live · Neon Postgres${time ? ` · Synced ${time}` : ''}`;
+      setupBanner.hidden = true;
+    } else {
+      connectionBadge.dataset.state = 'offline';
+      connectionText.textContent = 'Database Not Connected';
+      setupBanner.hidden = false;
+    }
+  }
+
+  // ---- ROSTER BUILDING ----
+  function buildRoster(eventType) {
+    const invitedMap = state.guests[eventType] || {};
+    const eventRsvps = state.rsvps.filter((r) => r.event === eventType);
+    const bySlug = new Map(eventRsvps.map((r) => [r.guest_slug, r]));
+    const rows = [];
+
+    for (const [slug, guestInfo] of Object.entries(invitedMap)) {
+      const rsvp = bySlug.get(slug) || null;
+      bySlug.delete(slug);
+      const status = !rsvp ? 'pending' : (rsvp.attending === 'yes' ? 'attending' : 'declined');
+      const partySize = status === 'attending' ? (1 + (rsvp.plus_one ? 1 : 0)) : 0;
+      rows.push({
+        event: eventType,
+        slug,
+        name: rsvp ? rsvp.name : guestInfo.name,
+        invitedName: guestInfo.name,
+        invited: true,
+        plusOneEligible: Boolean(guestInfo.plusOne),
+        status,
+        partySize,
+        rsvp
+      });
+    }
+
+    for (const [slug, rsvp] of bySlug.entries()) {
+      const status = rsvp.attending === 'yes' ? 'attending' : 'declined';
+      const partySize = status === 'attending' ? (1 + (rsvp.plus_one ? 1 : 0)) : 0;
+      rows.push({
+        event: eventType,
+        slug,
+        name: rsvp.name,
+        invitedName: rsvp.name,
+        invited: false,
+        plusOneEligible: Boolean(rsvp.plus_one),
+        status,
+        partySize,
+        rsvp
+      });
+    }
+
+    return rows;
+  }
+
+  // ---- RENDERING: KPI HELPERS ----
+  function createKpiCard({ label, value, sub, progressPct, onClick }) {
+    const card = document.createElement(onClick ? 'button' : 'div');
+    if (onClick) {
+      card.type = 'button';
+      card.addEventListener('click', onClick);
+    }
+    card.className = 'kpi-card';
+    card.append(el('span', 'kpi-label', label), el('div', 'kpi-value', value), el('div', 'kpi-sub', sub));
+    if (typeof progressPct === 'number') {
+      const bar = el('div', 'kpi-bar');
+      const fill = el('div', 'kpi-bar-fill');
+      fill.style.width = `${Math.max(0, Math.min(100, progressPct))}%`;
+      bar.appendChild(fill);
+      card.appendChild(bar);
+    }
+    return card;
+  }
+
+  function createStatusBadge(status) {
+    if (status === 'attending') return el('span', 'pill pill-yes', '✓ Attending');
+    if (status === 'declined') return el('span', 'pill pill-no', '✕ Declined');
+    return el('span', 'pill pill-pending', '⏳ Pending');
+  }
+
+  function getStatusSortRank(status) {
+    if (status === 'attending') return 1;
+    if (status === 'pending') return 2;
+    return 3;
+  }
+
+  // ---- RENDERING: WEDDING TAB ----
+  function renderWeddingTab() {
+    const roster = buildRoster('wedding');
+    const invited = roster.filter((r) => r.invited);
+    const respondedInvited = invited.filter((r) => r.status !== 'pending');
+    const attendingRows = roster.filter((r) => r.status === 'attending');
+    const declinedRows = roster.filter((r) => r.status === 'declined');
+    const pendingRows = invited.filter((r) => r.status === 'pending');
+
+    const confirmedGuests = attendingRows.length;
+    const confirmedPlusOnes = attendingRows.filter((r) => r.rsvp?.plus_one).length;
+    const totalHeadcount = confirmedGuests + confirmedPlusOnes;
+    const maxPlusOnes = invited.filter((r) => r.plusOneEligible).length;
+    const maxHeadcount = invited.length + maxPlusOnes;
+    const pct = invited.length ? Math.round((respondedInvited.length / invited.length) * 100) : 0;
+
+    document.getElementById('count-wedding').textContent = `${respondedInvited.length} / ${invited.length}`;
+
+    const kpiContainer = document.getElementById('wedding-kpis');
+    kpiContainer.replaceChildren(
+      createKpiCard({
+        label: 'Confirmed Headcount',
+        value: String(totalHeadcount),
+        sub: `${confirmedGuests} guests + ${confirmedPlusOnes} plus-ones · max ${maxHeadcount}`
+      }),
+      createKpiCard({
+        label: 'Response Progress',
+        value: `${respondedInvited.length} / ${invited.length}`,
+        sub: `${pct}% of invite list replied`,
+        progressPct: pct
+      }),
+      createKpiCard({
+        label: 'Attending',
+        value: String(confirmedGuests),
+        sub: `${attendingRows.filter((r) => !r.invited).length} unlisted added`
+      }),
+      createKpiCard({
+        label: 'Declined',
+        value: String(declinedRows.length),
+        sub: `${invited.length ? Math.round((declinedRows.length / invited.length) * 100) : 0}% of invite list`
+      }),
+      createKpiCard({
+        label: 'Awaiting Response',
+        value: String(pendingRows.length),
+        sub: 'Click to filter pending guests',
+        onClick: () => setFilterPill('wedding', 'pending')
+      })
+    );
+
+    const tbody = document.getElementById('wedding-tbody');
+    const frag = document.createDocumentFragment();
+
+    for (const item of roster) {
+      const tr = document.createElement('tr');
+      tr.dataset.slug = item.slug;
+      tr.dataset.status = item.status;
+      tr.dataset.plusone = String(Boolean(item.rsvp?.plus_one));
+      tr.dataset.hasnotes = String(Boolean(item.rsvp?.notes));
+      tr.dataset.search = [
+        item.name,
+        item.slug,
+        item.rsvp?.email || '',
+        item.rsvp?.plus_one_name || '',
+        item.rsvp?.notes || ''
+      ].join(' ').toLowerCase();
+
+      // 1. Guest
+      const tdGuest = document.createElement('td');
+      tdGuest.dataset.value = item.name;
+      const nameWrap = el('div', 'guest-name');
+      nameWrap.appendChild(el('span', null, item.name));
+      if (!item.invited) {
+        nameWrap.appendChild(el('span', 'pill pill-lavender', 'Unlisted'));
+      } else if (item.plusOneEligible) {
+        nameWrap.appendChild(el('span', 'pill pill-neutral', '+1 Eligible'));
+      }
+      tdGuest.appendChild(nameWrap);
+      tdGuest.appendChild(el('div', 'guest-meta', `?guest=${item.slug}`));
+
+      // 2. Status
+      const tdStatus = document.createElement('td');
+      tdStatus.dataset.value = String(getStatusSortRank(item.status));
+      tdStatus.appendChild(createStatusBadge(item.status));
+      if (item.rsvp?.solo_ack) {
+        tdStatus.appendChild(document.createTextNode(' '));
+        tdStatus.appendChild(el('div', 'guest-meta', 'Solo invite ack'));
+      }
+
+      // 3. Party
+      const tdParty = el('td', 'party-cell');
+      tdParty.dataset.value = String(item.partySize);
+      if (item.status === 'attending') {
+        tdParty.appendChild(el('strong', null, String(item.partySize)));
+        if (item.rsvp?.plus_one) {
+          const guestLabel = item.rsvp.plus_one_name ? `+1: ${item.rsvp.plus_one_name}` : '+1 (name TBD)';
+          tdParty.appendChild(el('div', 'guest-meta', guestLabel));
+        }
+      } else {
+        tdParty.appendChild(makeDash());
+      }
+
+      // 4. Email
+      const tdEmail = document.createElement('td');
+      const emailText = item.rsvp?.email || '';
+      tdEmail.dataset.value = emailText;
+      if (emailText) {
+        tdEmail.textContent = emailText;
+      } else {
+        tdEmail.appendChild(makeDash());
+      }
+
+      // 5. Notes
+      const tdNotes = el('td', 'notes-cell');
+      const notesText = item.rsvp?.notes || '';
+      tdNotes.dataset.value = notesText;
+      if (notesText) {
+        tdNotes.textContent = notesText;
+      } else {
+        tdNotes.appendChild(makeDash());
+      }
+
+      // 6. Updated
+      const tdUpdated = document.createElement('td');
+      const updatedMs = item.rsvp?.updated_at ? new Date(item.rsvp.updated_at).getTime() : 0;
+      tdUpdated.dataset.value = String(updatedMs);
+      tdUpdated.textContent = item.rsvp ? formatTimestamp(item.rsvp.updated_at) : '—';
+
+      // 7. Actions
+      const tdActions = document.createElement('td');
+      const actionsWrap = el('div', 'row-actions');
+
+      const copyBtn = el('button', 'btn btn-sm', 'Copy Link');
+      copyBtn.type = 'button';
+      copyBtn.addEventListener('click', () => copyText(getInviteUrl('wedding', item.slug), `Copied invite link for ${item.name}`));
+      actionsWrap.appendChild(copyBtn);
+
+      const editBtn = el('button', 'btn btn-sm', item.rsvp ? 'Edit' : 'Log RSVP');
+      editBtn.type = 'button';
+      editBtn.addEventListener('click', () => {
+        if (item.rsvp) {
+          openRsvpModalForEdit(item.rsvp);
+        } else {
+          openRsvpModalForAdd('wedding', item.slug, item.name);
+        }
+      });
+      actionsWrap.appendChild(editBtn);
+
+      if (item.rsvp) {
+        const delBtn = el('button', 'btn btn-sm btn-danger', 'Delete');
+        delBtn.type = 'button';
+        delBtn.addEventListener('click', () => openDeleteModal(item.rsvp));
+        actionsWrap.appendChild(delBtn);
+      }
+
+      tdActions.appendChild(actionsWrap);
+      tr.append(tdGuest, tdStatus, tdParty, tdEmail, tdNotes, tdUpdated, tdActions);
+      frag.appendChild(tr);
+    }
+
+    tbody.replaceChildren(frag);
+    reapplyCurrentSort(document.getElementById('wedding-table'));
+    applyWeddingFilters();
+  }
+
+  function applyWeddingFilters() {
+    const { query, pill } = state.filters.wedding;
+    const q = query.trim().toLowerCase();
+    const tbody = document.getElementById('wedding-tbody');
+    let visible = 0;
+
+    for (const tr of tbody.rows) {
+      let match = !q || tr.dataset.search.includes(q);
+      if (match && pill === 'attending') match = tr.dataset.status === 'attending';
+      else if (match && pill === 'declined') match = tr.dataset.status === 'declined';
+      else if (match && pill === 'pending') match = tr.dataset.status === 'pending';
+      else if (match && pill === 'plusone') match = tr.dataset.plusone === 'true';
+      else if (match && pill === 'notes') match = tr.dataset.hasnotes === 'true';
+
+      tr.hidden = !match;
+      if (match) visible += 1;
+    }
+
+    document.getElementById('wedding-empty').hidden = visible > 0;
+  }
+
+  // ---- RENDERING: BACH WEEKEND TAB ----
+  function computeBachStopBreakdown(roster) {
+    const attending = roster.filter((r) => r.status === 'attending');
+    const pendingOrDeclined = roster.filter((r) => r.status !== 'attending');
+
+    const stops = QUEST_STOPS.map((stop) => {
+      let guestsCount = 0;
+      let plusOneCount = 0;
+      const attendingEntries = [];
+      const arrivingEntries = [];
+      const departingEntries = [];
+      const skippingEntries = [];
+
+      for (const item of attending) {
+        const r = item.rsvp;
+        const a = r.arrive_idx ?? 0;
+        const d = r.depart_idx ?? LAST_STOP;
+        const label = r.plus_one
+          ? `${item.name} (+1${r.plus_one_name ? `: ${r.plus_one_name}` : ''})`
+          : item.name;
+
+        if (stop.index >= a && stop.index <= d) {
+          guestsCount += 1;
+          if (r.plus_one) plusOneCount += 1;
+          attendingEntries.push({ name: label, isArriving: stop.index === a, isDeparting: stop.index === d });
+          if (stop.index === a && a > 0) arrivingEntries.push(label);
+          if (stop.index === d && d < LAST_STOP) departingEntries.push(label);
+        } else {
+          skippingEntries.push(label);
+        }
+      }
+
+      const totalPeople = guestsCount + plusOneCount;
+      return {
+        stop,
+        guestsCount,
+        plusOneCount,
+        totalPeople,
+        estCost: totalPeople * stop.cost,
+        attendingEntries,
+        arrivingEntries,
+        departingEntries,
+        skippingEntries,
+        pendingOrDeclined
+      };
+    });
+
+    return { attending, stops };
+  }
+
+  function renderBachTab() {
+    const roster = buildRoster('bach');
+    const invited = roster.filter((r) => r.invited);
+    const respondedInvited = invited.filter((r) => r.status !== 'pending');
+    const attendingRows = roster.filter((r) => r.status === 'attending');
+    const declinedRows = roster.filter((r) => r.status === 'declined');
+    const pendingRows = invited.filter((r) => r.status === 'pending');
+
+    const confirmedGuests = attendingRows.length;
+    const confirmedPlusOnes = attendingRows.filter((r) => r.rsvp?.plus_one).length;
+    const totalHeadcount = confirmedGuests + confirmedPlusOnes;
+    const pct = invited.length ? Math.round((respondedInvited.length / invited.length) * 100) : 0;
+
+    const fullWeekendCount = attendingRows.filter((r) => {
+      const a = r.rsvp?.arrive_idx ?? 0;
+      const d = r.rsvp?.depart_idx ?? LAST_STOP;
+      return a === 0 && d === LAST_STOP;
+    }).length;
+    const partialCount = attendingRows.length - fullWeekendCount;
+
+    const { attending, stops } = computeBachStopBreakdown(roster);
+    const tokTotal = stops[2].estCost;
+    const clubTotal = stops[5].estCost;
+    const combinedTicketCost = tokTotal + clubTotal;
+
+    document.getElementById('count-bach').textContent = `${respondedInvited.length} / ${invited.length}`;
+
+    document.getElementById('bach-kpis').replaceChildren(
+      createKpiCard({
+        label: 'Confirmed Headcount',
+        value: String(totalHeadcount),
+        sub: `${confirmedGuests} guests + ${confirmedPlusOnes} plus-ones`
+      }),
+      createKpiCard({
+        label: 'Response Progress',
+        value: `${respondedInvited.length} / ${invited.length}`,
+        sub: `${pct}% of Bach list replied`,
+        progressPct: pct
+      }),
+      createKpiCard({
+        label: 'Schedule Split',
+        value: `${fullWeekendCount} Full`,
+        sub: `${partialCount} partial weekend · ${declinedRows.length} declined`
+      }),
+      createKpiCard({
+        label: 'Est. Ticket Costs',
+        value: `$${combinedTicketCost.toLocaleString()}`,
+        sub: `ToK $${tokTotal.toLocaleString()} · Club Crawl $${clubTotal.toLocaleString()}`
+      }),
+      createKpiCard({
+        label: 'Awaiting Response',
+        value: String(pendingRows.length),
+        sub: 'Click to filter pending guests',
+        onClick: () => setFilterPill('bach', 'pending')
+      })
+    );
+
+    document.getElementById('bach-cost-summary').textContent =
+      `Peak Stop: ${Math.max(...stops.map((s) => s.totalPeople))} people · Est. Group Tickets $${combinedTicketCost.toLocaleString()}`;
+
+    const maxBarDenom = Math.max(totalHeadcount, 1);
+    const stopBarsEl = document.getElementById('bach-stop-bars');
+    const stopBarFrag = document.createDocumentFragment();
+
+    for (const s of stops) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'stop-bar-btn';
+      btn.setAttribute('aria-pressed', String(s.stop.index === state.selectedStopIndex));
+      btn.addEventListener('click', () => {
+        state.selectedStopIndex = s.stop.index;
+        renderBachStopDetail(stops);
+        for (const elBtn of stopBarsEl.querySelectorAll('.stop-bar-btn')) {
+          elBtn.setAttribute('aria-pressed', String(Number(elBtn.dataset.index) === state.selectedStopIndex));
+        }
+      });
+      btn.dataset.index = String(s.stop.index);
+
+      const meta = el('div', 'stop-meta');
+      meta.append(
+        el('span', 'stop-time', `${s.stop.day} · ${s.stop.time}`),
+        el('span', 'stop-title', `${s.stop.icon} ${s.stop.name}`)
+      );
+      if (s.stop.cost > 0) {
+        meta.appendChild(el('span', 'stop-cost', `~$${s.stop.cost}/pp · est. $${s.estCost.toLocaleString()}`));
+      }
+
+      const track = el('div', 'stop-track');
+      const fill = el('div', 'stop-fill');
+      fill.style.width = `${Math.round((s.totalPeople / maxBarDenom) * 100)}%`;
+      track.appendChild(fill);
+
+      const count = el('div', 'stop-count');
+      count.append(
+        el('strong', null, `${s.totalPeople} ${s.totalPeople === 1 ? 'person' : 'people'}`),
+        el('span', null, `${s.guestsCount} + ${s.plusOneCount} +1s`)
+      );
+
+      btn.append(meta, track, count);
+      stopBarFrag.appendChild(btn);
+    }
+    stopBarsEl.replaceChildren(stopBarFrag);
+    renderBachStopDetail(stops);
+    renderBachMatrix(attending);
+
+    // Bach table
+    const tbody = document.getElementById('bach-tbody');
+    const frag = document.createDocumentFragment();
+
+    for (const item of roster) {
+      const tr = document.createElement('tr');
+      const r = item.rsvp;
+      const a = r ? (r.arrive_idx ?? 0) : 0;
+      const d = r ? (r.depart_idx ?? LAST_STOP) : LAST_STOP;
+      const isPartial = item.status === 'attending' && (a > 0 || d < LAST_STOP);
+      const scheduleLabel = getScheduleLabel(r);
+
+      tr.dataset.slug = item.slug;
+      tr.dataset.status = item.status;
+      tr.dataset.plusone = String(Boolean(r?.plus_one));
+      tr.dataset.partial = String(isPartial);
+      tr.dataset.search = [
+        item.name,
+        item.slug,
+        scheduleLabel,
+        r?.email || '',
+        r?.plus_one_name || '',
+        r?.notes || ''
+      ].join(' ').toLowerCase();
+
+      // 1. Guest
+      const tdGuest = document.createElement('td');
+      tdGuest.dataset.value = item.name;
+      const nameWrap = el('div', 'guest-name');
+      nameWrap.appendChild(el('span', null, item.name));
+      if (!item.invited) {
+        nameWrap.appendChild(el('span', 'pill pill-lavender', 'Unlisted'));
+      }
+      tdGuest.appendChild(nameWrap);
+      tdGuest.appendChild(el('div', 'guest-meta', `?guest=${item.slug}`));
+
+      // 2. Status
+      const tdStatus = document.createElement('td');
+      tdStatus.dataset.value = String(getStatusSortRank(item.status));
+      tdStatus.appendChild(createStatusBadge(item.status));
+
+      // 3. Party
+      const tdParty = el('td', 'party-cell');
+      tdParty.dataset.value = String(item.partySize);
+      if (item.status === 'attending') {
+        tdParty.appendChild(el('strong', null, String(item.partySize)));
+        if (r?.plus_one) {
+          const guestLabel = r.plus_one_name ? `+1: ${r.plus_one_name}` : '+1 (name TBD)';
+          tdParty.appendChild(el('div', 'guest-meta', guestLabel));
+        }
+      } else {
+        tdParty.appendChild(makeDash());
+      }
+
+      // 4. Quest Timeline
+      const tdSchedule = document.createElement('td');
+      tdSchedule.dataset.value = item.status === 'attending' ? `${a}-${d}-${scheduleLabel}` : 'zzz';
+      if (item.status === 'attending') {
+        tdSchedule.appendChild(el('span', isPartial ? 'pill pill-lavender' : 'pill pill-yes', scheduleLabel));
+      } else {
+        tdSchedule.appendChild(makeDash());
+      }
+
+      // 5. Email
+      const tdEmail = document.createElement('td');
+      const emailText = r?.email || '';
+      tdEmail.dataset.value = emailText;
+      if (emailText) {
+        tdEmail.textContent = emailText;
+      } else {
+        tdEmail.appendChild(makeDash());
+      }
+
+      // 6. Notes
+      const tdNotes = el('td', 'notes-cell');
+      const notesText = r?.notes || '';
+      tdNotes.dataset.value = notesText;
+      if (notesText) {
+        tdNotes.textContent = notesText;
+      } else {
+        tdNotes.appendChild(makeDash());
+      }
+
+      // 7. Updated
+      const tdUpdated = document.createElement('td');
+      const updatedMs = r?.updated_at ? new Date(r.updated_at).getTime() : 0;
+      tdUpdated.dataset.value = String(updatedMs);
+      tdUpdated.textContent = r ? formatTimestamp(r.updated_at) : '—';
+
+      // 8. Actions
+      const tdActions = document.createElement('td');
+      const actionsWrap = el('div', 'row-actions');
+
+      const copyBtn = el('button', 'btn btn-sm', 'Copy Link');
+      copyBtn.type = 'button';
+      copyBtn.addEventListener('click', () => copyText(getInviteUrl('bach', item.slug), `Copied Bach link for ${item.name}`));
+      actionsWrap.appendChild(copyBtn);
+
+      const editBtn = el('button', 'btn btn-sm', r ? 'Edit' : 'Log RSVP');
+      editBtn.type = 'button';
+      editBtn.addEventListener('click', () => {
+        if (r) {
+          openRsvpModalForEdit(r);
+        } else {
+          openRsvpModalForAdd('bach', item.slug, item.name);
+        }
+      });
+      actionsWrap.appendChild(editBtn);
+
+      if (r) {
+        const delBtn = el('button', 'btn btn-sm btn-danger', 'Delete');
+        delBtn.type = 'button';
+        delBtn.addEventListener('click', () => openDeleteModal(r));
+        actionsWrap.appendChild(delBtn);
+      }
+
+      tdActions.appendChild(actionsWrap);
+      tr.append(tdGuest, tdStatus, tdParty, tdSchedule, tdEmail, tdNotes, tdUpdated, tdActions);
+      frag.appendChild(tr);
+    }
+
+    tbody.replaceChildren(frag);
+    reapplyCurrentSort(document.getElementById('bach-table'));
+    applyBachFilters();
+  }
+
+  function renderBachStopDetail(stops) {
+    const detailBox = document.getElementById('bach-stop-detail');
+    const selected = stops[state.selectedStopIndex] || stops[0];
+    const frag = document.createDocumentFragment();
+
+    const head = el('div', 'stop-detail-head');
+    head.appendChild(el('h3', null, `${selected.stop.icon} ${formatStop(selected.stop)}`));
+    const costNote = selected.stop.cost > 0
+      ? ` · ~$${selected.stop.cost}/pp (Est. $${selected.estCost.toLocaleString()})`
+      : '';
+    head.appendChild(el('p', null, `${selected.totalPeople} attending (${selected.guestsCount} guests + ${selected.plusOneCount} +1s)${costNote}`));
+    frag.appendChild(head);
+
+    const addGroup = (title, items, pillClass, emptyText) => {
+      const wrap = document.createElement('div');
+      wrap.appendChild(el('div', 'chip-list-label', title));
+      const list = el('div', 'guest-chips');
+      if (items.length === 0) {
+        list.appendChild(el('span', 'field-hint', emptyText));
+      } else {
+        for (const text of items) {
+          list.appendChild(el('span', `pill ${pillClass}`, text));
+        }
+      }
+      wrap.appendChild(list);
+      frag.appendChild(wrap);
+    };
+
+    addGroup(
+      `Attending This Stop (${selected.attendingEntries.length})`,
+      selected.attendingEntries.map((e) => e.name),
+      'pill-yes',
+      'No confirmed attendees for this stop yet.'
+    );
+
+    if (selected.arrivingEntries.length > 0) {
+      addGroup('Arriving Late Here', selected.arrivingEntries, 'pill-lavender', '');
+    }
+
+    if (selected.departingEntries.length > 0) {
+      addGroup('Leaving After This Stop', selected.departingEntries, 'pill-pending', '');
+    }
+
+    if (selected.skippingEntries.length > 0) {
+      addGroup('Attending Other Stops (Skipping This One)', selected.skippingEntries, 'pill-neutral', '');
+    }
+
+    detailBox.replaceChildren(frag);
+  }
+
+  function renderBachMatrix(attending) {
+    const wrap = document.getElementById('bach-matrix-wrap');
+    if (attending.length === 0) {
+      wrap.replaceChildren(el('div', 'empty-state', 'No attending Bach Weekend responses yet.'));
+      return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'matrix-table';
+    const thead = document.createElement('thead');
+    const hRow = document.createElement('tr');
+    hRow.appendChild(el('th', null, 'Guest (Party)'));
+    for (const stop of QUEST_STOPS) {
+      const th = document.createElement('th');
+      th.append(el('div', null, `${stop.icon} ${stop.day}`), el('div', null, stop.short));
+      hRow.appendChild(th);
+    }
+    thead.appendChild(hRow);
+
+    const tbody = document.createElement('tbody');
+    for (const item of attending) {
+      const r = item.rsvp;
+      const a = r.arrive_idx ?? 0;
+      const d = r.depart_idx ?? LAST_STOP;
+      const row = document.createElement('tr');
+
+      const nameTd = document.createElement('td');
+      nameTd.appendChild(el('strong', null, item.name));
+      if (r.plus_one) {
+        nameTd.appendChild(document.createTextNode(' '));
+        nameTd.appendChild(el('span', 'pill pill-neutral', r.plus_one_name ? `+1 ${r.plus_one_name}` : '+1'));
+      }
+      row.appendChild(nameTd);
+
+      for (const stop of QUEST_STOPS) {
+        const td = document.createElement('td');
+        const inRange = stop.index >= a && stop.index <= d;
+        const badge = el('span', 'matrix-block');
+        if (!inRange) {
+          badge.classList.add('out');
+          badge.textContent = '·';
+          badge.title = `${item.name}: not attending ${stop.name}`;
+        } else if (stop.index === a && a > 0) {
+          badge.classList.add('in', 'arrive');
+          badge.textContent = 'IN';
+          badge.title = `${item.name}: arrives for ${stop.name}`;
+        } else if (stop.index === d && d < LAST_STOP) {
+          badge.classList.add('in', 'depart');
+          badge.textContent = 'OUT';
+          badge.title = `${item.name}: stays through ${stop.name}`;
+        } else {
+          badge.classList.add('in');
+          badge.textContent = '✓';
+          badge.title = `${item.name}: attending ${stop.name}`;
+        }
+        td.appendChild(badge);
+        row.appendChild(td);
+      }
+      tbody.appendChild(row);
+    }
+
+    table.append(thead, tbody);
+    wrap.replaceChildren(table);
+  }
+
+  function applyBachFilters() {
+    const { query, pill } = state.filters.bach;
+    const q = query.trim().toLowerCase();
+    const tbody = document.getElementById('bach-tbody');
+    let visible = 0;
+
+    for (const tr of tbody.rows) {
+      let match = !q || tr.dataset.search.includes(q);
+      if (match && pill === 'attending') match = tr.dataset.status === 'attending';
+      else if (match && pill === 'declined') match = tr.dataset.status === 'declined';
+      else if (match && pill === 'pending') match = tr.dataset.status === 'pending';
+      else if (match && pill === 'partial') match = tr.dataset.partial === 'true';
+      else if (match && pill === 'plusone') match = tr.dataset.plusone === 'true';
+
+      tr.hidden = !match;
+      if (match) visible += 1;
+    }
+
+    document.getElementById('bach-empty').hidden = visible > 0;
+  }
+
+  // ---- RENDERING: DIETARY & NOTES TAB ----
+  function getFilteredNotesRecords() {
+    const { query, pill } = state.filters.notes;
+    const q = query.trim().toLowerCase();
+    return state.rsvps.filter((r) => {
+      if (!r.notes || !r.notes.trim()) return false;
+      if (pill !== 'all' && r.event !== pill) return false;
+      if (!q) return true;
+      const hay = [r.name, r.email, r.plus_one_name, r.notes, r.event].join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  function renderNotesTab() {
+    const totalNotes = state.rsvps.filter((r) => r.notes && r.notes.trim()).length;
+    document.getElementById('count-notes').textContent = String(totalNotes);
+
+    const records = getFilteredNotesRecords();
+    const grid = document.getElementById('notes-grid');
+    const frag = document.createDocumentFragment();
+
+    for (const r of records) {
+      const card = el('article', 'note-card');
+
+      const head = el('div', 'note-card-head');
+      const left = document.createElement('div');
+      left.appendChild(el('div', 'guest-name', r.name));
+      const partyText = r.attending === 'yes'
+        ? (r.plus_one ? `Party of 2 (${r.plus_one_name || '+1 TBD'})` : 'Party of 1')
+        : 'Declined';
+      left.appendChild(el('div', 'guest-meta', `${partyText}${r.email ? ` · ${r.email}` : ''}`));
+
+      const badges = el('div', 'guest-chips');
+      badges.appendChild(el('span', r.event === 'bach' ? 'pill pill-lavender' : 'pill pill-neutral', r.event === 'bach' ? 'Bach Weekend' : 'Wedding'));
+      badges.appendChild(createStatusBadge(r.attending === 'yes' ? 'attending' : 'declined'));
+      head.append(left, badges);
+
+      const body = el('div', 'note-card-body', r.notes);
+
+      const foot = el('div', 'note-card-foot');
+      foot.appendChild(el('span', null, `Updated ${formatTimestamp(r.updated_at)}`));
+      const editBtn = el('button', 'btn btn-sm', 'Edit');
+      editBtn.type = 'button';
+      editBtn.addEventListener('click', () => openRsvpModalForEdit(r));
+      foot.appendChild(editBtn);
+
+      card.append(head, body, foot);
+      frag.appendChild(card);
+    }
+
+    grid.replaceChildren(frag);
+    document.getElementById('notes-empty').hidden = records.length > 0;
+  }
+
+  // ---- RENDERING: ALL ACTIVITY TAB ----
+  function renderActivityTab() {
+    document.getElementById('count-activity').textContent = String(state.rsvps.length);
+    const tbody = document.getElementById('activity-tbody');
+    const frag = document.createDocumentFragment();
+
+    for (const r of state.rsvps) {
+      const tr = document.createElement('tr');
+      const status = r.attending === 'yes' ? 'attending' : 'declined';
+      const partySize = status === 'attending' ? (1 + (r.plus_one ? 1 : 0)) : 0;
+      const detail = r.event === 'bach'
+        ? (status === 'attending' ? getScheduleLabel(r) : '—')
+        : (r.solo_ack ? 'Solo invite ack' : '—');
+
+      tr.dataset.event = r.event;
+      tr.dataset.search = [r.event, r.name, r.guest_slug, r.email, r.plus_one_name, detail, r.notes, r.source].join(' ').toLowerCase();
+
+      const tdEvent = document.createElement('td');
+      tdEvent.dataset.value = r.event;
+      tdEvent.appendChild(el('span', r.event === 'bach' ? 'pill pill-lavender' : 'pill pill-neutral', r.event === 'bach' ? 'Bach Weekend' : 'Wedding'));
+
+      const tdGuest = document.createElement('td');
+      tdGuest.dataset.value = r.name;
+      tdGuest.append(el('div', 'guest-name', r.name), el('div', 'guest-meta', r.email || `?guest=${r.guest_slug}`));
+
+      const tdStatus = document.createElement('td');
+      tdStatus.dataset.value = String(getStatusSortRank(status));
+      tdStatus.appendChild(createStatusBadge(status));
+
+      const tdParty = el('td', 'party-cell');
+      tdParty.dataset.value = String(partySize);
+      if (status === 'attending') {
+        tdParty.appendChild(el('strong', null, String(partySize)));
+        if (r.plus_one) {
+          tdParty.appendChild(el('div', 'guest-meta', r.plus_one_name ? `+1: ${r.plus_one_name}` : '+1 TBD'));
+        }
+      } else {
+        tdParty.appendChild(makeDash());
+      }
+
+      const tdDetail = document.createElement('td');
+      tdDetail.textContent = detail;
+
+      const tdNotes = el('td', 'notes-cell');
+      tdNotes.dataset.value = r.notes || '';
+      if (r.notes) tdNotes.textContent = r.notes;
+      else tdNotes.appendChild(makeDash());
+
+      const tdSource = document.createElement('td');
+      tdSource.dataset.value = r.source || 'form';
+      tdSource.appendChild(el('span', 'pill pill-neutral', r.source === 'admin' ? 'Admin' : 'Form'));
+
+      const tdUpdated = document.createElement('td');
+      tdUpdated.dataset.value = String(new Date(r.updated_at).getTime() || 0);
+      tdUpdated.textContent = formatTimestamp(r.updated_at);
+
+      const tdActions = document.createElement('td');
+      const actionsWrap = el('div', 'row-actions');
+      const editBtn = el('button', 'btn btn-sm', 'Edit');
+      editBtn.type = 'button';
+      editBtn.addEventListener('click', () => openRsvpModalForEdit(r));
+      const delBtn = el('button', 'btn btn-sm btn-danger', 'Delete');
+      delBtn.type = 'button';
+      delBtn.addEventListener('click', () => openDeleteModal(r));
+      actionsWrap.append(editBtn, delBtn);
+      tdActions.appendChild(actionsWrap);
+
+      tr.append(tdEvent, tdGuest, tdStatus, tdParty, tdDetail, tdNotes, tdSource, tdUpdated, tdActions);
+      frag.appendChild(tr);
+    }
+
+    tbody.replaceChildren(frag);
+    reapplyCurrentSort(document.getElementById('activity-table'));
+    applyActivityFilters();
+  }
+
+  function applyActivityFilters() {
+    const { query, pill } = state.filters.activity;
+    const q = query.trim().toLowerCase();
+    const tbody = document.getElementById('activity-tbody');
+    let visible = 0;
+
+    for (const tr of tbody.rows) {
+      let match = !q || tr.dataset.search.includes(q);
+      if (match && pill !== 'all') match = tr.dataset.event === pill;
+      tr.hidden = !match;
+      if (match) visible += 1;
+    }
+
+    document.getElementById('activity-empty').hidden = visible > 0;
+  }
+
+  function renderAll() {
+    updateConnectionUi();
+    renderWeddingTab();
+    renderBachTab();
+    renderNotesTab();
+    renderActivityTab();
+  }
+
+  // ---- FILTER WIRING ----
+  function setFilterPill(scope, pillValue) {
+    state.filters[scope].pill = pillValue;
+    const group = document.getElementById(`${scope}-filters`);
+    for (const btn of group.querySelectorAll('.filter-chip')) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.filter === pillValue));
+    }
+    if (scope === 'wedding') applyWeddingFilters();
+    else if (scope === 'bach') applyBachFilters();
+    else if (scope === 'notes') renderNotesTab();
+    else if (scope === 'activity') applyActivityFilters();
+  }
+
+  for (const scope of ['wedding', 'bach', 'notes', 'activity']) {
+    const searchEl = document.getElementById(`${scope}-search`);
+    const groupEl = document.getElementById(`${scope}-filters`);
+
+    searchEl.addEventListener('input', () => {
+      state.filters[scope].query = searchEl.value;
+      if (scope === 'wedding') applyWeddingFilters();
+      else if (scope === 'bach') applyBachFilters();
+      else if (scope === 'notes') renderNotesTab();
+      else if (scope === 'activity') applyActivityFilters();
+    });
+
+    groupEl.addEventListener('click', (event) => {
+      const btn = event.target.closest('.filter-chip');
+      if (!btn) return;
+      setFilterPill(scope, btn.dataset.filter);
+    });
+  }
+
+  // ---- CLIPBOARD ACTIONS ----
+  async function copyText(text, successMsg) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast(successMsg, 'success');
+    } catch {
+      window.prompt('Copy to clipboard:', text);
+    }
+  }
+
+  function copyPendingLinks(eventType) {
+    const pending = buildRoster(eventType).filter((r) => r.invited && r.status === 'pending');
+    if (pending.length === 0) {
+      showToast(`Everyone on the ${eventType === 'bach' ? 'Bach Weekend' : 'Wedding'} list has already responded!`, 'info');
+      return;
+    }
+    const lines = pending.map((item) => `${item.name}: ${getInviteUrl(eventType, item.slug)}`);
+    copyText(lines.join('\n'), `Copied ${pending.length} pending ${eventType === 'bach' ? 'Bach' : 'Wedding'} invite links.`);
+  }
+
+  document.getElementById('btn-copy-wedding-pending').addEventListener('click', () => copyPendingLinks('wedding'));
+  document.getElementById('btn-copy-bach-pending').addEventListener('click', () => copyPendingLinks('bach'));
+
+  // ---- CSV EXPORT ----
+  function escapeCsvCell(value) {
+    const str = String(value ?? '');
+    if (/[",\r\n]/.test(str)) {
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  }
+
+  function downloadCsv(filename, headers, rows) {
+    const lines = [
+      headers.map(escapeCsvCell).join(','),
+      ...rows.map((row) => row.map(escapeCsvCell).join(','))
+    ];
+    const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast(`Exported ${filename}`, 'success');
+  }
+
+  function exportActiveTabCsv() {
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    if (state.activeTab === 'wedding') {
+      const roster = buildRoster('wedding');
+      downloadCsv(
+        `wedding-rsvps-${dateStamp}.csv`,
+        ['Guest Name', 'Slug', 'Invited', 'Plus-One Eligible', 'Status', 'Party Size', 'Bringing +1', '+1 Name', 'Solo Ack', 'Email', 'Dietary & Notes', 'Source', 'Updated At', 'Invite Link'],
+        roster.map((item) => [
+          item.name,
+          item.slug,
+          item.invited ? 'Yes' : 'Unlisted',
+          item.plusOneEligible ? 'Yes' : 'No',
+          item.status,
+          item.partySize,
+          item.rsvp?.plus_one ? 'Yes' : 'No',
+          item.rsvp?.plus_one_name || '',
+          item.rsvp?.solo_ack ? 'Yes' : 'No',
+          item.rsvp?.email || '',
+          item.rsvp?.notes || '',
+          item.rsvp?.source || '',
+          item.rsvp?.updated_at || '',
+          getInviteUrl('wedding', item.slug)
+        ])
+      );
+    } else if (state.activeTab === 'bach') {
+      const roster = buildRoster('bach');
+      downloadCsv(
+        `bach-weekend-rsvps-${dateStamp}.csv`,
+        ['Guest Name', 'Slug', 'Invited', 'Status', 'Party Size', 'Bringing +1', '+1 Name', 'Schedule', 'Arriving For', 'Staying Through', 'Email', 'Dietary & Notes', 'Source', 'Updated At', 'Invite Link'],
+        roster.map((item) => [
+          item.name,
+          item.slug,
+          item.invited ? 'Yes' : 'Unlisted',
+          item.status,
+          item.partySize,
+          item.rsvp?.plus_one ? 'Yes' : 'No',
+          item.rsvp?.plus_one_name || '',
+          getScheduleLabel(item.rsvp),
+          item.rsvp?.arrive_at || '',
+          item.rsvp?.depart_after || '',
+          item.rsvp?.email || '',
+          item.rsvp?.notes || '',
+          item.rsvp?.source || '',
+          item.rsvp?.updated_at || '',
+          getInviteUrl('bach', item.slug)
+        ])
+      );
+    } else if (state.activeTab === 'notes') {
+      exportNotesCsv();
+    } else {
+      downloadCsv(
+        `all-rsvp-activity-${dateStamp}.csv`,
+        ['ID', 'Event', 'Guest Name', 'Slug', 'Attending', 'Plus-One', '+1 Name', 'Solo Ack', 'Schedule', 'Email', 'Dietary & Notes', 'Source', 'Submitted At', 'Updated At'],
+        state.rsvps.map((r) => [
+          r.id,
+          r.event,
+          r.name,
+          r.guest_slug,
+          r.attending,
+          r.plus_one ? 'Yes' : 'No',
+          r.plus_one_name || '',
+          r.solo_ack ? 'Yes' : 'No',
+          r.event === 'bach' ? getScheduleLabel(r) : '',
+          r.email || '',
+          r.notes || '',
+          r.source || 'form',
+          r.submitted_at || '',
+          r.updated_at || ''
+        ])
+      );
+    }
+  }
+
+  function exportNotesCsv() {
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    const records = getFilteredNotesRecords();
+    downloadCsv(
+      `dietary-and-notes-${dateStamp}.csv`,
+      ['Event', 'Guest Name', 'Status', 'Party Size', '+1 Name', 'Email', 'Dietary & Notes', 'Updated At'],
+      records.map((r) => [
+        r.event === 'bach' ? 'Bach Weekend' : 'Wedding',
+        r.name,
+        r.attending,
+        r.attending === 'yes' ? (1 + (r.plus_one ? 1 : 0)) : 0,
+        r.plus_one_name || '',
+        r.email || '',
+        r.notes,
+        r.updated_at || ''
+      ])
+    );
+  }
+
+  btnExportCsv.addEventListener('click', exportActiveTabCsv);
+  document.getElementById('btn-export-notes-csv').addEventListener('click', exportNotesCsv);
+  document.getElementById('btn-print-notes').addEventListener('click', () => window.print());
+
+  // ---- MODAL HELPERS & SAFARI LIGHT-DISMISS FALLBACK ----
+  if (!('closedBy' in HTMLDialogElement.prototype)) {
+    const isOutside = (e, dialog) => {
+      const r = dialog.getBoundingClientRect();
+      return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+    };
+    for (const dialog of document.querySelectorAll('dialog[closedby="any"]')) {
+      let pressedOutside = false;
+      dialog.addEventListener('pointerdown', (e) => {
+        pressedOutside = isOutside(e, dialog);
+      });
+      dialog.addEventListener('pointerup', (e) => {
+        if (pressedOutside && isOutside(e, dialog)) dialog.close();
+      });
+    }
+  }
+
+  function populateStopSelects() {
+    for (const sel of [modalArrive, modalDepart]) {
+      sel.replaceChildren();
+      for (const stop of QUEST_STOPS) {
+        const opt = document.createElement('option');
+        opt.value = String(stop.index);
+        opt.textContent = `${stop.icon} ${formatStop(stop)}`;
+        sel.appendChild(opt);
+      }
+    }
+  }
+  populateStopSelects();
+
+  function populatePresetSelect(eventType, currentSlug = '') {
+    const invitedMap = state.guests[eventType] || {};
+    const existingSet = new Set(state.rsvps.filter((r) => r.event === eventType).map((r) => r.guest_slug));
+
+    modalPreset.replaceChildren();
+    const customOpt = document.createElement('option');
+    customOpt.value = '';
+    customOpt.textContent = '— Custom / unlisted guest —';
+    modalPreset.appendChild(customOpt);
+
+    const entries = Object.entries(invitedMap).sort((a, b) => collator.compare(a[1].name, b[1].name));
+    for (const [slug, info] of entries) {
+      const opt = document.createElement('option');
+      opt.value = slug;
+      const suffix = existingSet.has(slug) ? ' (Responded)' : ' (Pending)';
+      opt.textContent = `${info.name}${suffix}`;
+      modalPreset.appendChild(opt);
+    }
+
+    modalPreset.value = invitedMap[currentSlug] ? currentSlug : '';
+  }
+
+  function syncModalFieldsVisibility() {
+    const eventType = modalEvent.value;
+    const attending = modalAttending.value === 'yes';
+    const hasPlusOne = attending && modalPlusOne.value === 'yes';
+    const presetSlug = modalPreset.value;
+    const invitedInfo = presetSlug ? state.guests[eventType]?.[presetSlug] : null;
+
+    modalPlusOneRow.hidden = !attending;
+    modalPlusOneNameWrap.hidden = !hasPlusOne;
+    if (!hasPlusOne) modalPlusOneName.value = '';
+
+    modalSoloRow.hidden = !(eventType === 'wedding' && attending && !hasPlusOne);
+    modalBachSchedule.hidden = !(eventType === 'bach' && attending);
+
+    if (invitedInfo) {
+      modalPlusOneHint.textContent = invitedInfo.plusOne
+        ? 'Invite list allows a +1 for this guest.'
+        : 'Invite list marks this guest as solo (no +1).';
+    } else {
+      modalPlusOneHint.textContent = '';
+    }
+  }
+
+  modalEvent.addEventListener('change', () => {
+    populatePresetSelect(modalEvent.value, '');
+    syncModalFieldsVisibility();
+  });
+
+  modalPreset.addEventListener('change', () => {
+    const slug = modalPreset.value;
+    const info = state.guests[modalEvent.value]?.[slug];
+    if (info) {
+      modalName.value = info.name;
+      modalSlug.value = slug;
+      state.modalSlugEdited = true;
+    }
+    syncModalFieldsVisibility();
+  });
+
+  modalName.addEventListener('input', () => {
+    if (state.modalMode === 'add' && !modalPreset.value && !state.modalSlugEdited) {
+      modalSlug.value = slugify(modalName.value);
+    }
+  });
+
+  modalSlug.addEventListener('input', () => {
+    state.modalSlugEdited = true;
+  });
+
+  modalAttending.addEventListener('change', syncModalFieldsVisibility);
+  modalPlusOne.addEventListener('change', syncModalFieldsVisibility);
+
+  modalArrive.addEventListener('change', () => {
+    if (Number(modalArrive.value) > Number(modalDepart.value)) {
+      modalDepart.value = modalArrive.value;
+    }
+  });
+
+  modalDepart.addEventListener('change', () => {
+    if (Number(modalDepart.value) < Number(modalArrive.value)) {
+      modalArrive.value = modalDepart.value;
+    }
+  });
+
+  function openRsvpModalForAdd(defaultEvent = 'wedding', slug = '', name = '') {
+    state.modalMode = 'add';
+    state.modalTargetId = null;
+    state.modalSlugEdited = Boolean(slug);
+
+    rsvpModalTitle.textContent = slug ? `Log RSVP — ${name}` : 'Add RSVP';
+    modalSubmitBtn.textContent = 'Save RSVP';
+    rsvpModalError.hidden = true;
+
+    modalId.value = '';
+    modalEvent.value = defaultEvent;
+    populatePresetSelect(defaultEvent, slug);
+    modalName.value = name || '';
+    modalSlug.value = slug || '';
+    modalEmail.value = '';
+    modalAttending.value = 'yes';
+    modalPlusOne.value = 'no';
+    modalPlusOneName.value = '';
+    modalSoloAck.checked = false;
+    modalArrive.value = '0';
+    modalDepart.value = String(LAST_STOP);
+    modalNotes.value = '';
+
+    syncModalFieldsVisibility();
+    rsvpModal.showModal();
+  }
+
+  function openRsvpModalForEdit(rsvp) {
+    state.modalMode = 'edit';
+    state.modalTargetId = rsvp.id;
+    state.modalSlugEdited = true;
+
+    rsvpModalTitle.textContent = `Edit RSVP — ${rsvp.name}`;
+    modalSubmitBtn.textContent = 'Update RSVP';
+    rsvpModalError.hidden = true;
+
+    modalId.value = String(rsvp.id);
+    modalEvent.value = rsvp.event;
+    populatePresetSelect(rsvp.event, rsvp.guest_slug);
+    modalName.value = rsvp.name || '';
+    modalSlug.value = rsvp.guest_slug || '';
+    modalEmail.value = rsvp.email || '';
+    modalAttending.value = rsvp.attending || 'yes';
+    modalPlusOne.value = rsvp.plus_one ? 'yes' : 'no';
+    modalPlusOneName.value = rsvp.plus_one_name || '';
+    modalSoloAck.checked = Boolean(rsvp.solo_ack);
+    modalArrive.value = String(rsvp.arrive_idx ?? 0);
+    modalDepart.value = String(rsvp.depart_idx ?? LAST_STOP);
+    modalNotes.value = rsvp.notes || '';
+
+    syncModalFieldsVisibility();
+    rsvpModal.showModal();
+  }
+
+  document.getElementById('rsvp-modal-close').addEventListener('click', () => rsvpModal.close('cancel'));
+  document.getElementById('rsvp-modal-cancel').addEventListener('click', () => rsvpModal.close('cancel'));
+  rsvpModal.addEventListener('close', () => {
+    rsvpModal.returnValue = '';
+  });
+
+  function applyLocalPreviewUpsert(payload, existingId = null) {
+    const nowIso = new Date().toISOString();
+    const aIdx = payload.event === 'bach' && payload.attending === 'yes' ? Number(payload.arriveIdx) : null;
+    const dIdx = payload.event === 'bach' && payload.attending === 'yes' ? Number(payload.departIdx) : null;
+    const arriveAt = aIdx !== null ? formatStop(QUEST_STOPS[aIdx]) : '';
+    const departAfter = dIdx !== null ? formatStop(QUEST_STOPS[dIdx]) : '';
+    const schedule = aIdx !== null
+      ? (aIdx === 0 && dIdx === LAST_STOP ? 'Full Weekend' : `${arriveAt} to ${departAfter}`)
+      : '';
+
+    const nextRow = {
+      id: existingId || state.nextSampleId++,
+      event: payload.event,
+      guest_slug: payload.guest,
+      name: payload.name,
+      email: payload.email,
+      attending: payload.attending,
+      plus_one: payload.attending === 'yes' && payload.plusOne === 'yes',
+      plus_one_name: payload.attending === 'yes' && payload.plusOne === 'yes' ? payload.plusOneName : '',
+      solo_ack: payload.event === 'wedding' && payload.attending === 'yes' && payload.plusOne !== 'yes' && Boolean(payload.soloAck),
+      arrive_idx: aIdx,
+      depart_idx: dIdx,
+      arrive_at: arriveAt,
+      depart_after: departAfter,
+      schedule,
+      notes: payload.notes,
+      source: 'admin',
+      submitted_at: nowIso,
+      updated_at: nowIso
+    };
+
+    const idx = existingId
+      ? state.rsvps.findIndex((r) => r.id === existingId)
+      : state.rsvps.findIndex((r) => r.event === nextRow.event && r.guest_slug === nextRow.guest_slug);
+
+    if (idx >= 0) {
+      nextRow.submitted_at = state.rsvps[idx].submitted_at;
+      nextRow.id = state.rsvps[idx].id;
+      state.rsvps[idx] = nextRow;
+    } else {
+      state.rsvps.unshift(nextRow);
+    }
+  }
+
+  rsvpModalForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    rsvpModalError.hidden = true;
+
+    const eventType = modalEvent.value;
+    const attending = modalAttending.value;
+    const plusOne = attending === 'yes' ? modalPlusOne.value : 'no';
+
+    const payload = {
+      event: eventType,
+      guest: modalSlug.value.trim().toLowerCase() || slugify(modalName.value),
+      name: modalName.value.trim(),
+      email: modalEmail.value.trim(),
+      attending,
+      plusOne,
+      plusOneName: plusOne === 'yes' ? modalPlusOneName.value.trim() : '',
+      soloAck: eventType === 'wedding' && attending === 'yes' && plusOne === 'no' && modalSoloAck.checked,
+      arriveIdx: eventType === 'bach' && attending === 'yes' ? Number(modalArrive.value) : null,
+      departIdx: eventType === 'bach' && attending === 'yes' ? Number(modalDepart.value) : null,
+      notes: modalNotes.value.trim(),
+      source: 'admin'
+    };
+
+    modalSubmitBtn.disabled = true;
+    modalSubmitBtn.textContent = 'Saving...';
+
+    try {
+      if (state.previewMode) {
+        applyLocalPreviewUpsert(payload, state.modalMode === 'edit' ? state.modalTargetId : null);
+      } else {
+        const isEdit = state.modalMode === 'edit' && state.modalTargetId;
+        const res = await fetch('/api/rsvps', {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(isEdit ? { id: state.modalTargetId, ...payload } : payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || 'Could not save RSVP.');
+        }
+        await fetchRsvpsFromServer();
+      }
+
+      const savedName = payload.name;
+      rsvpModal.close('saved');
+      renderAll();
+      showToast(`Saved RSVP for ${savedName}.`, 'success');
+    } catch (err) {
+      rsvpModalError.textContent = err.message || 'Unable to save RSVP.';
+      rsvpModalError.hidden = false;
+    } finally {
+      modalSubmitBtn.disabled = false;
+      modalSubmitBtn.textContent = state.modalMode === 'edit' ? 'Update RSVP' : 'Save RSVP';
+    }
+  });
+
+  // ---- DELETE MODAL ----
+  function openDeleteModal(rsvp) {
+    state.pendingDeleteRsvp = rsvp;
+    deleteModalMessage.textContent = `Delete the ${rsvp.event === 'bach' ? 'Bach Weekend' : 'Wedding'} RSVP for ${rsvp.name}? If they are on the invite list, they will return to Pending status.`;
+    deleteModal.showModal();
+  }
+
+  document.getElementById('delete-modal-close').addEventListener('click', () => deleteModal.close('cancel'));
+
+  deleteModal.addEventListener('close', async () => {
+    const choice = deleteModal.returnValue;
+    deleteModal.returnValue = '';
+
+    const target = state.pendingDeleteRsvp;
+    state.pendingDeleteRsvp = null;
+    if (choice !== 'delete' || !target) return;
+
+    try {
+      if (state.previewMode) {
+        state.rsvps = state.rsvps.filter((r) => r.id !== target.id);
+      } else {
+        const res = await fetch(`/api/rsvps?id=${encodeURIComponent(target.id)}`, { method: 'DELETE' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || 'Could not delete RSVP.');
+        }
+        await fetchRsvpsFromServer();
+      }
+      renderAll();
+      showToast(`Deleted RSVP for ${target.name}.`, 'success');
+    } catch (err) {
+      showToast(err.message || 'Failed to delete RSVP.', 'error');
+    }
+  });
+
+  // ---- HEADER & SETUP CONTROLS ----
+  btnAddRsvp.addEventListener('click', () => {
+    const defaultEvent = state.activeTab === 'bach' ? 'bach' : 'wedding';
+    openRsvpModalForAdd(defaultEvent);
+  });
+
+  btnPreviewSample.addEventListener('click', () => {
+    state.previewMode = true;
+    state.rsvps = buildSampleRsvps();
+    renderAll();
+    showToast('Loaded sample RSVP data for preview.', 'info');
+  });
+
+  btnExitPreview.addEventListener('click', async () => {
+    state.previewMode = false;
+    await refreshDashboard(true);
+  });
+
+  btnRetryDb.addEventListener('click', () => refreshDashboard(true));
+  btnRefresh.addEventListener('click', () => refreshDashboard(true));
+
+  async function refreshDashboard(notify = false) {
+    btnRefresh.disabled = true;
+    try {
+      await Promise.all([loadGuestLists(), fetchRsvpsFromServer()]);
+      renderAll();
+      if (notify) {
+        showToast(state.dbConfigured ? 'Ledger synced with Neon Postgres.' : 'Checked database status.', state.dbConfigured ? 'success' : 'info');
+      }
+    } catch (err) {
+      updateConnectionUi();
+      showToast(err.message || 'Unable to refresh data.', 'error');
+    } finally {
+      btnRefresh.disabled = false;
+    }
+  }
+
+  refreshDashboard(false);
+})();
+</script>
+</body>
+</html>

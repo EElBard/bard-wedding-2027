@@ -1259,26 +1259,39 @@
       ? (isFullWeekend ? 'Full Weekend' : `${arriveAt} to ${departAfter}`)
       : '';
 
-    const scheduleNote = (attending === 'yes' && !isFullWeekend)
-      ? `[Schedule: Arriving ${arriveAt} | Staying through ${departAfter}]`
-      : '';
-    const notes = [scheduleNote, rawNotes].filter(Boolean).join('\n');
-
     const btn = formEl.querySelector('.btn-primary');
     btn.textContent = 'Sending...';
     btn.disabled = true;
 
     try {
-      await fetch('https://script.google.com/macros/s/AKfycbyBfDQovMVZOntJmVXLHhVbhkrXn6-LRFVXJZirJp13RA3FnCCFhR7b_ZvZOBoC0RdP/exec', {
+      const res = await fetch('/api/rsvps', {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: 'bach', guest: guestSlug, name, email, attending, plusOne, plusOneName, schedule, arriveAt, departAfter, notes })
+        body: JSON.stringify({
+          event: 'bach',
+          guest: guestSlug ? guestSlug.toLowerCase() : '',
+          name,
+          email,
+          attending,
+          plusOne,
+          plusOneName,
+          arriveIdx: attending === 'yes' ? aIdx : null,
+          departIdx: attending === 'yes' ? dIdx : null,
+          arriveAt,
+          departAfter,
+          schedule,
+          notes: rawNotes,
+          source: 'form'
+        })
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Unable to save your RSVP right now.');
+      }
     } catch (err) {
       btn.textContent = 'Send My Reply ✦';
       btn.disabled = false;
-      alert("It seems you're offline or something went wrong. Please check your connection and try again, or contact Ethan & Holly directly.");
+      alert(err.message || "It seems you're offline or something went wrong. Please check your connection and try again, or contact Ethan & Holly directly.");
       return;
     }
 
