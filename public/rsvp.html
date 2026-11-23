@@ -286,7 +286,7 @@
 </head>
 <body>
 
-<a href="index.html" class="back-link">← Back to our site</a>
+<a href="/" class="back-link">← Back to our site</a>
 
 <div class="card">
   <p class="card-eyebrow">You are cordially summoned</p>
@@ -372,11 +372,52 @@
   const soloAckCheckbox  = document.getElementById('field-solo-ack');
   const nameInput        = document.getElementById('field-name');
 
-  const params    = new URLSearchParams(window.location.search);
-  const guestSlug = params.get('guest');
+  function resolveGuestSlug() {
+    const params = new URLSearchParams(window.location.search);
+    const querySlug = params.get('guest')?.trim();
+    if (querySlug) {
+      return querySlug;
+    }
+
+    const pathMatch = window.location.pathname.match(/^\/rsvp\/([^/]+)\/?$/i);
+    if (!pathMatch) {
+      return '';
+    }
+
+    try {
+      return decodeURIComponent(pathMatch[1]).trim();
+    } catch {
+      return pathMatch[1].trim();
+    }
+  }
+
+  const guestSlug = resolveGuestSlug();
   let guest       = null;
 
-  // --- Load guests.json and initialize the page ---
+  // --- Load live guest setup strictly from the database ---
+  async function fetchLiveGuest(slug) {
+    const normalizedSlug = slug.toLowerCase();
+    const res = await fetch(`/api/guests?event=wedding&guest=${encodeURIComponent(normalizedSlug)}`, {
+      cache: 'no-store'
+    });
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      throw new Error('Invitation service is unavailable right now. Please try again later.');
+    }
+
+    const data = await res.json();
+    if (res.ok && data.ok && data.guest) {
+      return data.guest;
+    }
+    if (res.status === 404 && data.code === 'NOT_FOUND') {
+      return null;
+    }
+    if (res.status === 503 && data.code === 'DB_NOT_CONFIGURED') {
+      throw new Error('Invitations are temporarily unavailable while the database is being set up. Please check back shortly.');
+    }
+    throw new Error(data.error || 'Unable to load your invitation. Please try again.');
+  }
+
   async function init() {
     if (!guestSlug) {
       greetingEl.style.display = 'none';
@@ -385,11 +426,9 @@
     }
 
     try {
-      const res = await fetch('guests.json');
-      const guests = await res.json();
-      guest = guests[guestSlug.toLowerCase()] || null;
+      guest = await fetchLiveGuest(guestSlug);
     } catch (err) {
-      greetingEl.textContent = 'Something went wrong loading your invitation. Please try again.';
+      greetingEl.textContent = err?.message || 'Something went wrong loading your invitation. Please try again.';
       return;
     }
 
@@ -457,7 +496,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           event: 'wedding',
-          guest: guestSlug ? guestSlug.toLowerCase() : '',
+          guest: guest?.slug || (guestSlug ? guestSlug.toLowerCase() : ''),
           name,
           email,
           attending,

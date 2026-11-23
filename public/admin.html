@@ -32,6 +32,7 @@
     --surface: rgba(255, 252, 246, 0.92);
     --shadow-sm: 0 2px 12px rgba(58, 42, 26, 0.06);
     --shadow-md: 0 10px 36px rgba(58, 42, 26, 0.1);
+    --icon-check: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'></polyline></svg>");
   }
 
   * {
@@ -1004,17 +1005,6 @@
     color: var(--sage-ink);
   }
 
-  .matrix-block.arrive {
-    background: rgba(126, 168, 122, 0.7);
-    color: #fff;
-  }
-
-  .matrix-block.depart {
-    background: rgba(200, 151, 58, 0.35);
-    border: 1px solid var(--gold);
-    color: var(--ink);
-  }
-
   .matrix-block.out {
     background: transparent;
     border: 1px dashed rgba(154, 132, 99, 0.45);
@@ -1218,6 +1208,171 @@
     cursor: pointer;
   }
 
+  .modal-events-fieldset {
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 0.75rem 0.85rem 0.85rem;
+    margin: 0;
+    min-inline-size: 0;
+    background: rgba(255, 253, 249, 0.75);
+  }
+
+  .modal-events-fieldset[hidden] {
+    display: none;
+  }
+
+  .modal-events-fieldset legend {
+    font-family: 'Cinzel', serif;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+    padding: 0 0.35rem;
+  }
+
+  .modal-events-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.65rem;
+  }
+
+  .modal-events-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .modal-events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .modal-event-item {
+    --me-bg: rgba(250, 241, 223, 0.4);
+    --me-border: rgba(154, 132, 99, 0.55);
+    --me-border-style: dashed;
+    --me-color: var(--ink-muted);
+    --me-decoration: line-through;
+
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-block-size: 44px;
+    padding: 0.4rem 0.6rem;
+    border-radius: 3px;
+    border: 1px var(--me-border-style) var(--me-border);
+    background: var(--me-bg);
+    color: var(--me-color);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .modal-event-item:hover {
+    border-color: var(--gold);
+  }
+
+  .modal-event-item:has(.modal-event-checkbox:checked) {
+    --me-bg: rgba(168, 197, 160, 0.22);
+    --me-border: rgba(90, 132, 86, 0.65);
+    --me-border-style: solid;
+    --me-color: var(--ink);
+    --me-decoration: none;
+  }
+
+  @supports not selector(:has(*)) {
+    .modal-event-item.is-checked {
+      --me-bg: rgba(168, 197, 160, 0.22);
+      --me-border: rgba(90, 132, 86, 0.65);
+      --me-border-style: solid;
+      --me-color: var(--ink);
+      --me-decoration: none;
+    }
+  }
+
+  .modal-event-checkbox {
+    --checkbox-size: 1.15em;
+    --checkbox-icon-size: 0.7em;
+
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-grid;
+    place-content: center;
+    flex-shrink: 0;
+    inline-size: var(--checkbox-size);
+    aspect-ratio: 1;
+    margin: 0;
+    border-radius: 2px;
+    border: 2px solid #7a6850;
+    background-color: #fffdf9;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .modal-event-checkbox::before {
+    content: "";
+    inline-size: var(--checkbox-icon-size);
+    aspect-ratio: 1;
+    background-color: #ffffff;
+    -webkit-mask: var(--icon-check) no-repeat center / contain;
+    mask: var(--icon-check) no-repeat center / contain;
+    scale: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .modal-event-checkbox::before {
+      transition: scale 150ms ease;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .modal-event-checkbox::before {
+      background-color: CanvasText;
+    }
+  }
+
+  .modal-event-checkbox:checked {
+    background-color: #4e7a4a;
+    border-color: #4e7a4a;
+  }
+
+  .modal-event-checkbox:checked::before {
+    scale: 1;
+  }
+
+  .modal-event-checkbox:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .modal-event-checkbox:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .modal-event-text {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  .modal-event-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: var(--me-decoration);
+  }
+
+  .modal-event-meta {
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+  }
+
   .modal-error {
     background: rgba(242, 196, 206, 0.38);
     border: 1px solid var(--blush-deep);
@@ -1228,6 +1383,148 @@
   }
 
   .modal-error[hidden] { display: none; }
+
+  .field-hint--above {
+    margin-bottom: 0.1rem;
+  }
+
+  .field-error {
+    display: none;
+    font-size: 0.78rem;
+    color: var(--rose-ink);
+    margin-top: 0.15rem;
+  }
+
+  .field input:is(:user-invalid, .user-invalid-fallback),
+  .field select:is(:user-invalid, .user-invalid-fallback),
+  .field textarea:is(:user-invalid, .user-invalid-fallback) {
+    border-color: #b43c54;
+    background-color: #fff5f7;
+  }
+
+  .field input:is(:user-invalid, .user-invalid-fallback) + .field-error,
+  .field select:is(:user-invalid, .user-invalid-fallback) + .field-error,
+  .field textarea:is(:user-invalid, .user-invalid-fallback) + .field-error {
+    display: block;
+  }
+
+  .field input:user-valid {
+    border-color: var(--sage-deep);
+  }
+
+  /* ---- NATIVE SWITCH CONTROLS ---- */
+  input[type="checkbox"][switch] {
+    accent-color: var(--sage-deep);
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  input[type="checkbox"][switch]:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  input[type="checkbox"][switch]:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .switch-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .switch-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .switch-inline.is-disabled {
+    color: var(--ink-muted);
+    cursor: not-allowed;
+  }
+
+  /* ---- GUEST SETUP CARDS & PREVIEWS ---- */
+  dialog#guest-modal:modal {
+    width: min(640px, calc(100vw - 2rem));
+  }
+
+  .guest-event-box {
+    background: rgba(255, 253, 249, 0.8);
+    border: 1px solid var(--border-gold);
+    border-radius: 3px;
+    padding: 0.75rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .guest-event-box-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  .guest-link-preview {
+    background: var(--parchment-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .guest-link-preview-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .guest-link-preview-row code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.76rem;
+    color: var(--ink);
+    word-break: break-all;
+  }
+
+  .delete-warning-box {
+    background: rgba(242, 196, 206, 0.28);
+    border: 1px solid var(--blush-deep);
+    border-radius: 3px;
+    padding: 0.75rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    font-size: 0.84rem;
+    color: var(--rose-ink);
+  }
+
+  .contact-cell {
+    max-width: 260px;
+    font-size: 0.82rem;
+    word-break: break-word;
+  }
+
+  .rsvp-status-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+    align-items: flex-start;
+  }
 
   .modal-footer {
     display: flex;
@@ -1326,7 +1623,8 @@
     .kpi-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .form-grid-2 {
+    .form-grid-2,
+    .modal-events-grid {
       grid-template-columns: 1fr;
     }
     .stop-bar-btn {
@@ -1383,9 +1681,10 @@
     <div class="topbar-actions">
       <button type="button" id="btn-exit-preview" class="btn" hidden>Exit Preview</button>
       <button type="button" id="btn-refresh" class="btn">↻ Refresh</button>
-      <button type="button" id="btn-add-rsvp" class="btn btn-primary">+ Add RSVP</button>
+      <button type="button" id="btn-add-guest" class="btn btn-primary">+ Add Guest</button>
+      <button type="button" id="btn-add-rsvp" class="btn">+ Add RSVP</button>
       <button type="button" id="btn-export-csv" class="btn">⬇ Export CSV</button>
-      <a href="index.html" class="btn">← Wedding Site</a>
+      <a href="/" class="btn">← Wedding Site</a>
     </div>
   </div>
 </header>
@@ -1394,11 +1693,11 @@
   <section id="setup-banner" class="setup-banner" aria-labelledby="setup-banner-title" hidden>
     <div>
       <h2 id="setup-banner-title">Connect Free Neon Postgres to Go Live</h2>
-      <p>Your dashboard and RSVP forms are wired to <code>/api/rsvps</code>, and no database connection string is configured yet. To enable persistent storage on Vercel for free (no credit card required):</p>
+      <p>Your dashboard and RSVP forms are wired to <code>/api/guests</code> and <code>/api/rsvps</code>, and no database connection string is configured yet. To enable persistent storage on Vercel for free (no credit card required):</p>
       <ol>
         <li>Open your project in <strong>Vercel Dashboard → Storage → Create Database → Neon (Serverless Postgres)</strong>.</li>
         <li>Link the database to this project (Vercel automatically populates <code>DATABASE_URL</code>).</li>
-        <li>Redeploy once — the <code>rsvps</code> table initializes automatically on the first request.</li>
+        <li>Redeploy once — the <code>guests</code> (pre-seeded with your initial 42 guests) and <code>rsvps</code> tables initialize automatically on the first request.</li>
       </ol>
     </div>
     <div class="setup-banner-actions">
@@ -1416,6 +1715,10 @@
       <button type="button" role="tab" id="tab-bach" aria-selected="false" tabindex="-1">
         <span>Bach Weekend</span>
         <span class="tab-count" id="count-bach">0 / 17</span>
+      </button>
+      <button type="button" role="tab" id="tab-guests" aria-selected="false" tabindex="-1">
+        <span>Guest Setup</span>
+        <span class="tab-count" id="count-guests">0</span>
       </button>
       <button type="button" role="tab" id="tab-notes" aria-selected="false" tabindex="-1">
         <span>Dietary &amp; Notes</span>
@@ -1507,8 +1810,8 @@
           <div class="section-card">
             <div class="section-head">
               <div>
-                <h2>Quest Timeline Headcount Breakdown</h2>
-                <p>Click any stop to see exact arrivals, departures, and who is attending or skipping.</p>
+                <h2>Bach Event Headcount Breakdown</h2>
+                <p>Click any event to see exact headcount, estimated ticket costs, and who is attending or skipping.</p>
               </div>
               <div id="bach-cost-summary" class="pill pill-lavender"></div>
             </div>
@@ -1522,7 +1825,7 @@
             <div class="section-head">
               <div>
                 <h2>Guest Schedule Matrix</h2>
-                <p>Visual Fri–Sun attendance across all 7 Quest Timeline stops for attending guests.</p>
+                <p>Visual Fri–Sun attendance across all 7 Bach Weekend events for attending guests.</p>
               </div>
             </div>
             <div class="matrix-wrap" id="bach-matrix-wrap"></div>
@@ -1568,7 +1871,7 @@
                     </th>
                     <th scope="col" data-type="text">
                       <button type="button" commandfor="bach-table" command="--sort">
-                        <span>Quest Timeline</span><span class="sort-icon" aria-hidden="true"></span>
+                        <span>Selected Events</span><span class="sort-icon" aria-hidden="true"></span>
                       </button>
                     </th>
                     <th scope="col" data-type="text">
@@ -1597,7 +1900,77 @@
         </div>
       </section>
 
-      <!-- PANEL 3: DIETARY & NOTES -->
+      <!-- PANEL 3: GUEST SETUP -->
+      <section id="panel-guests" role="tabpanel" aria-labelledby="tab-guests" hidden="until-found">
+        <div class="panel-inner">
+          <div class="kpi-grid" id="guests-kpis"></div>
+
+          <div class="section-card">
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <input type="search" id="guests-search" class="search-input" placeholder="Search name, slug, group, email, phone, or notes..." aria-label="Search guest setup">
+                <div class="chip-group" id="guests-filters" role="group" aria-label="Filter guests">
+                  <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
+                  <button type="button" class="filter-chip" data-filter="wedding" aria-pressed="false">Wedding</button>
+                  <button type="button" class="filter-chip" data-filter="wedding-plusone" aria-pressed="false">Wedding +1</button>
+                  <button type="button" class="filter-chip" data-filter="bach" aria-pressed="false">Bach Weekend</button>
+                  <button type="button" class="filter-chip" data-filter="both" aria-pressed="false">Both Events</button>
+                  <button type="button" class="filter-chip" data-filter="unassigned" aria-pressed="false">Unassigned</button>
+                </div>
+              </div>
+              <div class="toolbar-right">
+                <button type="button" id="btn-panel-add-guest" class="btn btn-sm btn-primary">+ Add Guest</button>
+                <button type="button" id="btn-export-guests-csv" class="btn btn-sm">⬇ Export Guests CSV</button>
+              </div>
+            </div>
+
+            <div class="table-scroll" role="region" aria-labelledby="guests-caption" tabindex="0">
+              <table id="guests-table" class="ledger-table">
+                <caption id="guests-caption" class="visually-hidden">Master guest setup and event invitations</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-type="text" aria-sort="ascending">
+                      <button type="button" commandfor="guests-table" command="--sort">
+                        <span>Guest</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="guests-table" command="--sort">
+                        <span>Group</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="guests-table" command="--sort">
+                        <span>Wedding</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="guests-table" command="--sort">
+                        <span>Bach Weekend</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="text">
+                      <button type="button" commandfor="guests-table" command="--sort">
+                        <span>Contact &amp; Notes</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col" data-type="number">
+                      <button type="button" commandfor="guests-table" command="--sort">
+                        <span>RSVPs</span><span class="sort-icon" aria-hidden="true"></span>
+                      </button>
+                    </th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="guests-tbody"></tbody>
+              </table>
+              <div id="guests-empty" class="empty-state" hidden>No guests match your current search or filter.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 4: DIETARY & NOTES -->
       <section id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden="until-found">
         <div class="panel-inner">
           <div class="section-card">
@@ -1765,16 +2138,17 @@
         <label for="modal-solo-ack">Solo invite acknowledged (no +1)</label>
       </div>
 
-      <div class="form-grid-2" id="modal-bach-schedule" hidden>
-        <div class="field">
-          <label for="modal-arrive">Arriving For</label>
-          <select id="modal-arrive"></select>
+      <fieldset class="modal-events-fieldset" id="modal-bach-schedule" hidden>
+        <legend>Bach Weekend Events</legend>
+        <div class="modal-events-bar">
+          <span class="field-hint" id="modal-events-summary">All 7 events selected</span>
+          <div class="modal-events-actions">
+            <button type="button" class="btn btn-sm" id="modal-events-select-all">Select all</button>
+            <button type="button" class="btn btn-sm" id="modal-events-clear-all">Clear all</button>
+          </div>
         </div>
-        <div class="field">
-          <label for="modal-depart">Staying Through</label>
-          <select id="modal-depart"></select>
-        </div>
-      </div>
+        <div class="modal-events-grid" id="modal-events-grid"></div>
+      </fieldset>
 
       <div class="field">
         <label for="modal-notes">Dietary Requirements or Notes</label>
@@ -1789,7 +2163,7 @@
   </form>
 </dialog>
 
-<!-- DELETE CONFIRMATION MODAL -->
+<!-- DELETE RSVP CONFIRMATION MODAL -->
 <dialog id="delete-modal" closedby="any" aria-labelledby="delete-modal-title">
   <div class="modal-header">
     <h2 id="delete-modal-title">Delete RSVP?</h2>
@@ -1802,6 +2176,154 @@
     <div class="modal-footer">
       <button type="submit" value="cancel" class="btn" autofocus>Cancel</button>
       <button type="submit" value="delete" class="btn btn-danger">Delete RSVP</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ADD / EDIT GUEST SETUP MODAL -->
+<dialog id="guest-modal" closedby="any" aria-labelledby="guest-modal-title">
+  <div class="modal-header">
+    <h2 id="guest-modal-title">Add Guest</h2>
+    <button type="button" class="modal-close-btn" id="guest-modal-close" aria-label="Close dialog">&times;</button>
+  </div>
+  <form id="guest-modal-form">
+    <div class="modal-body">
+      <div id="guest-modal-error" class="modal-error" hidden></div>
+      <input type="hidden" id="guest-modal-id">
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label for="guest-modal-name">Full Name</label>
+          <input
+            type="text"
+            id="guest-modal-name"
+            required
+            maxlength="120"
+            autofocus
+            placeholder="Guest's full name"
+            data-error="guest-name-error"
+          >
+          <div id="guest-name-error" class="field-error">
+            <span role="img" aria-label="Error">❌</span> Please enter the guest's full name.
+          </div>
+        </div>
+        <div class="field">
+          <label for="guest-modal-group">Group / Household</label>
+          <input
+            type="text"
+            id="guest-modal-group"
+            maxlength="80"
+            list="guest-group-options"
+            placeholder="e.g. Ethan's Family, Friends"
+          >
+          <datalist id="guest-group-options"></datalist>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="guest-modal-slug">Guest Link Slug</label>
+        <span id="guest-slug-hint" class="field-hint field-hint--above">
+          Lowercase letters, numbers, hyphens, or underscores — used in <code>?guest=slug</code>. <span id="guest-slug-edit-note" hidden>Renaming updates existing RSVPs too.</span>
+        </span>
+        <input
+          type="text"
+          id="guest-modal-slug"
+          required
+          maxlength="100"
+          pattern="[a-z0-9][a-z0-9_-]{0,99}"
+          placeholder="e.g. tori-watson"
+          aria-describedby="guest-slug-hint"
+          data-error="guest-slug-error"
+        >
+        <div id="guest-slug-error" class="field-error">
+          <span role="img" aria-label="Error">❌</span> Enter a slug starting with a letter or number, using only lowercase letters, numbers, hyphens, or underscores.
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field">
+          <label for="guest-modal-email">Email</label>
+          <span id="guest-email-hint" class="field-hint field-hint--above">Optional format: guest@example.com</span>
+          <input
+            type="email"
+            id="guest-modal-email"
+            maxlength="200"
+            placeholder="guest@example.com"
+            aria-describedby="guest-email-hint"
+            data-error="guest-email-error"
+          >
+          <div id="guest-email-error" class="field-error">
+            <span role="img" aria-label="Error">❌</span> Enter an email address in the format guest@example.com.
+          </div>
+        </div>
+        <div class="field">
+          <label for="guest-modal-phone">Phone</label>
+          <span class="field-hint field-hint--above">Optional contact number</span>
+          <input type="tel" id="guest-modal-phone" maxlength="40" placeholder="Optional phone number">
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="guest-event-box">
+          <div class="guest-event-box-title">Wedding Invitation</div>
+          <label class="switch-inline" for="guest-modal-wedding">
+            <input type="checkbox" switch id="guest-modal-wedding">
+            <span>Invited to Wedding</span>
+          </label>
+          <label class="switch-inline" id="guest-modal-wedding-plusone-label" for="guest-modal-wedding-plusone">
+            <input type="checkbox" switch id="guest-modal-wedding-plusone">
+            <span>Allow Wedding +1</span>
+          </label>
+        </div>
+
+        <div class="guest-event-box">
+          <div class="guest-event-box-title">Bach Weekend Invitation</div>
+          <label class="switch-inline" for="guest-modal-bach">
+            <input type="checkbox" switch id="guest-modal-bach">
+            <span>Invited to Bach Weekend</span>
+          </label>
+          <label class="switch-inline" id="guest-modal-bach-plusone-label" for="guest-modal-bach-plusone">
+            <input type="checkbox" switch id="guest-modal-bach-plusone">
+            <span>Allow Bach +1</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="guest-link-preview" id="guest-link-preview"></div>
+
+      <div class="field">
+        <label for="guest-modal-notes">Setup Notes</label>
+        <textarea id="guest-modal-notes" maxlength="2000" placeholder="Household details, mailing address, relationship, or seating notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn" id="guest-modal-cancel">Cancel</button>
+      <button type="submit" class="btn btn-primary" id="guest-modal-submit">Save Guest</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- DELETE GUEST CONFIRMATION MODAL -->
+<dialog id="delete-guest-modal" closedby="any" aria-labelledby="delete-guest-modal-title">
+  <div class="modal-header">
+    <h2 id="delete-guest-modal-title">Remove Guest?</h2>
+    <button type="button" class="modal-close-btn" id="delete-guest-modal-close" aria-label="Close dialog">&times;</button>
+  </div>
+  <form method="dialog">
+    <div class="modal-body">
+      <p id="delete-guest-modal-message">Remove this guest from your invite setup? Their personal invite link(s) will stop working.</p>
+      <div id="delete-guest-rsvps-warning" class="delete-warning-box" hidden>
+        <p id="delete-guest-rsvps-text"></p>
+        <label class="checkbox-field" for="delete-guest-also-rsvps">
+          <input type="checkbox" id="delete-guest-also-rsvps">
+          <span id="delete-guest-also-rsvps-label">Also permanently delete their submitted RSVP record(s)</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" value="cancel" class="btn" autofocus>Cancel</button>
+      <button type="submit" value="delete" class="btn btn-danger">Remove Guest</button>
     </div>
   </form>
 </dialog>
@@ -1825,6 +2347,7 @@
   const LAST_STOP = QUEST_STOPS.length - 1;
 
   const state = {
+    guestList: [],
     guests: { wedding: {}, bach: {} },
     rsvps: [],
     previewMode: false,
@@ -1835,6 +2358,7 @@
     filters: {
       wedding: { query: '', pill: 'all' },
       bach: { query: '', pill: 'all' },
+      guests: { query: '', pill: 'all' },
       notes: { query: '', pill: 'all' },
       activity: { query: '', pill: 'all' }
     },
@@ -1842,12 +2366,20 @@
     modalTargetId: null,
     modalSlugEdited: false,
     pendingDeleteRsvp: null,
-    nextSampleId: 100
+    guestModalMode: 'add',
+    guestModalTargetId: null,
+    guestModalSlugEdited: false,
+    pendingDeleteGuest: null,
+    nextSampleId: 100,
+    nextSampleGuestId: 1000
   };
 
   // ---- FEATURE DETECTION POLYFILLS ----
   if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
     import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js').catch(() => {});
+  }
+  if (!('switch' in HTMLInputElement.prototype)) {
+    import('https://unpkg.com/input-switch-polyfill@latest/input-switch-polyfill.js').catch(() => {});
   }
 
   // ---- DOM REFS ----
@@ -1856,6 +2388,8 @@
   const setupBanner     = document.getElementById('setup-banner');
   const btnExitPreview  = document.getElementById('btn-exit-preview');
   const btnRefresh      = document.getElementById('btn-refresh');
+  const btnAddGuest     = document.getElementById('btn-add-guest');
+  const btnPanelAddGuest = document.getElementById('btn-panel-add-guest');
   const btnAddRsvp      = document.getElementById('btn-add-rsvp');
   const btnExportCsv    = document.getElementById('btn-export-csv');
   const btnPreviewSample = document.getElementById('btn-preview-sample');
@@ -1885,13 +2419,45 @@
   const modalSoloRow    = document.getElementById('modal-solo-row');
   const modalSoloAck    = document.getElementById('modal-solo-ack');
   const modalBachSchedule = document.getElementById('modal-bach-schedule');
-  const modalArrive     = document.getElementById('modal-arrive');
-  const modalDepart     = document.getElementById('modal-depart');
+  const modalEventsGrid = document.getElementById('modal-events-grid');
+  const modalEventsSummary = document.getElementById('modal-events-summary');
+  const modalEventsSelectAll = document.getElementById('modal-events-select-all');
+  const modalEventsClearAll = document.getElementById('modal-events-clear-all');
   const modalNotes      = document.getElementById('modal-notes');
   const modalSubmitBtn  = document.getElementById('rsvp-modal-submit');
+  const supportsCssHas  = typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('selector(:has(*))');
 
   const deleteModal        = document.getElementById('delete-modal');
   const deleteModalMessage = document.getElementById('delete-modal-message');
+
+  const guestModal                 = document.getElementById('guest-modal');
+  const guestModalTitle            = document.getElementById('guest-modal-title');
+  const guestModalForm             = document.getElementById('guest-modal-form');
+  const guestModalError            = document.getElementById('guest-modal-error');
+  const guestModalId               = document.getElementById('guest-modal-id');
+  const guestModalName             = document.getElementById('guest-modal-name');
+  const guestModalGroup            = document.getElementById('guest-modal-group');
+  const guestGroupOptions          = document.getElementById('guest-group-options');
+  const guestModalSlug             = document.getElementById('guest-modal-slug');
+  const guestSlugEditNote          = document.getElementById('guest-slug-edit-note');
+  const guestModalEmail            = document.getElementById('guest-modal-email');
+  const guestModalPhone            = document.getElementById('guest-modal-phone');
+  const guestModalWedding          = document.getElementById('guest-modal-wedding');
+  const guestModalWeddingPlusOne   = document.getElementById('guest-modal-wedding-plusone');
+  const guestModalWeddingPlusLabel = document.getElementById('guest-modal-wedding-plusone-label');
+  const guestModalBach             = document.getElementById('guest-modal-bach');
+  const guestModalBachPlusOne      = document.getElementById('guest-modal-bach-plusone');
+  const guestModalBachPlusLabel    = document.getElementById('guest-modal-bach-plusone-label');
+  const guestLinkPreview           = document.getElementById('guest-link-preview');
+  const guestModalNotes            = document.getElementById('guest-modal-notes');
+  const guestModalSubmit           = document.getElementById('guest-modal-submit');
+
+  const deleteGuestModal           = document.getElementById('delete-guest-modal');
+  const deleteGuestModalMessage    = document.getElementById('delete-guest-modal-message');
+  const deleteGuestRsvpsWarning    = document.getElementById('delete-guest-rsvps-warning');
+  const deleteGuestRsvpsText       = document.getElementById('delete-guest-rsvps-text');
+  const deleteGuestAlsoRsvps       = document.getElementById('delete-guest-also-rsvps');
+  const deleteGuestAlsoRsvpsLabel  = document.getElementById('delete-guest-also-rsvps-label');
 
   const toastRegion = document.getElementById('toast-region');
   const srAnnouncer = document.getElementById('sr-announcer');
@@ -1940,19 +2506,61 @@
   }
 
   function getInviteUrl(eventType, slug) {
-    const page = eventType === 'bach' ? 'bach.html' : 'rsvp.html';
-    return `${window.location.origin}/${page}?guest=${encodeURIComponent(slug)}`;
+    const prefix = eventType === 'bach' ? 'bach' : 'rsvp';
+    return `${window.location.origin}/${prefix}/${encodeURIComponent(slug)}`;
+  }
+
+  function getSelectedStops(rsvp) {
+    if (!rsvp || rsvp.attending !== 'yes') return [];
+    if (Array.isArray(rsvp.selected_stops)) {
+      const valid = [];
+      for (const raw of rsvp.selected_stops) {
+        if (raw === null || raw === undefined || typeof raw === 'boolean' || (typeof raw === 'string' && raw.trim() === '')) {
+          continue;
+        }
+        const num = Number(raw);
+        if (Number.isInteger(num) && num >= 0 && num <= LAST_STOP) {
+          valid.push(num);
+        }
+      }
+      return [...new Set(valid)].sort((a, b) => a - b);
+    }
+    const rawArrive = Number.isInteger(rsvp.arrive_idx) ? rsvp.arrive_idx : 0;
+    const rawDepart = Number.isInteger(rsvp.depart_idx) ? rsvp.depart_idx : LAST_STOP;
+    const start = Math.max(0, Math.min(LAST_STOP, rawArrive));
+    const end = Math.max(0, Math.min(LAST_STOP, rawDepart));
+    const stops = [];
+    for (let i = start; i <= end; i += 1) stops.push(i);
+    return stops;
+  }
+
+  function isFullWeekend(rsvp) {
+    return getSelectedStops(rsvp).length === QUEST_STOPS.length;
+  }
+
+  function getFullEventsList(rsvp) {
+    return getSelectedStops(rsvp)
+      .map((idx) => QUEST_STOPS[idx]?.name)
+      .filter(Boolean)
+      .join(', ');
   }
 
   function getScheduleLabel(rsvp) {
     if (!rsvp || rsvp.attending !== 'yes') return '—';
-    const a = rsvp.arrive_idx ?? 0;
-    const d = rsvp.depart_idx ?? LAST_STOP;
-    if (a === 0 && d === LAST_STOP) return 'Full Weekend';
-    const stopA = QUEST_STOPS[a];
-    const stopD = QUEST_STOPS[d];
-    if (stopA && stopD) return `${formatShortStop(stopA)} → ${formatShortStop(stopD)}`;
-    return rsvp.schedule || 'Partial Weekend';
+    const stops = getSelectedStops(rsvp);
+    if (stops.length === 0) return 'None selected';
+    if (stops.length === QUEST_STOPS.length) return 'Full Weekend';
+    if (stops.length >= 5) {
+      const selectedSet = new Set(stops);
+      const skippedShorts = QUEST_STOPS
+        .filter((stop) => !selectedSet.has(stop.index))
+        .map((stop) => stop.short);
+      return `${stops.length}/${QUEST_STOPS.length} · Skip ${skippedShorts.join(', ')}`;
+    }
+    const chosenShorts = stops
+      .map((idx) => QUEST_STOPS[idx]?.short)
+      .filter(Boolean);
+    return `${stops.length}/${QUEST_STOPS.length} · ${chosenShorts.join(', ')}`;
   }
 
   // ---- TOASTS (POPOVER="MANUAL") ----
@@ -2212,35 +2820,82 @@
   }
 
   // ---- SAMPLE DATA FOR PREVIEW MODE ----
+  function buildSampleGuests() {
+    return [
+      { id: 1, slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', phone: '', party_group: 'Wedding Party', wedding_invited: true, wedding_plus_one: true, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 2, slug: 'olivia-el-bard', name: 'Olivia El Bard', email: 'olivia@example.com', phone: '', party_group: 'Family', wedding_invited: true, wedding_plus_one: false, bach_invited: false, bach_plus_one: false, notes: '' },
+      { id: 3, slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: true, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 4, slug: 'joel-ruud', name: 'Joel Ruud', email: 'joel@example.com', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: false, bach_invited: false, bach_plus_one: false, notes: '' },
+      { id: 5, slug: 'grandma-randel', name: 'Grandma Randel', email: '', phone: '', party_group: 'Family', wedding_invited: true, wedding_plus_one: false, bach_invited: false, bach_plus_one: false, notes: 'Confirmed by phone with Holly; prefers aisle seat.' },
+      { id: 6, slug: 'baron-leon', name: 'Baron Leon', email: 'baron@example.com', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: true, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 7, slug: 'tug', name: 'Tug', email: 'tug@example.com', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: true, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 8, slug: 'patrick-egbert', name: 'Patrick Egbert', email: 'patrick@example.com', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: false, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 9, slug: 'jeremy', name: 'Jeremy', email: 'jeremy@example.com', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: false, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 10, slug: 'naty', name: 'Naty', email: '', phone: '', party_group: 'Friends', wedding_invited: true, wedding_plus_one: false, bach_invited: true, bach_plus_one: true, notes: '' },
+      { id: 11, slug: 'sam-el-bard', name: 'Sam El Bard', email: '', phone: '', party_group: 'Family', wedding_invited: true, wedding_plus_one: false, bach_invited: false, bach_plus_one: false, notes: '' }
+    ];
+  }
+
   function buildSampleRsvps() {
     const now = Date.now();
     const mins = (m) => new Date(now - m * 60000).toISOString();
     return [
-      { id: 1, event: 'wedding', guest_slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Marcus Reed', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Vegetarian for Marcus please!', source: 'form', submitted_at: mins(420), updated_at: mins(420) },
-      { id: 2, event: 'wedding', guest_slug: 'olivia-el-bard', name: 'Olivia El Bard', email: 'olivia@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: true, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Cannot wait! Arriving Thursday night.', source: 'form', submitted_at: mins(380), updated_at: mins(380) },
-      { id: 3, event: 'wedding', guest_slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Sam Chen', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Gluten-free option if available.', source: 'form', submitted_at: mins(320), updated_at: mins(320) },
-      { id: 4, event: 'wedding', guest_slug: 'joel-ruud', name: 'Joel Ruud', email: 'joel@example.com', attending: 'no', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Work conference in Chicago — cheering from afar!', source: 'form', submitted_at: mins(280), updated_at: mins(280) },
-      { id: 5, event: 'wedding', guest_slug: 'grandma-randel', name: 'Grandma Randel', email: '', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: true, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Confirmed by phone with Holly; prefers aisle seat.', source: 'admin', submitted_at: mins(200), updated_at: mins(200) },
-      { id: 6, event: 'wedding', guest_slug: 'baron-leon', name: 'Baron Leon', email: 'baron@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'No allergies. Ready to dress up!', source: 'form', submitted_at: mins(140), updated_at: mins(140) },
-      { id: 7, event: 'bach', guest_slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Marcus Reed', solo_ack: false, arrive_idx: 0, depart_idx: 6, arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: 'Full Weekend', notes: 'Bringing extra fairy lights for crown crafting!', source: 'form', submitted_at: mins(115), updated_at: mins(115) },
-      { id: 8, event: 'bach', guest_slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: 2, depart_idx: 5, arrive_at: formatStop(QUEST_STOPS[2]), depart_after: formatStop(QUEST_STOPS[5]), schedule: `${formatStop(QUEST_STOPS[2])} to ${formatStop(QUEST_STOPS[5])}`, notes: 'Flight lands Friday at 4:45 PM — meeting right at Tournament of Kings!', source: 'form', submitted_at: mins(90), updated_at: mins(90) },
-      { id: 9, event: 'bach', guest_slug: 'tug', name: 'Tug', email: 'tug@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Alex', solo_ack: false, arrive_idx: 0, depart_idx: 6, arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: 'Full Weekend', notes: 'Dairy-free for Alex.', source: 'form', submitted_at: mins(65), updated_at: mins(65) },
-      { id: 10, event: 'bach', guest_slug: 'patrick-egbert', name: 'Patrick Egbert', email: 'patrick@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: 3, depart_idx: 6, arrive_at: formatStop(QUEST_STOPS[3]), depart_after: formatStop(QUEST_STOPS[6]), schedule: `${formatStop(QUEST_STOPS[3])} to ${formatStop(QUEST_STOPS[6])}`, notes: 'In for Saturday D&D through Sunday café!', source: 'form', submitted_at: mins(45), updated_at: mins(45) },
-      { id: 11, event: 'bach', guest_slug: 'jeremy', name: 'Jeremy', email: 'jeremy@example.com', attending: 'no', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Out of town Feb 19–21, sorry!', source: 'form', submitted_at: mins(25), updated_at: mins(25) }
+      { id: 1, event: 'wedding', guest_slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Marcus Reed', solo_ack: false, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Vegetarian for Marcus please!', source: 'form', submitted_at: mins(420), updated_at: mins(420) },
+      { id: 2, event: 'wedding', guest_slug: 'olivia-el-bard', name: 'Olivia El Bard', email: 'olivia@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: true, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Cannot wait! Arriving Thursday night.', source: 'form', submitted_at: mins(380), updated_at: mins(380) },
+      { id: 3, event: 'wedding', guest_slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Sam Chen', solo_ack: false, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Gluten-free option if available.', source: 'form', submitted_at: mins(320), updated_at: mins(320) },
+      { id: 4, event: 'wedding', guest_slug: 'joel-ruud', name: 'Joel Ruud', email: 'joel@example.com', attending: 'no', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Work conference in Chicago — cheering from afar!', source: 'form', submitted_at: mins(280), updated_at: mins(280) },
+      { id: 5, event: 'wedding', guest_slug: 'grandma-randel', name: 'Grandma Randel', email: '', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: true, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Confirmed by phone with Holly; prefers aisle seat.', source: 'admin', submitted_at: mins(200), updated_at: mins(200) },
+      { id: 6, event: 'wedding', guest_slug: 'baron-leon', name: 'Baron Leon', email: 'baron@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'No allergies. Ready to dress up!', source: 'form', submitted_at: mins(140), updated_at: mins(140) },
+      { id: 7, event: 'bach', guest_slug: 'tori-watson', name: 'Tori Watson', email: 'tori.watson@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Marcus Reed', solo_ack: false, arrive_idx: 0, depart_idx: 6, selected_stops: [0, 1, 2, 3, 4, 5, 6], arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: 'Full Weekend', notes: 'Bringing extra fairy lights for crown crafting!', source: 'form', submitted_at: mins(115), updated_at: mins(115) },
+      { id: 8, event: 'bach', guest_slug: 'victoria-yu', name: 'Victoria Yu', email: 'victoria.yu@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: 2, depart_idx: 6, selected_stops: [2, 3, 4, 6], arrive_at: formatStop(QUEST_STOPS[2]), depart_after: formatStop(QUEST_STOPS[6]), schedule: [2, 3, 4, 6].map((i) => QUEST_STOPS[i].name).join(', '), notes: 'Flight lands Friday at 4:45 PM — joining Tournament of Kings, D&D, Dinner & Sunday Café!', source: 'form', submitted_at: mins(90), updated_at: mins(90) },
+      { id: 9, event: 'bach', guest_slug: 'tug', name: 'Tug', email: 'tug@example.com', attending: 'yes', plus_one: true, plus_one_name: 'Alex', solo_ack: false, arrive_idx: 0, depart_idx: 6, selected_stops: [0, 1, 2, 3, 4, 5, 6], arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: 'Full Weekend', notes: 'Dairy-free for Alex.', source: 'form', submitted_at: mins(65), updated_at: mins(65) },
+      { id: 10, event: 'bach', guest_slug: 'patrick-egbert', name: 'Patrick Egbert', email: 'patrick@example.com', attending: 'yes', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: 0, depart_idx: 6, selected_stops: [0, 1, 3, 4, 6], arrive_at: formatStop(QUEST_STOPS[0]), depart_after: formatStop(QUEST_STOPS[6]), schedule: [0, 1, 3, 4, 6].map((i) => QUEST_STOPS[i].name).join(', '), notes: 'Skipping Tournament of Kings and Club Crawl, in for everything else!', source: 'form', submitted_at: mins(45), updated_at: mins(45) },
+      { id: 11, event: 'bach', guest_slug: 'jeremy', name: 'Jeremy', email: 'jeremy@example.com', attending: 'no', plus_one: false, plus_one_name: '', solo_ack: false, arrive_idx: null, depart_idx: null, selected_stops: null, arrive_at: '', depart_after: '', schedule: '', notes: 'Out of town Feb 19–21, sorry!', source: 'form', submitted_at: mins(25), updated_at: mins(25) }
     ];
   }
 
   // ---- DATA LOADING ----
-  async function loadGuestLists() {
-    const [wRes, bRes] = await Promise.all([
-      fetch('guests.json', { cache: 'no-store' }),
-      fetch('bach-guests.json', { cache: 'no-store' })
-    ]);
-    if (!wRes.ok || !bRes.ok) {
-      throw new Error('Could not load guest list JSON files.');
+  function rebuildEventGuestMaps() {
+    const weddingMap = {};
+    const bachMap = {};
+    for (const guest of state.guestList) {
+      if (guest.wedding_invited) {
+        weddingMap[guest.slug] = {
+          name: guest.name,
+          plusOne: Boolean(guest.wedding_plus_one),
+          guest
+        };
+      }
+      if (guest.bach_invited) {
+        bachMap[guest.slug] = {
+          name: guest.name,
+          plusOne: Boolean(guest.bach_plus_one),
+          guest
+        };
+      }
     }
-    state.guests.wedding = await wRes.json();
-    state.guests.bach = await bRes.json();
+    state.guests.wedding = weddingMap;
+    state.guests.bach = bachMap;
+  }
+
+  async function loadGuestsFromServer() {
+    const res = await fetch('/api/guests', { cache: 'no-store' });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.status === 503 && data.code === 'DB_NOT_CONFIGURED') {
+      if (!state.previewMode) {
+        state.guestList = [];
+        rebuildEventGuestMaps();
+      }
+      return;
+    }
+
+    if (!res.ok || !data.ok) {
+      throw new Error(data.error || 'Failed to load guest setup.');
+    }
+
+    state.guestList = data.guests || [];
+    rebuildEventGuestMaps();
   }
 
   async function fetchRsvpsFromServer() {
@@ -2301,10 +2956,12 @@
       rows.push({
         event: eventType,
         slug,
-        name: rsvp ? rsvp.name : guestInfo.name,
+        name: guestInfo.name,
+        rsvpName: rsvp ? rsvp.name : '',
         invitedName: guestInfo.name,
         invited: true,
         plusOneEligible: Boolean(guestInfo.plusOne),
+        guest: guestInfo.guest || null,
         status,
         partySize,
         rsvp
@@ -2318,9 +2975,11 @@
         event: eventType,
         slug,
         name: rsvp.name,
+        rsvpName: rsvp.name,
         invitedName: rsvp.name,
         invited: false,
         plusOneEligible: Boolean(rsvp.plus_one),
+        guest: null,
         status,
         partySize,
         rsvp
@@ -2421,7 +3080,9 @@
       tr.dataset.hasnotes = String(Boolean(item.rsvp?.notes));
       tr.dataset.search = [
         item.name,
+        item.rsvpName,
         item.slug,
+        item.guest?.party_group || '',
         item.rsvp?.email || '',
         item.rsvp?.plus_one_name || '',
         item.rsvp?.notes || ''
@@ -2439,6 +3100,9 @@
       }
       tdGuest.appendChild(nameWrap);
       tdGuest.appendChild(el('div', 'guest-meta', `?guest=${item.slug}`));
+      if (item.rsvp && item.rsvpName && item.rsvpName !== item.name) {
+        tdGuest.appendChild(el('div', 'guest-meta', `Submitted as: ${item.rsvpName}`));
+      }
 
       // 2. Status
       const tdStatus = document.createElement('td');
@@ -2515,6 +3179,8 @@
         actionsWrap.appendChild(delBtn);
       }
 
+      appendGuestSetupRowAction(actionsWrap, item, 'wedding');
+
       tdActions.appendChild(actionsWrap);
       tr.append(tdGuest, tdStatus, tdParty, tdEmail, tdNotes, tdUpdated, tdActions);
       frag.appendChild(tr);
@@ -2523,6 +3189,43 @@
     tbody.replaceChildren(frag);
     reapplyCurrentSort(document.getElementById('wedding-table'));
     applyWeddingFilters();
+  }
+
+  function appendGuestSetupRowAction(actionsWrap, item, eventType) {
+    if (item.invited && item.guest) {
+      const setupBtn = el('button', 'btn btn-sm', 'Setup');
+      setupBtn.type = 'button';
+      setupBtn.addEventListener('click', () => openGuestModalForEdit(item.guest));
+      actionsWrap.appendChild(setupBtn);
+      return;
+    }
+    if (!item.invited) {
+      const addToListBtn = el('button', 'btn btn-sm', '+ Add to List');
+      addToListBtn.type = 'button';
+      addToListBtn.addEventListener('click', () => {
+        const existingBySlug = state.guestList.find((g) => g.slug === item.slug);
+        if (existingBySlug) {
+          openGuestModalForEdit({
+            ...existingBySlug,
+            wedding_invited: eventType === 'wedding' ? true : existingBySlug.wedding_invited,
+            wedding_plus_one: eventType === 'wedding' ? Boolean(item.rsvp?.plus_one) : existingBySlug.wedding_plus_one,
+            bach_invited: eventType === 'bach' ? true : existingBySlug.bach_invited,
+            bach_plus_one: eventType === 'bach' ? true : existingBySlug.bach_plus_one
+          });
+        } else {
+          openGuestModalForAdd({
+            name: item.name,
+            slug: item.slug,
+            email: item.rsvp?.email || '',
+            wedding_invited: eventType === 'wedding',
+            wedding_plus_one: eventType === 'wedding' && Boolean(item.rsvp?.plus_one),
+            bach_invited: eventType === 'bach',
+            bach_plus_one: eventType === 'bach'
+          });
+        }
+      });
+      actionsWrap.appendChild(addToListBtn);
+    }
   }
 
   function applyWeddingFilters() {
@@ -2555,24 +3258,19 @@
       let guestsCount = 0;
       let plusOneCount = 0;
       const attendingEntries = [];
-      const arrivingEntries = [];
-      const departingEntries = [];
       const skippingEntries = [];
 
       for (const item of attending) {
         const r = item.rsvp;
-        const a = r.arrive_idx ?? 0;
-        const d = r.depart_idx ?? LAST_STOP;
+        const selectedSet = new Set(getSelectedStops(r));
         const label = r.plus_one
           ? `${item.name} (+1${r.plus_one_name ? `: ${r.plus_one_name}` : ''})`
           : item.name;
 
-        if (stop.index >= a && stop.index <= d) {
+        if (selectedSet.has(stop.index)) {
           guestsCount += 1;
           if (r.plus_one) plusOneCount += 1;
-          attendingEntries.push({ name: label, isArriving: stop.index === a, isDeparting: stop.index === d });
-          if (stop.index === a && a > 0) arrivingEntries.push(label);
-          if (stop.index === d && d < LAST_STOP) departingEntries.push(label);
+          attendingEntries.push(label);
         } else {
           skippingEntries.push(label);
         }
@@ -2586,8 +3284,6 @@
         totalPeople,
         estCost: totalPeople * stop.cost,
         attendingEntries,
-        arrivingEntries,
-        departingEntries,
         skippingEntries,
         pendingOrDeclined
       };
@@ -2609,11 +3305,7 @@
     const totalHeadcount = confirmedGuests + confirmedPlusOnes;
     const pct = invited.length ? Math.round((respondedInvited.length / invited.length) * 100) : 0;
 
-    const fullWeekendCount = attendingRows.filter((r) => {
-      const a = r.rsvp?.arrive_idx ?? 0;
-      const d = r.rsvp?.depart_idx ?? LAST_STOP;
-      return a === 0 && d === LAST_STOP;
-    }).length;
+    const fullWeekendCount = attendingRows.filter((r) => isFullWeekend(r.rsvp)).length;
     const partialCount = attendingRows.length - fullWeekendCount;
 
     const { attending, stops } = computeBachStopBreakdown(roster);
@@ -2708,10 +3400,10 @@
     for (const item of roster) {
       const tr = document.createElement('tr');
       const r = item.rsvp;
-      const a = r ? (r.arrive_idx ?? 0) : 0;
-      const d = r ? (r.depart_idx ?? LAST_STOP) : LAST_STOP;
-      const isPartial = item.status === 'attending' && (a > 0 || d < LAST_STOP);
+      const stops = item.status === 'attending' ? getSelectedStops(r) : [];
+      const isPartial = item.status === 'attending' && !isFullWeekend(r);
       const scheduleLabel = getScheduleLabel(r);
+      const fullEventsList = item.status === 'attending' ? getFullEventsList(r) : '';
 
       tr.dataset.slug = item.slug;
       tr.dataset.status = item.status;
@@ -2719,8 +3411,11 @@
       tr.dataset.partial = String(isPartial);
       tr.dataset.search = [
         item.name,
+        item.rsvpName,
         item.slug,
+        item.guest?.party_group || '',
         scheduleLabel,
+        fullEventsList,
         r?.email || '',
         r?.plus_one_name || '',
         r?.notes || ''
@@ -2736,6 +3431,9 @@
       }
       tdGuest.appendChild(nameWrap);
       tdGuest.appendChild(el('div', 'guest-meta', `?guest=${item.slug}`));
+      if (item.rsvp && item.rsvpName && item.rsvpName !== item.name) {
+        tdGuest.appendChild(el('div', 'guest-meta', `Submitted as: ${item.rsvpName}`));
+      }
 
       // 2. Status
       const tdStatus = document.createElement('td');
@@ -2755,11 +3453,13 @@
         tdParty.appendChild(makeDash());
       }
 
-      // 4. Quest Timeline
+      // 4. Selected Events
       const tdSchedule = document.createElement('td');
-      tdSchedule.dataset.value = item.status === 'attending' ? `${a}-${d}-${scheduleLabel}` : 'zzz';
+      tdSchedule.dataset.value = item.status === 'attending' ? `${stops.length}-${stops.join(',')}` : 'zzz';
       if (item.status === 'attending') {
-        tdSchedule.appendChild(el('span', isPartial ? 'pill pill-lavender' : 'pill pill-yes', scheduleLabel));
+        const pill = el('span', isPartial ? 'pill pill-lavender' : 'pill pill-yes', scheduleLabel);
+        pill.title = fullEventsList;
+        tdSchedule.appendChild(pill);
       } else {
         tdSchedule.appendChild(makeDash());
       }
@@ -2817,6 +3517,8 @@
         actionsWrap.appendChild(delBtn);
       }
 
+      appendGuestSetupRowAction(actionsWrap, item, 'bach');
+
       tdActions.appendChild(actionsWrap);
       tr.append(tdGuest, tdStatus, tdParty, tdSchedule, tdEmail, tdNotes, tdUpdated, tdActions);
       frag.appendChild(tr);
@@ -2857,22 +3559,17 @@
 
     addGroup(
       `Attending This Stop (${selected.attendingEntries.length})`,
-      selected.attendingEntries.map((e) => e.name),
+      selected.attendingEntries,
       'pill-yes',
       'No confirmed attendees for this stop yet.'
     );
 
-    if (selected.arrivingEntries.length > 0) {
-      addGroup('Arriving Late Here', selected.arrivingEntries, 'pill-lavender', '');
-    }
-
-    if (selected.departingEntries.length > 0) {
-      addGroup('Leaving After This Stop', selected.departingEntries, 'pill-pending', '');
-    }
-
-    if (selected.skippingEntries.length > 0) {
-      addGroup('Attending Other Stops (Skipping This One)', selected.skippingEntries, 'pill-neutral', '');
-    }
+    addGroup(
+      `Skipping This Stop (${selected.skippingEntries.length})`,
+      selected.skippingEntries,
+      'pill-neutral',
+      'None — all attending guests are going.'
+    );
 
     detailBox.replaceChildren(frag);
   }
@@ -2899,8 +3596,7 @@
     const tbody = document.createElement('tbody');
     for (const item of attending) {
       const r = item.rsvp;
-      const a = r.arrive_idx ?? 0;
-      const d = r.depart_idx ?? LAST_STOP;
+      const selectedSet = new Set(getSelectedStops(r));
       const row = document.createElement('tr');
 
       const nameTd = document.createElement('td');
@@ -2913,20 +3609,12 @@
 
       for (const stop of QUEST_STOPS) {
         const td = document.createElement('td');
-        const inRange = stop.index >= a && stop.index <= d;
+        const attendingStop = selectedSet.has(stop.index);
         const badge = el('span', 'matrix-block');
-        if (!inRange) {
+        if (!attendingStop) {
           badge.classList.add('out');
           badge.textContent = '·';
-          badge.title = `${item.name}: not attending ${stop.name}`;
-        } else if (stop.index === a && a > 0) {
-          badge.classList.add('in', 'arrive');
-          badge.textContent = 'IN';
-          badge.title = `${item.name}: arrives for ${stop.name}`;
-        } else if (stop.index === d && d < LAST_STOP) {
-          badge.classList.add('in', 'depart');
-          badge.textContent = 'OUT';
-          badge.title = `${item.name}: stays through ${stop.name}`;
+          badge.title = `${item.name}: skipping ${stop.name}`;
         } else {
           badge.classList.add('in');
           badge.textContent = '✓';
@@ -2961,6 +3649,328 @@
     }
 
     document.getElementById('bach-empty').hidden = visible > 0;
+  }
+
+  // ---- RENDERING: GUEST SETUP TAB ----
+  function createSwitchControl({ checked, disabled, labelText, ariaLabel, onChange }) {
+    const label = document.createElement('label');
+    label.className = `switch-inline${disabled ? ' is-disabled' : ''}`;
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.setAttribute('switch', '');
+    input.checked = Boolean(checked);
+    input.disabled = Boolean(disabled);
+    input.setAttribute('aria-label', ariaLabel);
+    input.addEventListener('change', () => onChange(input.checked, input));
+
+    label.append(input, el('span', null, labelText));
+    return { label, input };
+  }
+
+  function createGuestRsvpPill(prefix, invited, rsvp) {
+    if (!invited && !rsvp) return null;
+    if (!invited && rsvp) {
+      return el('span', 'pill pill-lavender', `${prefix}: Unlisted (${rsvp.attending === 'yes' ? '✓' : '✕'})`);
+    }
+    if (!rsvp) return el('span', 'pill pill-pending', `${prefix}: ⏳ Pending`);
+    if (rsvp.attending === 'yes') return el('span', 'pill pill-yes', `${prefix}: ✓ Attending`);
+    return el('span', 'pill pill-no', `${prefix}: ✕ Declined`);
+  }
+
+  async function handleInlineGuestToggle(guest, patch, checkboxEl, rowSwitches) {
+    if (!state.dbConfigured && !state.previewMode) {
+      checkboxEl.checked = !checkboxEl.checked;
+      showToast('Connect Neon Postgres or click "Preview with Sample Data" to edit guest setup.', 'error');
+      return;
+    }
+
+    for (const sw of rowSwitches) sw.disabled = true;
+
+    try {
+      if (state.previewMode) {
+        const updated = { ...guest, ...patch };
+        if (!updated.wedding_invited) updated.wedding_plus_one = false;
+        if (!updated.bach_invited) updated.bach_plus_one = false;
+        updated.updated_at = new Date().toISOString();
+        const idx = state.guestList.findIndex((g) => g.id === guest.id);
+        if (idx >= 0) state.guestList[idx] = updated;
+        rebuildEventGuestMaps();
+        renderAll();
+        showToast(`Updated guest setup for ${guest.name}.`, 'success');
+      } else {
+        const res = await fetch('/api/guests', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: guest.id, ...patch })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || 'Could not update guest setup.');
+        }
+        const idx = state.guestList.findIndex((g) => g.id === guest.id);
+        if (idx >= 0 && data.guest) state.guestList[idx] = data.guest;
+        rebuildEventGuestMaps();
+        renderAll();
+        showToast(`Updated ${guest.name}.`, 'success');
+      }
+    } catch (err) {
+      checkboxEl.checked = !checkboxEl.checked;
+      for (const sw of rowSwitches) {
+        if (!sw.dataset.stayDisabled) sw.disabled = false;
+      }
+      showToast(err.message || 'Unable to update guest setup.', 'error');
+    }
+  }
+
+  function renderGuestsTab() {
+    const guests = state.guestList || [];
+    document.getElementById('count-guests').textContent = String(guests.length);
+
+    const uniqueGroups = [...new Set(guests.map((g) => (g.party_group || '').trim()).filter(Boolean))]
+      .sort((a, b) => collator.compare(a, b));
+    guestGroupOptions.replaceChildren(
+      ...uniqueGroups.map((group) => {
+        const opt = document.createElement('option');
+        opt.value = group;
+        return opt;
+      })
+    );
+
+    const weddingRsvps = new Map(state.rsvps.filter((r) => r.event === 'wedding').map((r) => [r.guest_slug, r]));
+    const bachRsvps = new Map(state.rsvps.filter((r) => r.event === 'bach').map((r) => [r.guest_slug, r]));
+
+    const withEmailCount = guests.filter((g) => g.email && g.email.trim()).length;
+    const weddingInvitedList = guests.filter((g) => g.wedding_invited);
+    const weddingPlusOneCount = weddingInvitedList.filter((g) => g.wedding_plus_one).length;
+    const bachInvitedList = guests.filter((g) => g.bach_invited);
+    const bachPlusOneCount = bachInvitedList.filter((g) => g.bach_plus_one).length;
+    const bothCount = guests.filter((g) => g.wedding_invited && g.bach_invited).length;
+    const unassignedCount = guests.filter((g) => !g.wedding_invited && !g.bach_invited).length;
+
+    document.getElementById('guests-kpis').replaceChildren(
+      createKpiCard({
+        label: 'Total Guests',
+        value: String(guests.length),
+        sub: `${uniqueGroups.length} groups · ${withEmailCount} with email`
+      }),
+      createKpiCard({
+        label: 'Wedding Invites',
+        value: String(weddingInvitedList.length),
+        sub: `max ${weddingInvitedList.length + weddingPlusOneCount} w/ +1s`,
+        onClick: () => setFilterPill('guests', 'wedding')
+      }),
+      createKpiCard({
+        label: 'Wedding +1s',
+        value: String(weddingPlusOneCount),
+        sub: 'Click to filter +1 eligible',
+        onClick: () => setFilterPill('guests', 'wedding-plusone')
+      }),
+      createKpiCard({
+        label: 'Bach Weekend',
+        value: String(bachInvitedList.length),
+        sub: `${bachPlusOneCount} allowed +1`,
+        onClick: () => setFilterPill('guests', 'bach')
+      }),
+      createKpiCard({
+        label: 'Both Events',
+        value: String(bothCount),
+        sub: `${unassignedCount} unassigned`,
+        onClick: () => setFilterPill('guests', 'both')
+      })
+    );
+
+    const tbody = document.getElementById('guests-tbody');
+    const frag = document.createDocumentFragment();
+
+    for (const guest of guests) {
+      const tr = document.createElement('tr');
+      const wRsvp = weddingRsvps.get(guest.slug) || null;
+      const bRsvp = bachRsvps.get(guest.slug) || null;
+      const both = Boolean(guest.wedding_invited && guest.bach_invited);
+      const unassigned = !guest.wedding_invited && !guest.bach_invited;
+
+      tr.dataset.slug = guest.slug;
+      tr.dataset.wedding = String(Boolean(guest.wedding_invited));
+      tr.dataset.weddingPlusone = String(Boolean(guest.wedding_invited && guest.wedding_plus_one));
+      tr.dataset.bach = String(Boolean(guest.bach_invited));
+      tr.dataset.both = String(both);
+      tr.dataset.unassigned = String(unassigned);
+      tr.dataset.search = [
+        guest.name,
+        guest.slug,
+        guest.party_group || '',
+        guest.email || '',
+        guest.phone || '',
+        guest.notes || ''
+      ].join(' ').toLowerCase();
+
+      // 1. Guest
+      const tdGuest = document.createElement('td');
+      tdGuest.dataset.value = guest.name;
+      tdGuest.append(el('div', 'guest-name', guest.name), el('div', 'guest-meta', `?guest=${guest.slug}`));
+
+      // 2. Group
+      const tdGroup = document.createElement('td');
+      tdGroup.dataset.value = guest.party_group || 'zzz';
+      if (guest.party_group) {
+        tdGroup.appendChild(el('span', 'pill pill-neutral', guest.party_group));
+      } else {
+        tdGroup.appendChild(makeDash());
+      }
+
+      const rowSwitches = [];
+
+      // 3. Wedding switches
+      const tdWedding = document.createElement('td');
+      const wRank = guest.wedding_invited ? (guest.wedding_plus_one ? 2 : 1) : 0;
+      tdWedding.dataset.value = String(wRank);
+      const wStack = el('div', 'switch-stack');
+      const wInvCtrl = createSwitchControl({
+        checked: guest.wedding_invited,
+        disabled: false,
+        labelText: 'Invited',
+        ariaLabel: `Invite ${guest.name} to Wedding`,
+        onChange: (checked, inputEl) =>
+          handleInlineGuestToggle(
+            guest,
+            checked ? { wedding_invited: true } : { wedding_invited: false, wedding_plus_one: false },
+            inputEl,
+            rowSwitches
+          )
+      });
+      const wPlusDisabled = !guest.wedding_invited;
+      const wPlusCtrl = createSwitchControl({
+        checked: guest.wedding_invited && guest.wedding_plus_one,
+        disabled: wPlusDisabled,
+        labelText: '+1',
+        ariaLabel: `Allow Wedding plus-one for ${guest.name}`,
+        onChange: (checked, inputEl) =>
+          handleInlineGuestToggle(guest, { wedding_plus_one: checked }, inputEl, rowSwitches)
+      });
+      if (wPlusDisabled) wPlusCtrl.input.dataset.stayDisabled = 'true';
+      rowSwitches.push(wInvCtrl.input, wPlusCtrl.input);
+      wStack.append(wInvCtrl.label, wPlusCtrl.label);
+      tdWedding.appendChild(wStack);
+
+      // 4. Bach Weekend switches
+      const tdBach = document.createElement('td');
+      const bRank = guest.bach_invited ? (guest.bach_plus_one ? 2 : 1) : 0;
+      tdBach.dataset.value = String(bRank);
+      const bStack = el('div', 'switch-stack');
+      const bInvCtrl = createSwitchControl({
+        checked: guest.bach_invited,
+        disabled: false,
+        labelText: 'Invited',
+        ariaLabel: `Invite ${guest.name} to Bach Weekend`,
+        onChange: (checked, inputEl) =>
+          handleInlineGuestToggle(
+            guest,
+            checked ? { bach_invited: true, bach_plus_one: true } : { bach_invited: false, bach_plus_one: false },
+            inputEl,
+            rowSwitches
+          )
+      });
+      const bPlusDisabled = !guest.bach_invited;
+      const bPlusCtrl = createSwitchControl({
+        checked: guest.bach_invited && guest.bach_plus_one,
+        disabled: bPlusDisabled,
+        labelText: '+1',
+        ariaLabel: `Allow Bach Weekend plus-one for ${guest.name}`,
+        onChange: (checked, inputEl) =>
+          handleInlineGuestToggle(guest, { bach_plus_one: checked }, inputEl, rowSwitches)
+      });
+      if (bPlusDisabled) bPlusCtrl.input.dataset.stayDisabled = 'true';
+      rowSwitches.push(bInvCtrl.input, bPlusCtrl.input);
+      bStack.append(bInvCtrl.label, bPlusCtrl.label);
+      tdBach.appendChild(bStack);
+
+      // 5. Contact & Notes
+      const tdContact = el('td', 'contact-cell');
+      const contactParts = [guest.email, guest.phone, guest.notes].filter(Boolean);
+      tdContact.dataset.value = contactParts.join(' ') || 'zzz';
+      if (contactParts.length === 0) {
+        tdContact.appendChild(makeDash());
+      } else {
+        if (guest.email) tdContact.appendChild(el('div', null, guest.email));
+        if (guest.phone) tdContact.appendChild(el('div', 'guest-meta', guest.phone));
+        if (guest.notes) tdContact.appendChild(el('div', 'guest-meta', guest.notes));
+      }
+
+      // 6. RSVPs
+      const tdRsvps = document.createElement('td');
+      const wScore = guest.wedding_invited ? (wRsvp ? (wRsvp.attending === 'yes' ? 3 : 1) : 2) : 0;
+      const bScore = guest.bach_invited ? (bRsvp ? (bRsvp.attending === 'yes' ? 3 : 1) : 2) : 0;
+      tdRsvps.dataset.value = String(wScore * 10 + bScore);
+      const rsvpStack = el('div', 'rsvp-status-stack');
+      const wPill = createGuestRsvpPill('W', guest.wedding_invited, wRsvp);
+      const bPill = createGuestRsvpPill('B', guest.bach_invited, bRsvp);
+      if (wPill) rsvpStack.appendChild(wPill);
+      if (bPill) rsvpStack.appendChild(bPill);
+      if (!wPill && !bPill) rsvpStack.appendChild(makeDash());
+      tdRsvps.appendChild(rsvpStack);
+
+      // 7. Actions
+      const tdActions = document.createElement('td');
+      const actionsWrap = el('div', 'row-actions');
+
+      if (guest.wedding_invited) {
+        const wCopyBtn = el('button', 'btn btn-sm', 'W Link');
+        wCopyBtn.type = 'button';
+        wCopyBtn.title = `Copy Wedding invite link for ${guest.name}`;
+        wCopyBtn.setAttribute('aria-label', `Copy Wedding invite link for ${guest.name}`);
+        wCopyBtn.addEventListener('click', () => copyText(getInviteUrl('wedding', guest.slug), `Copied Wedding link for ${guest.name}`));
+        actionsWrap.appendChild(wCopyBtn);
+      }
+
+      if (guest.bach_invited) {
+        const bCopyBtn = el('button', 'btn btn-sm', 'B Link');
+        bCopyBtn.type = 'button';
+        bCopyBtn.title = `Copy Bach Weekend invite link for ${guest.name}`;
+        bCopyBtn.setAttribute('aria-label', `Copy Bach Weekend invite link for ${guest.name}`);
+        bCopyBtn.addEventListener('click', () => copyText(getInviteUrl('bach', guest.slug), `Copied Bach link for ${guest.name}`));
+        actionsWrap.appendChild(bCopyBtn);
+      }
+
+      const editBtn = el('button', 'btn btn-sm', 'Edit');
+      editBtn.type = 'button';
+      editBtn.addEventListener('click', () => openGuestModalForEdit(guest));
+      actionsWrap.appendChild(editBtn);
+
+      const delBtn = el('button', 'btn btn-sm btn-danger', 'Delete');
+      delBtn.type = 'button';
+      delBtn.addEventListener('click', () => openDeleteGuestModal(guest));
+      actionsWrap.appendChild(delBtn);
+
+      tdActions.appendChild(actionsWrap);
+      tr.append(tdGuest, tdGroup, tdWedding, tdBach, tdContact, tdRsvps, tdActions);
+      frag.appendChild(tr);
+    }
+
+    tbody.replaceChildren(frag);
+    reapplyCurrentSort(document.getElementById('guests-table'));
+    applyGuestsFilters();
+  }
+
+  function applyGuestsFilters() {
+    const { query, pill } = state.filters.guests;
+    const q = query.trim().toLowerCase();
+    const tbody = document.getElementById('guests-tbody');
+    let visible = 0;
+
+    for (const tr of tbody.rows) {
+      let match = !q || tr.dataset.search.includes(q);
+      if (match && pill === 'wedding') match = tr.dataset.wedding === 'true';
+      else if (match && pill === 'wedding-plusone') match = tr.dataset.weddingPlusone === 'true';
+      else if (match && pill === 'bach') match = tr.dataset.bach === 'true';
+      else if (match && pill === 'both') match = tr.dataset.both === 'true';
+      else if (match && pill === 'unassigned') match = tr.dataset.unassigned === 'true';
+
+      tr.hidden = !match;
+      if (match) visible += 1;
+    }
+
+    document.getElementById('guests-empty').hidden = visible > 0;
   }
 
   // ---- RENDERING: DIETARY & NOTES TAB ----
@@ -3113,6 +4123,7 @@
     updateConnectionUi();
     renderWeddingTab();
     renderBachTab();
+    renderGuestsTab();
     renderNotesTab();
     renderActivityTab();
   }
@@ -3126,11 +4137,12 @@
     }
     if (scope === 'wedding') applyWeddingFilters();
     else if (scope === 'bach') applyBachFilters();
+    else if (scope === 'guests') applyGuestsFilters();
     else if (scope === 'notes') renderNotesTab();
     else if (scope === 'activity') applyActivityFilters();
   }
 
-  for (const scope of ['wedding', 'bach', 'notes', 'activity']) {
+  for (const scope of ['wedding', 'bach', 'guests', 'notes', 'activity']) {
     const searchEl = document.getElementById(`${scope}-search`);
     const groupEl = document.getElementById(`${scope}-filters`);
 
@@ -3138,6 +4150,7 @@
       state.filters[scope].query = searchEl.value;
       if (scope === 'wedding') applyWeddingFilters();
       else if (scope === 'bach') applyBachFilters();
+      else if (scope === 'guests') applyGuestsFilters();
       else if (scope === 'notes') renderNotesTab();
       else if (scope === 'activity') applyActivityFilters();
     });
@@ -3226,25 +4239,56 @@
       const roster = buildRoster('bach');
       downloadCsv(
         `bach-weekend-rsvps-${dateStamp}.csv`,
-        ['Guest Name', 'Slug', 'Invited', 'Status', 'Party Size', 'Bringing +1', '+1 Name', 'Schedule', 'Arriving For', 'Staying Through', 'Email', 'Dietary & Notes', 'Source', 'Updated At', 'Invite Link'],
-        roster.map((item) => [
-          item.name,
-          item.slug,
-          item.invited ? 'Yes' : 'Unlisted',
-          item.status,
-          item.partySize,
-          item.rsvp?.plus_one ? 'Yes' : 'No',
-          item.rsvp?.plus_one_name || '',
-          getScheduleLabel(item.rsvp),
-          item.rsvp?.arrive_at || '',
-          item.rsvp?.depart_after || '',
-          item.rsvp?.email || '',
-          item.rsvp?.notes || '',
-          item.rsvp?.source || '',
-          item.rsvp?.updated_at || '',
-          getInviteUrl('bach', item.slug)
-        ])
+        [
+          'Guest Name',
+          'Slug',
+          'Invited',
+          'Status',
+          'Party Size',
+          'Bringing +1',
+          '+1 Name',
+          'Events Summary',
+          'Event Count',
+          'Selected Events',
+          'Fri Crowns',
+          'Fri Happy Hr',
+          'Fri Tournament',
+          'Sat D&D',
+          'Sat Dinner',
+          'Sat Club Crawl',
+          'Sun Café',
+          'Email',
+          'Dietary & Notes',
+          'Source',
+          'Updated At',
+          'Invite Link'
+        ],
+        roster.map((item) => {
+          const attending = item.status === 'attending';
+          const stops = attending ? getSelectedStops(item.rsvp) : [];
+          const stopSet = new Set(stops);
+          return [
+            item.name,
+            item.slug,
+            item.invited ? 'Yes' : 'Unlisted',
+            item.status,
+            item.partySize,
+            item.rsvp?.plus_one ? 'Yes' : 'No',
+            item.rsvp?.plus_one_name || '',
+            getScheduleLabel(item.rsvp),
+            attending ? stops.length : 0,
+            attending ? getFullEventsList(item.rsvp) : '',
+            ...QUEST_STOPS.map((stop) => (attending ? (stopSet.has(stop.index) ? 'Yes' : 'No') : '')),
+            item.rsvp?.email || '',
+            item.rsvp?.notes || '',
+            item.rsvp?.source || '',
+            item.rsvp?.updated_at || '',
+            getInviteUrl('bach', item.slug)
+          ];
+        })
       );
+    } else if (state.activeTab === 'guests') {
+      exportGuestsCsv();
     } else if (state.activeTab === 'notes') {
       exportNotesCsv();
     } else {
@@ -3271,6 +4315,41 @@
     }
   }
 
+  function exportGuestsCsv() {
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    downloadCsv(
+      `guest-setup-${dateStamp}.csv`,
+      [
+        'Guest Name',
+        'Slug',
+        'Group',
+        'Email',
+        'Phone',
+        'Wedding Invited',
+        'Wedding +1',
+        'Bach Invited',
+        'Bach +1',
+        'Setup Notes',
+        'Wedding Link',
+        'Bach Link'
+      ],
+      state.guestList.map((g) => [
+        g.name,
+        g.slug,
+        g.party_group || '',
+        g.email || '',
+        g.phone || '',
+        g.wedding_invited ? 'Yes' : 'No',
+        g.wedding_invited && g.wedding_plus_one ? 'Yes' : 'No',
+        g.bach_invited ? 'Yes' : 'No',
+        g.bach_invited && g.bach_plus_one ? 'Yes' : 'No',
+        g.notes || '',
+        g.wedding_invited ? getInviteUrl('wedding', g.slug) : '',
+        g.bach_invited ? getInviteUrl('bach', g.slug) : ''
+      ])
+    );
+  }
+
   function exportNotesCsv() {
     const dateStamp = new Date().toISOString().slice(0, 10);
     const records = getFilteredNotesRecords();
@@ -3291,6 +4370,7 @@
   }
 
   btnExportCsv.addEventListener('click', exportActiveTabCsv);
+  document.getElementById('btn-export-guests-csv').addEventListener('click', exportGuestsCsv);
   document.getElementById('btn-export-notes-csv').addEventListener('click', exportNotesCsv);
   document.getElementById('btn-print-notes').addEventListener('click', () => window.print());
 
@@ -3311,18 +4391,91 @@
     }
   }
 
-  function populateStopSelects() {
-    for (const sel of [modalArrive, modalDepart]) {
-      sel.replaceChildren();
-      for (const stop of QUEST_STOPS) {
-        const opt = document.createElement('option');
-        opt.value = String(stop.index);
-        opt.textContent = `${stop.icon} ${formatStop(stop)}`;
-        sel.appendChild(opt);
+  function getModalEventCheckboxes() {
+    return [...modalEventsGrid.querySelectorAll('.modal-event-checkbox')];
+  }
+
+  function getModalSelectedStops() {
+    return getModalEventCheckboxes()
+      .filter((cb) => cb.checked)
+      .map((cb) => Number(cb.value));
+  }
+
+  function syncModalEventsUi() {
+    const checkboxes = getModalEventCheckboxes();
+    const count = checkboxes.filter((cb) => cb.checked).length;
+
+    if (count === QUEST_STOPS.length) {
+      modalEventsSummary.textContent = `All ${QUEST_STOPS.length} events selected`;
+    } else if (count > 0) {
+      modalEventsSummary.textContent = `${count} of ${QUEST_STOPS.length} events selected`;
+    } else {
+      modalEventsSummary.textContent = 'No events selected';
+    }
+
+    modalEventsSelectAll.hidden = count >= QUEST_STOPS.length;
+    modalEventsClearAll.hidden = count === 0;
+
+    if (count > 0) {
+      for (const cb of checkboxes) {
+        cb.removeAttribute('aria-invalid');
+      }
+      if (!rsvpModalError.hidden && rsvpModalError.textContent.includes('Bach Weekend event')) {
+        rsvpModalError.hidden = true;
+      }
+    }
+
+    if (!supportsCssHas) {
+      for (const cb of checkboxes) {
+        cb.closest('.modal-event-item')?.classList.toggle('is-checked', cb.checked);
       }
     }
   }
-  populateStopSelects();
+
+  function setModalSelectedStops(indices) {
+    const set = new Set(indices);
+    for (const cb of getModalEventCheckboxes()) {
+      cb.checked = set.has(Number(cb.value));
+    }
+    syncModalEventsUi();
+  }
+
+  function buildModalEventCheckboxes() {
+    const frag = document.createDocumentFragment();
+    for (const stop of QUEST_STOPS) {
+      const label = document.createElement('label');
+      label.className = 'modal-event-item';
+      label.htmlFor = `modal-stop-${stop.index}`;
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.id = `modal-stop-${stop.index}`;
+      cb.className = 'modal-event-checkbox';
+      cb.name = 'modalSelectedStops';
+      cb.value = String(stop.index);
+      cb.checked = true;
+      cb.addEventListener('change', syncModalEventsUi);
+
+      const textWrap = el('span', 'modal-event-text');
+      textWrap.appendChild(el('span', 'modal-event-name', `${stop.icon} ${stop.name}`));
+      const costText = stop.cost > 0 ? ` · ~$${stop.cost}/pp` : '';
+      textWrap.appendChild(el('span', 'modal-event-meta', `${stop.day} ${stop.time}${costText}`));
+
+      label.append(cb, textWrap);
+      frag.appendChild(label);
+    }
+    modalEventsGrid.replaceChildren(frag);
+    syncModalEventsUi();
+  }
+  buildModalEventCheckboxes();
+
+  modalEventsSelectAll.addEventListener('click', () => {
+    setModalSelectedStops(QUEST_STOPS.map((s) => s.index));
+  });
+
+  modalEventsClearAll.addEventListener('click', () => {
+    setModalSelectedStops([]);
+  });
 
   function populatePresetSelect(eventType, currentSlug = '') {
     const invitedMap = state.guests[eventType] || {};
@@ -3371,6 +4524,9 @@
 
   modalEvent.addEventListener('change', () => {
     populatePresetSelect(modalEvent.value, '');
+    if (state.modalMode === 'add' && modalEvent.value === 'bach') {
+      setModalSelectedStops(QUEST_STOPS.map((s) => s.index));
+    }
     syncModalFieldsVisibility();
   });
 
@@ -3380,6 +4536,9 @@
     if (info) {
       modalName.value = info.name;
       modalSlug.value = slug;
+      if (!modalEmail.value.trim() && info.guest?.email) {
+        modalEmail.value = info.guest.email;
+      }
       state.modalSlugEdited = true;
     }
     syncModalFieldsVisibility();
@@ -3398,18 +4557,6 @@
   modalAttending.addEventListener('change', syncModalFieldsVisibility);
   modalPlusOne.addEventListener('change', syncModalFieldsVisibility);
 
-  modalArrive.addEventListener('change', () => {
-    if (Number(modalArrive.value) > Number(modalDepart.value)) {
-      modalDepart.value = modalArrive.value;
-    }
-  });
-
-  modalDepart.addEventListener('change', () => {
-    if (Number(modalDepart.value) < Number(modalArrive.value)) {
-      modalArrive.value = modalDepart.value;
-    }
-  });
-
   function openRsvpModalForAdd(defaultEvent = 'wedding', slug = '', name = '') {
     state.modalMode = 'add';
     state.modalTargetId = null;
@@ -3419,18 +4566,19 @@
     modalSubmitBtn.textContent = 'Save RSVP';
     rsvpModalError.hidden = true;
 
+    const guestRecord = slug ? state.guestList.find((g) => g.slug === slug) : null;
+
     modalId.value = '';
     modalEvent.value = defaultEvent;
     populatePresetSelect(defaultEvent, slug);
     modalName.value = name || '';
     modalSlug.value = slug || '';
-    modalEmail.value = '';
+    modalEmail.value = guestRecord?.email || '';
     modalAttending.value = 'yes';
     modalPlusOne.value = 'no';
     modalPlusOneName.value = '';
     modalSoloAck.checked = false;
-    modalArrive.value = '0';
-    modalDepart.value = String(LAST_STOP);
+    setModalSelectedStops(QUEST_STOPS.map((s) => s.index));
     modalNotes.value = '';
 
     syncModalFieldsVisibility();
@@ -3456,8 +4604,10 @@
     modalPlusOne.value = rsvp.plus_one ? 'yes' : 'no';
     modalPlusOneName.value = rsvp.plus_one_name || '';
     modalSoloAck.checked = Boolean(rsvp.solo_ack);
-    modalArrive.value = String(rsvp.arrive_idx ?? 0);
-    modalDepart.value = String(rsvp.depart_idx ?? LAST_STOP);
+    const editStops = rsvp.event === 'bach' && rsvp.attending === 'yes'
+      ? getSelectedStops(rsvp)
+      : QUEST_STOPS.map((s) => s.index);
+    setModalSelectedStops(editStops);
     modalNotes.value = rsvp.notes || '';
 
     syncModalFieldsVisibility();
@@ -3472,13 +4622,24 @@
 
   function applyLocalPreviewUpsert(payload, existingId = null) {
     const nowIso = new Date().toISOString();
-    const aIdx = payload.event === 'bach' && payload.attending === 'yes' ? Number(payload.arriveIdx) : null;
-    const dIdx = payload.event === 'bach' && payload.attending === 'yes' ? Number(payload.departIdx) : null;
-    const arriveAt = aIdx !== null ? formatStop(QUEST_STOPS[aIdx]) : '';
-    const departAfter = dIdx !== null ? formatStop(QUEST_STOPS[dIdx]) : '';
-    const schedule = aIdx !== null
-      ? (aIdx === 0 && dIdx === LAST_STOP ? 'Full Weekend' : `${arriveAt} to ${departAfter}`)
-      : '';
+    let selectedStops = null;
+    let aIdx = null;
+    let dIdx = null;
+    let arriveAt = '';
+    let departAfter = '';
+    let schedule = '';
+    if (payload.event === 'bach' && payload.attending === 'yes') {
+      selectedStops = Array.isArray(payload.selectedStops) && payload.selectedStops.length > 0
+        ? [...new Set(payload.selectedStops.map(Number))].sort((a, b) => a - b)
+        : QUEST_STOPS.map((s) => s.index);
+      aIdx = selectedStops[0];
+      dIdx = selectedStops[selectedStops.length - 1];
+      arriveAt = formatStop(QUEST_STOPS[aIdx]);
+      departAfter = formatStop(QUEST_STOPS[dIdx]);
+      schedule = selectedStops.length === QUEST_STOPS.length
+        ? 'Full Weekend'
+        : selectedStops.map((idx) => QUEST_STOPS[idx].name).join(', ');
+    }
 
     const nextRow = {
       id: existingId || state.nextSampleId++,
@@ -3492,6 +4653,7 @@
       solo_ack: payload.event === 'wedding' && payload.attending === 'yes' && payload.plusOne !== 'yes' && Boolean(payload.soloAck),
       arrive_idx: aIdx,
       depart_idx: dIdx,
+      selected_stops: selectedStops,
       arrive_at: arriveAt,
       depart_after: departAfter,
       schedule,
@@ -3521,6 +4683,18 @@
     const eventType = modalEvent.value;
     const attending = modalAttending.value;
     const plusOne = attending === 'yes' ? modalPlusOne.value : 'no';
+    const selectedStops = eventType === 'bach' && attending === 'yes' ? getModalSelectedStops() : null;
+
+    if (eventType === 'bach' && attending === 'yes' && selectedStops.length === 0) {
+      rsvpModalError.textContent = 'Please select at least one Bach Weekend event.';
+      rsvpModalError.hidden = false;
+      const firstCb = modalEventsGrid.querySelector('.modal-event-checkbox');
+      if (firstCb) {
+        firstCb.setAttribute('aria-invalid', 'true');
+        firstCb.focus();
+      }
+      return;
+    }
 
     const payload = {
       event: eventType,
@@ -3531,8 +4705,7 @@
       plusOne,
       plusOneName: plusOne === 'yes' ? modalPlusOneName.value.trim() : '',
       soloAck: eventType === 'wedding' && attending === 'yes' && plusOne === 'no' && modalSoloAck.checked,
-      arriveIdx: eventType === 'bach' && attending === 'yes' ? Number(modalArrive.value) : null,
-      departIdx: eventType === 'bach' && attending === 'yes' ? Number(modalDepart.value) : null,
+      selectedStops,
       notes: modalNotes.value.trim(),
       source: 'admin'
     };
@@ -3605,13 +4778,474 @@
     }
   });
 
+  // ---- ACCESSIBLE POST-INTERACTION VALIDATION ----
+  function initAccessibleValidation(form) {
+    const supportsUserInvalid = typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('selector(:user-invalid)');
+    const dirtyState = new WeakMap();
+    const flagged = new WeakSet();
+    const announced = new WeakSet();
+    let announceTimer;
+    let announcedField;
+
+    const controls = [...form.querySelectorAll('input, select, textarea')];
+    for (const control of controls) {
+      if (!Object.hasOwn(control.dataset, 'baseDescribedby')) {
+        control.dataset.baseDescribedby = control.getAttribute('aria-describedby') || '';
+      }
+      if (!control.hasAttribute('aria-invalid')) {
+        control.setAttribute('aria-invalid', 'false');
+      }
+    }
+
+    const linkError = (node, shown) => {
+      const errorId = node.dataset.error;
+      if (!errorId) return;
+      const base = (node.dataset.baseDescribedby || '').split(/\s+/).filter(Boolean);
+      const ids = base.filter((id) => id !== errorId);
+      if (shown) ids.push(errorId);
+      if (ids.length) node.setAttribute('aria-describedby', ids.join(' '));
+      else node.removeAttribute('aria-describedby');
+    };
+
+    const spokenText = (node) => {
+      const copy = node.cloneNode(true);
+      copy.querySelectorAll('[aria-hidden="true"]').forEach((n) => n.remove());
+      copy.querySelectorAll('[role="img"][aria-label]').forEach((n) => n.replaceWith(`${n.getAttribute('aria-label')}: `));
+      return copy.textContent.replace(/\s+/g, ' ').trim();
+    };
+
+    const announceError = (node) => {
+      const errNode = document.getElementById(node.dataset.error);
+      if (!errNode) return;
+      const label = node.labels?.[0] ? `${spokenText(node.labels[0])}: ` : '';
+      clearTimeout(announceTimer);
+      srAnnouncer.textContent = '';
+      announcedField = node;
+      announceTimer = setTimeout(() => {
+        srAnnouncer.textContent = label + spokenText(errNode);
+      }, 500);
+    };
+
+    const syncAria = (node, announce = false) => {
+      if (!node.matches?.('input, select, textarea')) return;
+      let invalid;
+      if (supportsUserInvalid) {
+        invalid = node.matches(':user-invalid');
+      } else {
+        const stateEntry = dirtyState.get(node);
+        invalid = Boolean(stateEntry && stateEntry.hasInteracted && stateEntry.hasBlurred && !node.validity.valid);
+        node.classList.toggle('user-invalid-fallback', invalid);
+        node.classList.toggle('user-valid-fallback', Boolean(stateEntry && stateEntry.hasInteracted && stateEntry.hasBlurred && node.validity.valid));
+      }
+
+      if (invalid) {
+        if (announce && !announced.has(node)) {
+          announceError(node);
+          announced.add(node);
+        }
+        node.setAttribute('aria-invalid', 'true');
+        linkError(node, true);
+        flagged.add(node);
+      } else if (flagged.has(node) || node.getAttribute('aria-invalid') !== 'true') {
+        node.setAttribute('aria-invalid', 'false');
+        linkError(node, false);
+        flagged.delete(node);
+        announced.delete(node);
+        if (announcedField === node) {
+          clearTimeout(announceTimer);
+          srAnnouncer.textContent = '';
+        }
+      }
+    };
+
+    const resetValidation = () => {
+      clearTimeout(announceTimer);
+      srAnnouncer.textContent = '';
+      announcedField = null;
+      for (const control of controls) {
+        dirtyState.delete(control);
+        flagged.delete(control);
+        announced.delete(control);
+        control.classList.remove('user-invalid-fallback', 'user-valid-fallback');
+        control.setAttribute('aria-invalid', 'false');
+        linkError(control, false);
+      }
+    };
+
+    form.addEventListener('blur', (e) => {
+      const node = e.target;
+      if (!node.matches?.('input, select, textarea')) return;
+      if (!supportsUserInvalid) {
+        const entry = dirtyState.get(node) || { hasInteracted: false, hasBlurred: false };
+        entry.hasBlurred = true;
+        dirtyState.set(node, entry);
+      }
+      syncAria(node, true);
+    }, true);
+
+    form.addEventListener('input', (e) => {
+      const node = e.target;
+      if (!node.matches?.('input, select, textarea')) return;
+      if (!supportsUserInvalid) {
+        const entry = dirtyState.get(node) || { hasInteracted: false, hasBlurred: false };
+        entry.hasInteracted = true;
+        dirtyState.set(node, entry);
+      }
+      if (node.hasAttribute('aria-invalid')) syncAria(node, false);
+    });
+
+    form.addEventListener('change', (e) => {
+      const node = e.target;
+      if (!node.matches?.('input, select, textarea')) return;
+      if (!supportsUserInvalid) {
+        const entry = dirtyState.get(node) || { hasInteracted: false, hasBlurred: false };
+        entry.hasInteracted = true;
+        dirtyState.set(node, entry);
+      }
+      syncAria(node, true);
+    }, true);
+
+    form.addEventListener('invalid', (e) => {
+      const node = e.target;
+      if (!supportsUserInvalid) {
+        dirtyState.set(node, { hasInteracted: true, hasBlurred: true });
+      }
+      announced.add(node);
+      syncAria(node, false);
+    }, true);
+
+    form.addEventListener('reset', () => {
+      setTimeout(resetValidation);
+    });
+
+    return { reset: resetValidation };
+  }
+
+  const guestFormValidation = initAccessibleValidation(guestModalForm);
+
+  // ---- ADD / EDIT GUEST MODAL ----
+  function renderGuestLinkPreview() {
+    const rawSlug = guestModalSlug.value.trim().toLowerCase() || slugify(guestModalName.value);
+    const items = [];
+    if (guestModalWedding.checked) {
+      items.push({ label: 'Wedding Link', eventType: 'wedding' });
+    }
+    if (guestModalBach.checked) {
+      items.push({ label: 'Bach Link', eventType: 'bach' });
+    }
+
+    if (items.length === 0) {
+      guestLinkPreview.replaceChildren(
+        el('span', 'field-hint', 'Not currently invited to Wedding or Bach Weekend — no invite link active.')
+      );
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    for (const item of items) {
+      const row = el('div', 'guest-link-preview-row');
+      const urlText = rawSlug ? getInviteUrl(item.eventType, rawSlug) : '';
+
+      const left = document.createElement('div');
+      left.append(el('strong', null, `${item.label}: `));
+      if (urlText) {
+        left.appendChild(el('code', null, urlText));
+      } else {
+        left.appendChild(el('span', 'field-hint', '(enter a guest name or slug)'));
+      }
+
+      const copyBtn = el('button', 'btn btn-sm', 'Copy');
+      copyBtn.type = 'button';
+      copyBtn.disabled = !urlText;
+      copyBtn.addEventListener('click', async () => {
+        if (!urlText) return;
+        try {
+          await navigator.clipboard.writeText(urlText);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => {
+            if (document.contains(copyBtn)) copyBtn.textContent = 'Copy';
+          }, 1500);
+        } catch {
+          window.prompt('Copy to clipboard:', urlText);
+        }
+      });
+
+      row.append(left, copyBtn);
+      frag.appendChild(row);
+    }
+
+    guestLinkPreview.replaceChildren(frag);
+  }
+
+  function syncGuestModalSwitches() {
+    const wInvited = guestModalWedding.checked;
+    if (!wInvited) guestModalWeddingPlusOne.checked = false;
+    guestModalWeddingPlusOne.disabled = !wInvited;
+    guestModalWeddingPlusLabel.classList.toggle('is-disabled', !wInvited);
+
+    const bInvited = guestModalBach.checked;
+    if (!bInvited) guestModalBachPlusOne.checked = false;
+    guestModalBachPlusOne.disabled = !bInvited;
+    guestModalBachPlusLabel.classList.toggle('is-disabled', !bInvited);
+
+    renderGuestLinkPreview();
+  }
+
+  guestModalName.addEventListener('input', () => {
+    if (state.guestModalMode === 'add' && !state.guestModalSlugEdited) {
+      guestModalSlug.value = slugify(guestModalName.value);
+    }
+    renderGuestLinkPreview();
+  });
+
+  guestModalSlug.addEventListener('input', () => {
+    state.guestModalSlugEdited = true;
+    renderGuestLinkPreview();
+  });
+
+  guestModalWedding.addEventListener('change', syncGuestModalSwitches);
+  guestModalBach.addEventListener('change', () => {
+    if (guestModalBach.checked) {
+      guestModalBachPlusOne.checked = true;
+    }
+    syncGuestModalSwitches();
+  });
+
+  function openGuestModalForAdd(prefill = {}) {
+    guestModalForm.reset();
+    guestFormValidation.reset();
+
+    state.guestModalMode = 'add';
+    state.guestModalTargetId = null;
+    state.guestModalSlugEdited = Boolean(prefill.slug);
+
+    guestModalTitle.textContent = prefill.name ? `Add Guest — ${prefill.name}` : 'Add Guest';
+    guestModalSubmit.textContent = 'Save Guest';
+    guestModalError.hidden = true;
+    guestSlugEditNote.hidden = true;
+
+    guestModalId.value = '';
+    guestModalName.value = prefill.name || '';
+    guestModalGroup.value = prefill.party_group || '';
+    guestModalSlug.value = prefill.slug || (prefill.name ? slugify(prefill.name) : '');
+    guestModalEmail.value = prefill.email || '';
+    guestModalPhone.value = prefill.phone || '';
+    guestModalWedding.checked = prefill.wedding_invited !== undefined ? Boolean(prefill.wedding_invited) : true;
+    guestModalWeddingPlusOne.checked = Boolean(prefill.wedding_plus_one);
+    guestModalBach.checked = Boolean(prefill.bach_invited);
+    guestModalBachPlusOne.checked = prefill.bach_invited ? (prefill.bach_plus_one !== undefined ? Boolean(prefill.bach_plus_one) : true) : false;
+    guestModalNotes.value = prefill.notes || '';
+
+    syncGuestModalSwitches();
+    guestModal.showModal();
+  }
+
+  function openGuestModalForEdit(guest) {
+    guestModalForm.reset();
+    guestFormValidation.reset();
+
+    state.guestModalMode = 'edit';
+    state.guestModalTargetId = guest.id;
+    state.guestModalSlugEdited = true;
+
+    guestModalTitle.textContent = `Edit Guest — ${guest.name}`;
+    guestModalSubmit.textContent = 'Update Guest';
+    guestModalError.hidden = true;
+    guestSlugEditNote.hidden = false;
+
+    guestModalId.value = String(guest.id);
+    guestModalName.value = guest.name || '';
+    guestModalGroup.value = guest.party_group || '';
+    guestModalSlug.value = guest.slug || '';
+    guestModalEmail.value = guest.email || '';
+    guestModalPhone.value = guest.phone || '';
+    guestModalWedding.checked = Boolean(guest.wedding_invited);
+    guestModalWeddingPlusOne.checked = Boolean(guest.wedding_invited && guest.wedding_plus_one);
+    guestModalBach.checked = Boolean(guest.bach_invited);
+    guestModalBachPlusOne.checked = Boolean(guest.bach_invited && guest.bach_plus_one);
+    guestModalNotes.value = guest.notes || '';
+
+    syncGuestModalSwitches();
+    guestModal.showModal();
+  }
+
+  document.getElementById('guest-modal-close').addEventListener('click', () => guestModal.close('cancel'));
+  document.getElementById('guest-modal-cancel').addEventListener('click', () => guestModal.close('cancel'));
+  guestModal.addEventListener('close', () => {
+    guestModal.returnValue = '';
+  });
+
+  function applyLocalPreviewGuestSave(payload, existingId = null) {
+    const duplicate = state.guestList.find((g) => g.slug === payload.slug && g.id !== existingId);
+    if (duplicate) {
+      throw new Error('A guest with this link slug already exists.');
+    }
+
+    const nowIso = new Date().toISOString();
+    if (existingId !== null && existingId !== undefined) {
+      const idx = state.guestList.findIndex((g) => g.id === existingId);
+      if (idx === -1) throw new Error('Guest not found.');
+      const prevSlug = state.guestList[idx].slug;
+      const updated = {
+        ...state.guestList[idx],
+        ...payload,
+        updated_at: nowIso
+      };
+      state.guestList[idx] = updated;
+
+      if (prevSlug !== payload.slug) {
+        for (const rsvp of state.rsvps) {
+          if (rsvp.guest_slug === prevSlug) {
+            const collision = state.rsvps.some((other) => other.event === rsvp.event && other.guest_slug === payload.slug);
+            if (!collision) {
+              rsvp.guest_slug = payload.slug;
+              rsvp.updated_at = nowIso;
+            }
+          }
+        }
+      }
+    } else {
+      state.guestList.unshift({
+        id: state.nextSampleGuestId++,
+        ...payload,
+        created_at: nowIso,
+        updated_at: nowIso
+      });
+    }
+
+    rebuildEventGuestMaps();
+  }
+
+  guestModalForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    guestModalError.hidden = true;
+
+    if (!state.dbConfigured && !state.previewMode) {
+      guestModalError.textContent = 'Connect Neon Postgres or click "Preview with Sample Data" before modifying guests.';
+      guestModalError.hidden = false;
+      return;
+    }
+
+    const payload = {
+      name: guestModalName.value.trim(),
+      slug: guestModalSlug.value.trim().toLowerCase() || slugify(guestModalName.value),
+      party_group: guestModalGroup.value.trim(),
+      email: guestModalEmail.value.trim(),
+      phone: guestModalPhone.value.trim(),
+      wedding_invited: guestModalWedding.checked,
+      wedding_plus_one: guestModalWedding.checked && guestModalWeddingPlusOne.checked,
+      bach_invited: guestModalBach.checked,
+      bach_plus_one: guestModalBach.checked && guestModalBachPlusOne.checked,
+      notes: guestModalNotes.value.trim()
+    };
+
+    guestModalSubmit.disabled = true;
+    guestModalSubmit.textContent = 'Saving...';
+
+    try {
+      if (state.previewMode) {
+        applyLocalPreviewGuestSave(payload, state.guestModalMode === 'edit' ? state.guestModalTargetId : null);
+      } else {
+        const isEdit = state.guestModalMode === 'edit' && state.guestModalTargetId;
+        const res = await fetch('/api/guests', {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(isEdit ? { id: state.guestModalTargetId, ...payload } : payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || 'Could not save guest setup.');
+        }
+        await Promise.all([loadGuestsFromServer(), fetchRsvpsFromServer()]);
+      }
+
+      const savedName = payload.name;
+      guestModal.close('saved');
+      renderAll();
+      showToast(`Saved guest setup for ${savedName}.`, 'success');
+    } catch (err) {
+      guestModalError.textContent = err.message || 'Unable to save guest setup.';
+      guestModalError.hidden = false;
+    } finally {
+      guestModalSubmit.disabled = false;
+      guestModalSubmit.textContent = state.guestModalMode === 'edit' ? 'Update Guest' : 'Save Guest';
+    }
+  });
+
+  // ---- DELETE GUEST MODAL ----
+  function openDeleteGuestModal(guest) {
+    state.pendingDeleteGuest = guest;
+    deleteGuestModalMessage.textContent = `Remove ${guest.name} (?guest=${guest.slug}) from your guest setup? Their personal invite link(s) will stop working.`;
+
+    const matchingRsvps = state.rsvps.filter((r) => r.guest_slug === guest.slug);
+    deleteGuestAlsoRsvps.checked = false;
+
+    if (matchingRsvps.length > 0) {
+      const eventNames = matchingRsvps.map((r) => (r.event === 'bach' ? 'Bach Weekend' : 'Wedding')).join(' & ');
+      deleteGuestRsvpsText.textContent = `${guest.name} currently has ${matchingRsvps.length} submitted RSVP record${matchingRsvps.length === 1 ? '' : 's'} (${eventNames}). Leave unchecked to keep the RSVP record(s) as Unlisted, or check below to remove them too.`;
+      deleteGuestAlsoRsvpsLabel.textContent = `Also permanently delete their ${matchingRsvps.length} RSVP record${matchingRsvps.length === 1 ? '' : 's'}`;
+      deleteGuestRsvpsWarning.hidden = false;
+    } else {
+      deleteGuestRsvpsWarning.hidden = true;
+    }
+
+    deleteGuestModal.showModal();
+  }
+
+  document.getElementById('delete-guest-modal-close').addEventListener('click', () => deleteGuestModal.close('cancel'));
+
+  deleteGuestModal.addEventListener('close', async () => {
+    const choice = deleteGuestModal.returnValue;
+    deleteGuestModal.returnValue = '';
+
+    const target = state.pendingDeleteGuest;
+    const alsoDeleteRsvps = deleteGuestAlsoRsvps.checked;
+    state.pendingDeleteGuest = null;
+    if (choice !== 'delete' || !target) return;
+
+    if (!state.dbConfigured && !state.previewMode) {
+      showToast('Connect Neon Postgres or click "Preview with Sample Data" before removing guests.', 'error');
+      return;
+    }
+
+    try {
+      if (state.previewMode) {
+        state.guestList = state.guestList.filter((g) => g.id !== target.id);
+        if (alsoDeleteRsvps) {
+          state.rsvps = state.rsvps.filter((r) => r.guest_slug !== target.slug);
+        }
+        rebuildEventGuestMaps();
+      } else {
+        const res = await fetch(
+          `/api/guests?id=${encodeURIComponent(target.id)}&deleteRsvps=${alsoDeleteRsvps ? 'true' : 'false'}`,
+          { method: 'DELETE' }
+        );
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || 'Could not remove guest.');
+        }
+        await Promise.all([loadGuestsFromServer(), fetchRsvpsFromServer()]);
+      }
+      renderAll();
+      showToast(`Removed guest ${target.name}.`, 'success');
+    } catch (err) {
+      showToast(err.message || 'Failed to remove guest.', 'error');
+    }
+  });
+
   // ---- HEADER & SETUP CONTROLS ----
+  btnAddGuest.addEventListener('click', () => openGuestModalForAdd());
+  btnPanelAddGuest.addEventListener('click', () => openGuestModalForAdd());
+
   btnAddRsvp.addEventListener('click', () => {
     const defaultEvent = state.activeTab === 'bach' ? 'bach' : 'wedding';
     openRsvpModalForAdd(defaultEvent);
   });
 
   btnPreviewSample.addEventListener('click', () => {
+    state.guestList = buildSampleGuests();
+    state.nextSampleGuestId = 1000;
+    rebuildEventGuestMaps();
     state.previewMode = true;
     state.rsvps = buildSampleRsvps();
     renderAll();
@@ -3620,6 +5254,7 @@
 
   btnExitPreview.addEventListener('click', async () => {
     state.previewMode = false;
+    state.guestList = [];
     await refreshDashboard(true);
   });
 
@@ -3629,7 +5264,7 @@
   async function refreshDashboard(notify = false) {
     btnRefresh.disabled = true;
     try {
-      await Promise.all([loadGuestLists(), fetchRsvpsFromServer()]);
+      await Promise.all([loadGuestsFromServer(), fetchRsvpsFromServer()]);
       renderAll();
       if (notify) {
         showToast(state.dbConfigured ? 'Ledger synced with Neon Postgres.' : 'Checked database status.', state.dbConfigured ? 'success' : 'info');

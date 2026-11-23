@@ -2,7 +2,8 @@ import fs from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DELETE, GET, POST, PUT } from '../api/rsvps.js';
+import * as guestHandlers from '../api/guests.js';
+import * as rsvpHandlers from '../api/rsvps.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.resolve(__dirname, '../public');
@@ -20,14 +21,18 @@ const MIME_TYPES = {
   '.webp': 'image/webp'
 };
 
-const API_HANDLERS = { GET, POST, PUT, DELETE };
+const API_ROUTES = {
+  '/api/rsvps': rsvpHandlers,
+  '/api/guests': guestHandlers
+};
 
 const server = http.createServer(async (req, res) => {
   try {
     const reqUrl = new URL(req.url || '/', `http://localhost:${PORT}`);
 
-    if (reqUrl.pathname === '/api/rsvps') {
-      const handler = API_HANDLERS[req.method];
+    const routeHandlers = API_ROUTES[reqUrl.pathname];
+    if (routeHandlers) {
+      const handler = routeHandlers[req.method];
       if (!handler) {
         res.writeHead(405, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({ ok: false, error: 'Method Not Allowed' }));
@@ -53,7 +58,9 @@ const server = http.createServer(async (req, res) => {
 
     let pathname = decodeURIComponent(reqUrl.pathname);
     if (pathname === '/') pathname = '/index.html';
-    if (pathname === '/admin') pathname = '/admin.html';
+    else if (pathname === '/admin' || pathname === '/admin/') pathname = '/admin.html';
+    else if (pathname === '/rsvp' || pathname === '/rsvp/' || /^\/rsvp\/[^/]+\/?$/.test(pathname)) pathname = '/rsvp.html';
+    else if (pathname === '/bach' || pathname === '/bach/' || /^\/bach\/[^/]+\/?$/.test(pathname)) pathname = '/bach.html';
 
     const filePath = path.resolve(PUBLIC_DIR, `.${pathname}`);
     if (!filePath.startsWith(PUBLIC_DIR + path.sep) && filePath !== PUBLIC_DIR) {

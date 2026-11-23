@@ -9,20 +9,21 @@ A whimsical, medieval-inspired, and romantic wedding website built with pure HTM
 ```text
 bard-wedding-2027/
 ├── api/
+│   ├── guests.js            # Vercel serverless Guest Setup API (GET/POST/PUT/PATCH/DELETE)
 │   └── rsvps.js             # Vercel serverless REST API (GET/POST/PUT/DELETE)
 ├── db/
 │   └── schema.sql           # Neon Postgres table DDL (auto-created on first request)
 ├── lib/
-│   ├── db.js                # Neon serverless client & schema initializer
+│   ├── db.js                # Neon serverless client, schema initializer & one-time guest seeder
+│   ├── guests-service.js    # Parameterized Postgres guest setup CRUD queries
 │   ├── quest-stops.js       # Shared Bach Weekend 7-stop schedule metadata
-│   ├── rsvps-service.js     # Parameterized Postgres CRUD queries
+│   ├── rsvps-service.js     # Parameterized Postgres RSVP CRUD queries
+│   ├── seed-guests.js       # Initial 42 wedding + 17 bach guest records
 │   └── validation.js        # Payload normalization & validation
 ├── public/
 │   ├── index.html           # Main landing page & all sections
 │   ├── rsvp.html            # Wedding RSVP page
-│   ├── guests.json          # Wedding guest list data
 │   ├── bach.html            # Bach Weekend RSVP & Quest Timeline page
-│   ├── bach-guests.json     # Bach Weekend guest list data
 │   ├── admin.html           # Desktop Admin Dashboard ("The Royal Ledger")
 │   └── Engagement Picture   # Couple photo asset
 ├── scripts/
@@ -30,7 +31,7 @@ bard-wedding-2027/
 ├── tests/
 │   └── api.test.js          # Node unit & API handler tests
 ├── package.json
-└── vercel.json              # Static output directory + /admin rewrite & noindex header
+└── vercel.json              # Static output directory + /admin, /rsvp/:guest & /bach/:guest rewrites & noindex header
 ```
 
 ---
@@ -73,5 +74,5 @@ npm test
    Open `public/index.html` and look for the Hero section (`<h1>Ethan & Holly</h1>`) and date headers (`March 25, 2027`).
 2. **Edit Your Story & Event Details**:
    Modify `#story` and `#events` in `public/index.html`, or edit the Bach Weekend itinerary in `public/bach.html`.
-3. **Update Guest Lists**:
-   Edit `public/guests.json` (Wedding) and `public/bach-guests.json` (Bach Weekend). The Admin Dashboard automatically cross-references both files to track pending guests and generate personal invite links.
+3. **Manage Guest Lists & Setup**:
+   Manage all guests, invite link slugs, group tags, Wedding/Bach invitations, and `+1` eligibility directly from the **Guest Setup** tab in `/admin`. Guests live exclusively in Neon Postgres (`guests` table via `/api/guests`). On initial database setup, the 42 guests in `lib/seed-guests.js` are seeded automatically once. Invite links use `/rsvp/<slug>` and `/bach/<slug>` (legacy `?guest=<slug>` links remain supported).

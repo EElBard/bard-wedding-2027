@@ -1,7 +1,11 @@
 {
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/rsvp", "destination": "/rsvp.html" },
+    { "source": "/rsvp/:guest", "destination": "/rsvp.html" },
+    { "source": "/bach", "destination": "/bach.html" },
+    { "source": "/bach/:guest", "destination": "/bach.html" }
   ],
   "headers": [
     {
